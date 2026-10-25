@@ -159,8 +159,8 @@ pre.tpl{white-space:pre-wrap;background:#fff;border:1px solid var(--line);paddin
 @keyframes tw{50%{opacity:.25}}
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01s!important}}
 .logo.swap{animation:lgs .55s ease}
-@keyframes lgs{0%{transform:scale(1)}20%{transform:scale(.9) skewX(-8deg);filter:hue-rotate(40deg) blur(1px)}40%{transform:scale(1.08) skewX(6deg) translateX(4px);clip-path:inset(0 0 45% 0)}60%{transform:scale(1.04) translateX(-4px);clip-path:inset(45% 0 0 0)}100%{transform:scale(1);clip-path:none;filter:none}}
-.logo{display:block;margin:10px auto 0;width:min(78%,360px);height:auto;cursor:pointer;-webkit-user-select:none;user-select:none}
+@keyframes lgs{0%{opacity:1}20%{opacity:.35;filter:hue-rotate(40deg) blur(1px)}40%{opacity:1;clip-path:inset(0 0 45% 0)}60%{clip-path:inset(45% 0 0 0)}100%{clip-path:none;filter:none;opacity:1}}
+.logo{display:block;margin:10px auto 0;width:min(78%,360px);aspect-ratio:900/340;height:auto;object-fit:contain;cursor:pointer;-webkit-user-select:none;user-select:none}
 .hero{flex-direction:column;text-align:center;gap:10px}
 .hero .stand{width:min(94%,400px);height:auto;filter:drop-shadow(0 8px 14px rgba(143,119,194,.28));animation:float 6s ease-in-out infinite}
 @keyframes float{50%{transform:translateY(-6px)}}

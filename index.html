@@ -265,7 +265,7 @@ a.frame{cursor:pointer}
   .wrap{max-width:1240px}
   .grid{grid-template-columns:repeat(5,1fr)}
 }
-footer{text-align:center;font-size:11px;color:var(--sub);margin-top:22px}
+footer{text-align:center;font-size:11px;color:var(--sub);margin-top:22px;padding-bottom:72px}
 
 /* 立ち絵を紙面に馴染ませる: 軌道リング+地面の楕円+十字の目印 */
 .hero .stage{position:relative;width:100%;display:flex;justify-content:center;align-items:flex-end;isolation:isolate}
@@ -326,6 +326,19 @@ body::after{content:"";position:fixed;left:11px;top:0;bottom:0;width:1px;z-index
 .figcap b{color:var(--pink);font-weight:400}
 .sheetno{display:flex;justify-content:space-between;font:10.5px/1.2 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.14em;color:var(--violet);margin:10px 0 2px;padding:0 2px}
 .sheetno b{color:var(--pink);font-weight:400}
+
+/* 薬・点滴・注射モチーフ: 余白の線を点滴のチューブに / 上の注射器の進捗 / 用法用量 */
+.dripd{position:fixed;left:9px;top:-12px;width:5px;height:9px;border-radius:50% 50% 50% 50%/62% 62% 38% 38%;background:var(--pink);opacity:.75;z-index:-1;pointer-events:none;animation:dripfall 8s cubic-bezier(.45,0,.9,.6) infinite}
+.dripd.b{animation-delay:-4s;background:var(--blue)}
+@keyframes dripfall{0%{transform:translateY(0) scaleY(.4)}12%{transform:translateY(0) scaleY(1)}100%{transform:translateY(calc(100vh + 24px)) scaleY(1.25)}}
+@media(min-width:900px){.dripd{left:16px}}
+#syr{position:fixed;top:0;left:0;right:0;height:7px;z-index:70;pointer-events:none;border-bottom:1px solid rgba(143,119,194,.55);
+  background:repeating-linear-gradient(90deg,rgba(143,119,194,.5) 0 1px,transparent 1px 12px) bottom/100% 3px no-repeat,rgba(255,255,255,.5)}
+#syr i{position:absolute;left:0;top:0;bottom:0;width:calc(var(--p,0)*100%);background:linear-gradient(90deg,var(--blue),var(--pink));transition:width .12s linear}
+#syr i::after{content:"";position:absolute;right:-2px;top:-1px;bottom:-1px;width:3px;background:var(--violet);border-radius:1px}
+.rxline{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;font:11px/1.6 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.1em;color:var(--violet);margin:18px 0 0}
+.rxline svg{width:15px;height:15px}
+.rxline b{color:var(--pink);font-weight:400}
 </style>
 </head>
 <body>
@@ -350,22 +363,25 @@ body::after{content:"";position:fixed;left:11px;top:0;bottom:0;width:1px;z-index
   <nav class="tabs" role="tablist" id="tabs"></nav>
   <div class="sheetno" id="sheetNo"></div>
   <main class="sheet" id="main"></main>
+  <i class="dripd"></i><i class="dripd b"></i>
+  <div id="syr"><i></i></div>
   <button id="toTabs" aria-label="目次へ">▲<span>目次</span></button>
   <div class="walker"><img src="img/chibi7.webp" alt=""></div>
+  <div class="rxline" id="rxline"></div>
   <footer class="mono">© Shisui Re-ka · all works are protected<br><span style="opacity:.75">Icons: <a href="licenses/tabler-icons-LICENSE.txt" style="color:inherit">Tabler Icons</a> (MIT License)</span></footer>
 </div>
 
 <div id="lb" role="dialog" aria-label="拡大表示"><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="t" id="lbt"></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1792938388";
+window.BUILD="1792938709";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1792938388"></script>
-<script src="core.js?v=1792938388"></script>
-<script src="data.js?v=1792938388"></script>
+<script src="icons.js?v=1792938709"></script>
+<script src="core.js?v=1792938709"></script>
+<script src="data.js?v=1792938709"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -615,6 +631,8 @@ function keepTabsInPlace(){
   if(window.scrollY>nat) window.scrollTo(0,Math.round(nat));
 }
 (function(){const bt=document.getElementById('toTabs');const upd=()=>{const r=tabsEl.getBoundingClientRect();bt.classList.toggle('on',r.bottom<0)};addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd);bt.addEventListener('click',()=>{const y=tabsEl.getBoundingClientRect().top+window.scrollY-8;window.scrollTo({top:Math.max(0,y),behavior:'smooth'})});})();
+(function(){const syr=document.getElementById('syr'),bar=syr.firstChild;const f=()=>{const h=document.documentElement.scrollHeight-innerHeight;bar.style.setProperty('--p',h>0?Math.min(1,scrollY/h):0);syr.style.setProperty('--p',h>0?Math.min(1,scrollY/h):0)};addEventListener('scroll',f,{passive:true});addEventListener('resize',f);f();
+ document.getElementById('rxline').innerHTML=IC.pill+'<span><b>Rx</b> 用法・用量を守って、ゆっくり見てね</span>'+IC.cross+IC.drip})();
 const PEEK={links:'chibi7',x:'chibi8',arc:'chibi9',gal:'chibi12',req:'chibi7',shop:'chibi8',fun:'chibi12'};
 function show(id,byTab){
   if(!P[id]) id='chart';

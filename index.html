@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>偲睡れーか | 研究ノート</title>
+<meta name="description" content="本日の処方を開始します。偲睡れーかの公式サイト">
+<meta name="theme-color" content="#eef1fa">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<style>
+:root{
+  --blue:#8ca9ec; --violet:#8f77c2; --pink:#ff63bd;
+  --paper:#eef1fa; --ink:#2b2f45; --sub:#6b7190; --line:rgba(140,169,236,.38); --line2:rgba(140,169,236,.18);
+  --card:#f8f9fe;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{margin:0;color:var(--ink);background-color:var(--paper);
+  background-image:
+    linear-gradient(var(--line) 1px,transparent 1px),
+    linear-gradient(90deg,var(--line) 1px,transparent 1px),
+    linear-gradient(var(--line2) 1px,transparent 1px),
+    linear-gradient(90deg,var(--line2) 1px,transparent 1px);
+  background-size:80px 80px,80px 80px,16px 16px,16px 16px;
+  font-family:"Hiragino Sans","Yu Gothic",YuGothic,Meiryo,sans-serif;line-height:1.85;letter-spacing:.03em;
+  min-height:100vh;-webkit-text-size-adjust:100%}
+.mono{font-family:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;letter-spacing:.08em}
+a{color:var(--violet)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px calc(36px + env(safe-area-inset-bottom))}
+
+/* header */
+header{padding:calc(26px + env(safe-area-inset-top)) 0 10px;text-align:center;position:relative}
+.stamp-top{font-size:11px;color:var(--violet);border:1px solid var(--violet);display:inline-block;padding:1px 10px;border-radius:2px;transform:rotate(-2deg)}
+h1{margin:10px 0 0;font-size:30px;font-weight:600;letter-spacing:.18em;color:var(--ink)}
+.read{font-size:12px;color:var(--sub);margin-top:2px}
+.tag{margin:8px 0 0;font-size:14px;color:var(--violet)}
+.tag::before,.tag::after{content:"✝";color:var(--pink);margin:0 .6em;font-size:11px}
+
+/* tabs */
+.tabs{position:sticky;top:0;z-index:20;background:rgba(238,241,250,.92);backdrop-filter:blur(6px);margin:8px -16px 0;padding:6px 10px 0;border-bottom:1px solid var(--blue);
+  display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;border:1px solid var(--line);border-bottom:none;background:transparent;color:var(--sub);font:inherit;font-size:13px;padding:7px 13px 6px;border-radius:8px 8px 0 0;cursor:pointer;white-space:nowrap}
+.tab small{display:block;font-size:9px;line-height:1.1;letter-spacing:.12em;color:var(--blue)}
+.tab[aria-selected=true]{background:var(--card);color:var(--ink);border-color:var(--blue);position:relative;top:1px}
+.tab[aria-selected=true] small{color:var(--pink)}
+
+/* sections */
+.panel{display:none;animation:in .35s ease}
+.panel.on{display:block}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.sheet{background:var(--card);border:1px solid var(--blue);border-top:none;padding:20px 16px 26px;box-shadow:3px 3px 0 var(--line)}
+h2{font-size:17px;font-weight:600;margin:26px 0 12px;padding-bottom:4px;border-bottom:1px dashed var(--violet);display:flex;align-items:center;gap:8px}
+h2:first-child{margin-top:0}
+h2 .no{font-size:11px;color:#fff;background:var(--violet);padding:0 7px;border-radius:2px;letter-spacing:.1em}
+p{margin:0 0 10px}
+.muted{color:var(--sub);font-size:13px}
+.hero{display:flex;gap:16px;align-items:center;margin-bottom:6px}
+.hero svg{flex:0 0 96px}
+.hero p{margin:0}
+
+/* chart table */
+table.chart{width:100%;border-collapse:collapse;font-size:14px}
+table.chart th,table.chart td{border:1px solid var(--blue);padding:7px 10px;vertical-align:top;text-align:left}
+table.chart th{width:32%;background:rgba(140,169,236,.16);font-weight:500;color:var(--violet);font-size:12px}
+
+/* accordion */
+details{border:1px solid var(--line);background:rgba(255,255,255,.55);margin:8px 0;border-radius:4px}
+summary{cursor:pointer;padding:10px 12px;font-size:14px;list-style:none;display:flex;gap:8px;align-items:center}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"＋";color:var(--pink);font-size:12px;width:14px}
+details[open] summary::before{content:"－"}
+details .in{padding:2px 14px 12px;font-size:13.5px}
+ol.rules{margin:0;padding-left:1.6em;font-size:13.5px}
+ol.rules li{margin:0 0 8px}
+
+/* links */
+.group{font-size:11px;color:var(--violet);margin:18px 0 6px}
+.lk{display:flex;align-items:center;gap:12px;padding:12px 14px;margin:6px 0;border:1px solid var(--blue);background:#fff;color:var(--ink);text-decoration:none;border-radius:4px;transition:.15s}
+.lk:hover,.lk:active{border-color:var(--pink);transform:translateX(3px)}
+.lk .ic{flex:0 0 22px;color:var(--violet)}
+.lk b{display:block;font-weight:500;font-size:14.5px;line-height:1.4}
+.lk span.s{font-size:11.5px;color:var(--sub);line-height:1.3}
+.lk .go{margin-left:auto;color:var(--blue)}
+.lk.off{opacity:.55;pointer-events:none;border-style:dashed}
+.badge{font-size:10px;border:1px solid var(--sub);color:var(--sub);padding:0 6px;border-radius:2px;margin-left:auto}
+
+/* cards / gallery */
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.chip{border:1px solid var(--blue);background:transparent;color:var(--sub);font:inherit;font-size:12px;padding:3px 12px;border-radius:99px;cursor:pointer}
+.chip[aria-pressed=true]{background:var(--violet);border-color:var(--violet);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(min-width:560px){.grid{grid-template-columns:repeat(3,1fr)}}
+.frame{border:1px solid var(--blue);background:#fff;padding:6px;position:relative}
+.frame::before{content:"";position:absolute;top:-6px;left:50%;width:46px;height:12px;margin-left:-23px;background:rgba(143,119,194,.28);transform:rotate(-2deg)}
+.ph{aspect-ratio:1/1;background:repeating-linear-gradient(45deg,rgba(140,169,236,.14) 0 8px,rgba(140,169,236,.06) 8px 16px);display:flex;align-items:center;justify-content:center;color:var(--blue);overflow:hidden}
+.ph img{width:100%;height:100%;object-fit:cover;display:block}
+.frame .cap{font-size:12px;padding:6px 2px 0;line-height:1.4}
+.frame .cap i{display:block;font-style:normal;color:var(--sub);font-size:10.5px}
+.empty{border:1px dashed var(--violet);padding:22px 14px;text-align:center;color:var(--sub);font-size:13px;background:rgba(255,255,255,.5)}
+
+/* status */
+.status{display:inline-flex;align-items:center;gap:8px;border:2px solid var(--violet);padding:6px 18px;font-size:16px;letter-spacing:.2em;transform:rotate(-1.5deg);background:#fff}
+.status i{width:10px;height:10px;border-radius:50%;display:inline-block}
+.status.open{color:var(--violet)} .status.open i{background:var(--pink);box-shadow:0 0 0 4px rgba(255,99,189,.25)}
+.status.closed{color:var(--sub);border-color:var(--sub)} .status.closed i{background:var(--sub)}
+.status.ask{color:var(--blue);border-color:var(--blue)} .status.ask i{background:var(--blue)}
+table.price{width:100%;border-collapse:collapse;font-size:14px;margin-top:6px}
+table.price td,table.price th{border-bottom:1px dashed var(--violet);padding:8px 4px;text-align:left}
+table.price td:last-child{text-align:right;white-space:nowrap}
+pre.tpl{white-space:pre-wrap;background:#fff;border:1px solid var(--line);padding:12px;font:inherit;font-size:12.5px;line-height:1.8;margin:8px 0}
+.btn{display:inline-block;border:1px solid var(--violet);background:var(--violet);color:#fff;font:inherit;font-size:13px;padding:7px 18px;border-radius:3px;cursor:pointer;text-decoration:none}
+.btn.line{background:transparent;color:var(--violet)}
+.btn:active{transform:scale(.97)}
+
+/* fortune & stamps */
+.rx{background:#fff;border:1px solid var(--blue);padding:18px 16px;text-align:center;position:relative;margin:10px 0}
+.rx::before{content:"Rx";position:absolute;top:8px;left:12px;font:italic 22px Georgia,serif;color:var(--blue)}
+.rx .rank{font-size:34px;letter-spacing:.2em;color:var(--violet);margin:4px 0}
+.rx .sub{font-size:12px;color:var(--pink);letter-spacing:.2em}
+.rx .msg{font-size:14px;margin-top:8px}
+.card{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:10px 0}
+.slot{aspect-ratio:1/1;border:1.5px dashed var(--blue);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--blue);font-size:11px;background:#fff}
+.slot.on{border:2px solid var(--pink);color:var(--pink);border-style:solid}
+
+/* opening */
+#op{position:fixed;inset:0;z-index:100;background-color:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;transition:opacity .7s,visibility .7s;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:32px 32px}
+#op.gone{opacity:0;visibility:hidden}
+#op .stars{position:absolute;inset:0;pointer-events:none}
+#op .t1{font-size:12px;color:var(--violet);letter-spacing:.4em;margin-bottom:10px;opacity:0;animation:fd 1s .2s forwards}
+#op .t2{font-size:32px;letter-spacing:.2em;opacity:0;animation:fd 1s .6s forwards}
+#op .t3{font-size:13px;color:var(--sub);margin:8px 0 26px;opacity:0;animation:fd 1s 1s forwards}
+#op .btn{opacity:0;animation:fd 1s 1.4s forwards;padding:10px 30px;font-size:14px;letter-spacing:.3em}
+#op .drip{opacity:0;animation:fd 1s .1s forwards;margin-bottom:12px}
+@keyframes fd{to{opacity:1}}
+.tw{animation:tw 3s ease-in-out infinite}
+@keyframes tw{50%{opacity:.25}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01s!important}}
+.logo{display:block;margin:10px auto 0;width:min(78%,360px);height:auto;cursor:pointer;-webkit-user-select:none;user-select:none}
+.hero img{flex:0 0 112px;width:112px;height:auto}
+.frame{cursor:zoom-in}
+a.frame{cursor:pointer}
+#lb{position:fixed;inset:0;z-index:90;background:rgba(238,241,250,.97);display:none;flex-direction:column;align-items:center;justify-content:center;padding:16px;gap:10px}
+#lb.on{display:flex}
+#lb img{max-width:100%;max-height:78vh;object-fit:contain;background:repeating-conic-gradient(rgba(140,169,236,.12) 0 25%,#fff 0 50%) 0 0/20px 20px;border:1px solid var(--blue)}
+#lb .t{font-size:13px;color:var(--sub)}
+#lb .x{position:absolute;top:calc(12px + env(safe-area-inset-top));right:14px}
+#sec h2{margin-top:0}
+.secretgrid{display:grid;gap:14px}
+footer{text-align:center;font-size:11px;color:var(--sub);margin-top:22px}
+</style>
+</head>
+<body>
+
+<div id="op" role="dialog" aria-label="オープニング">
+  <svg class="stars" id="ops" width="100%" height="100%"></svg>
+  <svg class="drip" width="56" height="86" viewBox="0 0 56 86" fill="none" stroke="#8f77c2" stroke-width="1.5">
+    <path d="M18 4h20M28 4v6"/><rect x="14" y="10" width="28" height="36" rx="6"/><path d="M14 24h28" stroke-dasharray="2 3"/>
+    <path d="M28 46v18"/><circle cx="28" cy="52" r="3" fill="#ff63bd" stroke="none"/><path d="M28 64c0 8-8 8-8 14" />
+    <path d="M24 18h8M28 14v8" stroke="#ff63bd"/>
+  </svg>
+  <div class="t1 mono">PRESCRIPTION START</div>
+  <div class="t2" id="opName"></div>
+  <div class="t3" id="opTag"></div>
+  <button class="btn" id="opGo">処方開始</button>
+</div>
+
+<div class="wrap">
+  <header>
+    <div class="stamp-top mono">RESEARCH NOTE · No.<span id="noDay"></span></div>
+    <img class="logo" id="hLogo" alt="" hidden><h1 id="hName"></h1>
+    <div class="read mono" id="hRead"></div>
+    <p class="tag" id="hTag"></p>
+  </header>
+
+  <nav class="tabs" role="tablist" id="tabs"></nav>
+  <main class="sheet" id="main"></main>
+  <footer class="mono">© Shisui Re-ka · all works are protected</footer>
+</div>
+
+<div id="lb" role="dialog" aria-label="拡大表示"><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="t" id="lbt"></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
+<script src="data.js"></script>
+<script>
+(function(){
+const S = window.SITE;
+const $ = (s,r=document)=>r.querySelector(s);
+const esc = t => String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const store = {
+  get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+};
+const today = () => { const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
+
+/* header */
+$('#hName').textContent = S.name;
+$('#hRead').textContent = S.reading + ' / ' + S.en;
+$('#hTag').textContent = S.tagline;
+$('#noDay').textContent = today().replace(/-/g,'');
+$('#opName').textContent = S.name;
+$('#opTag').textContent = S.tagline;
+if(S.logo){const lg=$('#hLogo');lg.src=S.logo;lg.alt=S.name;lg.hidden=false;$('#hName').style.cssText='position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)';}
+/* lightbox */
+const lb=$('#lb');
+function openLb(src,t){$('#lbsec').style.display='none';$('#lbi').style.display='';$('#lbi').src=src;$('#lbt').textContent=t||'';lb.classList.add('on')}
+$('#lbx').addEventListener('click',()=>lb.classList.remove('on'));
+lb.addEventListener('click',e=>{if(e.target===lb)lb.classList.remove('on')});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')lb.classList.remove('on')});
+/* secret: logo 5 taps */
+(function(){let n=0,t=null;const lg=$('#hLogo');(lg.hidden?$('#hName'):lg).addEventListener('click',()=>{n++;clearTimeout(t);t=setTimeout(()=>n=0,1500);if(n>=5){n=0;const s=$('#lbsec');$('#lbi').style.display='none';$('#lbt').textContent='';s.style.display='block';s.innerHTML='<h2 style="margin-top:0">設定資料</h2><p class="muted">'+esc(S.secretLead)+'</p><div class="secretgrid">'+S.secret.map(x=>'<div class="frame" style="cursor:default"><img style="width:100%;display:block;background:#fff" src="'+esc(x.img)+'" alt="'+esc(x.title)+'"><div class="cap">'+esc(x.title)+'</div></div>').join('')+'</div>';lb.classList.add('on')}})})();
+document.title = S.name + ' | 研究ノート';
+
+/* opening */
+(function(){
+  const svg=$('#ops'); let h='';
+  for(let i=0;i<26;i++){
+    const x=Math.random()*100,y=Math.random()*100,r=(Math.random()*1.4+.6).toFixed(1),d=(Math.random()*3).toFixed(1);
+    const col=['#8ca9ec','#8f77c2','#ff63bd'][i%3];
+    h+=`<circle class="tw" cx="${x}%" cy="${y}%" r="${r}" fill="${col}" style="animation-delay:${d}s"/>`;
+  }
+  svg.innerHTML=h;
+  const op=$('#op');
+  const seen = (()=>{try{return sessionStorage.getItem('op')}catch(e){return null}})();
+  if(seen){op.classList.add('gone');}
+  $('#opGo').addEventListener('click',()=>{op.classList.add('gone');try{sessionStorage.setItem('op','1')}catch(e){}});
+})();
+
+/* icons */
+const IC = {
+  link:'<svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>',
+  pill:'<svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="8.5" width="19" height="7" rx="3.5" transform="rotate(-35 12 12)"/><path d="M9.5 6.5l6 9" /></svg>',
+  cross:'<svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v18M6 9h12"/></svg>'
+};
+const heroSvg = `<svg viewBox="0 0 96 96" fill="none" stroke="#8f77c2" stroke-width="1.5"><circle cx="48" cy="48" r="44" stroke="#8ca9ec" stroke-dasharray="3 4"/><path d="M48 18v60M32 36h32" stroke="#ff63bd" stroke-width="2"/><rect x="14" y="60" width="30" height="11" rx="5.5" transform="rotate(-30 29 65)"/><path d="M80 22l-3 3M70 32l8-8M72 34l-9 9 5 5 9-9z" /><circle cx="22" cy="24" r="1.6" fill="#8ca9ec" stroke="none"/><circle cx="78" cy="72" r="1.6" fill="#ff63bd" stroke="none"/><circle cx="70" cy="14" r="1.2" fill="#8f77c2" stroke="none"/></svg>`;
+
+/* panels */
+const tabs = [
+  {id:'chart', ja:'カルテ', en:'CHART'},
+  {id:'links', ja:'リンク', en:'LINKS'},
+  {id:'x',     ja:'X', en:'POSTS'},
+  {id:'arc',   ja:'アーカイブ', en:'ARCHIVE'},
+  {id:'gal',   ja:'ギャラリー', en:'GALLERY'},
+  {id:'req',   ja:'依頼', en:'COMMISSION'},
+  {id:'shop',  ja:'ショップ', en:'SHOP'},
+  {id:'fun',   ja:'処方箋', en:'FORTUNE'}
+];
+const P = {};
+
+P.chart = () => {
+  let h = `<h2><span class="no mono">01</span>プロフィール</h2>
+  <div class="hero">${S.hero?`<img src="${esc(S.hero)}" alt="">`:heroSvg}<div><p>${esc(S.sub)}</p>${S.about.map(t=>`<p class="muted">${esc(t)}</p>`).join('')}</div></div>
+  <table class="chart">${S.chart.map(r=>`<tr><th class="mono">${esc(r[0])}</th><td>${esc(r[1])}</td></tr>`).join('')}</table>`;
+  h += `<h2><span class="no mono">02</span>ご案内</h2>` + S.notes.map(n=>`<details><summary>${esc(n.title)}</summary><div class="in">${n.body.map(b=>`<p>${esc(b)}</p>`).join('')}</div></details>`).join('');
+  h += `<h2><span class="no mono">03</span>配信のお約束</h2><details open><summary>みんなで気持ちよく過ごすために</summary><div class="in"><ol class="rules">${S.rules.map(r=>`<li>${esc(r)}</li>`).join('')}</ol></div></details>`;
+  h += `<h2><span class="no mono">04</span>お願いごと</h2>` + S.wish.map(n=>`<details><summary>${esc(n.title)}</summary><div class="in"><p>${esc(n.body)}</p></div></details>`).join('');
+  h += `<h2><span class="no mono">05</span>クレジット</h2><table class="chart">${S.credits.map(r=>`<tr><th>${esc(r[0])}</th><td>${esc(r[1])}</td></tr>`).join('')}</table><p class="muted" style="margin-top:8px">${esc(S.creditsNote)}</p>`;
+  return h;
+};
+
+P.links = () => {
+  const groups = {}; S.links.forEach(l=>{(groups[l.group]=groups[l.group]||[]).push(l)});
+  const nm = {SNS:'SNS', SHOP:'支援・ショップ', WORK:'お仕事', OTHER:'その他'};
+  let h = `<h2><span class="no mono">LINK</span>リンク集</h2><p class="muted">従来のリットリンクの項目をすべて掲載しています。</p>`;
+  for(const g in groups){
+    h += `<div class="group mono">▼ ${esc(nm[g]||g)}</div>`;
+    groups[g].forEach((l,i)=>{
+      const ic = [IC.pill,IC.cross,IC.link][i%3];
+      if(l.url) h += `<a class="lk" href="${esc(l.url)}" target="_blank" rel="noopener">${ic}<div><b>${esc(l.label)}</b><span class="s">${esc(l.sub||'')}</span></div><span class="go">›</span></a>`;
+      else h += `<div class="lk off">${ic}<div><b>${esc(l.label)}</b><span class="s">${esc(l.sub||'')}</span></div><span class="badge mono">準備中</span></div>`;
+    });
+  }
+  return h;
+};
+
+P.x = () => {
+  let h = `<h2><span class="no mono">POST</span>最新の処方(ポスト)</h2>`;
+  if(S.xposts.length){
+    h += S.xposts.map(u=>{ const m=String(u).replace('x.com','twitter.com'); return `<blockquote class="twitter-tweet" data-dnt="true"><a href="${esc(m)}">${esc(u)}</a></blockquote>`}).join('');
+    setTimeout(()=>{ if(!window.twttr){const s=document.createElement('script');s.src='https://platform.twitter.com/widgets.js';s.async=true;document.body.appendChild(s)} else {window.twttr.widgets&&window.twttr.widgets.load($('#main'))} },50);
+  } else {
+    h += `<div class="empty">ポストの掲載はこれから準備します。<br>URLを貼るだけで載せられる形にします。</div>`;
+  }
+  h += `<p style="margin-top:14px"><a class="btn line" href="${esc(S.xProfile)}" target="_blank" rel="noopener">Xで見る ›</a></p>`;
+  return h;
+};
+
+P.arc = () => {
+  let h = `<h2><span class="no mono">LOG</span>配信アーカイブ・ハイライト</h2>`;
+  if(!S.archive.length) return h + `<div class="empty">アーカイブは準備中です。<br>YouTubeの動画URLを追加するとここに並びます。</div>`;
+  h += S.archive.map(a=>`<a class="lk" href="${esc(a.url)}" target="_blank" rel="noopener">${IC.pill}<div><b>${esc(a.title)}</b><span class="s">${esc(a.kind||'')} ${esc(a.date||'')}</span></div><span class="go">›</span></a>`).join('');
+  return h;
+};
+
+P.gal = () => {
+  let h = `<h2><span class="no mono">ART</span>イラストギャラリー</h2><div class="chips" id="chips">${S.galleryCats.map((c,i)=>`<button class="chip" aria-pressed="${i===0}" data-c="${esc(c)}">${esc(c)}</button>`).join('')}</div><div class="grid" id="gal"></div>${(S.tagLinks||[]).map(t=>`<p style="margin-top:14px"><a class="btn" href="${esc(t.url)}" target="_blank" rel="noopener">${esc(t.label)} ›</a></p>`).join('')}<p class="muted" style="margin-top:14px">無断転載・AI学習利用は禁止です。</p>`;
+  return h;
+};
+function drawGal(cat){
+  const g=$('#gal'); if(!g) return;
+  const items = S.gallery.filter(x=>cat==='すべて'||x.cat===cat);
+  g.innerHTML = items.map(x=>`<div class="frame" data-src="${esc(x.img)}" data-t="${esc(x.title)}"><div class="ph">${x.img?`<img loading="lazy" src="${esc(x.img)}" alt="${esc(x.title)}">`:IC.cross.replace('width="22" height="22"','width="34" height="34"')}</div><div class="cap">${esc(x.title)}<i>${esc(x.cat)}${x.by?' / '+esc(x.by):''}</i></div></div>`).join('') || `<div class="empty" style="grid-column:1/-1">この分類の作品はまだありません。</div>`;
+  g.onclick=e=>{const f=e.target.closest('.frame');if(f&&f.dataset.src)openLb(f.dataset.src,f.dataset.t)};
+}
+
+P.req = () => {
+  const c=S.commission, lab={open:'受付中',closed:'停止中',ask:'要相談'}[c.status]||c.status;
+  let h = `<h2><span class="no mono">01</span>依頼の受付状況</h2><p><span class="status ${esc(c.status)}"><i></i>${lab}</span></p><p>${esc(c.note)}</p>`;
+  h += `<h2><span class="no mono">02</span>料金表</h2>${c.prices.length?`<table class="price">${c.prices.map(p=>`<tr><td>${esc(p.item)}</td><td>${p.price?esc(p.price):'<span class="muted">準備中</span>'}</td></tr>`).join('')}</table>`:''}<p class="muted">${esc(c.pricesNote)}</p>${c.pricesUrl?`<p><a class="btn" href="${esc(c.pricesUrl)}" target="_blank" rel="noopener">料金表・規約を見る ›</a></p>`:''}`;
+  const f=c.fanartGuide;
+  h += `<h2><span class="no mono">03</span>${esc(f.title)}</h2><p>${esc(f.lead)}</p><ol class="rules">${f.points.map(p=>`<li>${esc(p)}</li>`).join('')}</ol>`;
+  h += `<details><summary>skeb用テンプレ</summary><div class="in"><pre class="tpl" id="tpl">${esc(c.template)}</pre><button class="btn line" id="cpy">コピーする</button></div></details>`;
+  return h;
+};
+
+P.shop = () => {
+  let h = `<h2><span class="no mono">SHOP</span>ショップ・グッズ</h2><div class="grid">${S.goods.map(g=>`<a class="frame" style="text-decoration:none;color:inherit" href="${esc(g.url)}" target="_blank" rel="noopener"><div class="ph">${g.img?`<img loading="lazy" src="${esc(g.img)}" alt="" style="object-fit:contain;background:#fff">`:IC.pill.replace('width="22" height="22"','width="34" height="34"')}</div><div class="cap">${esc(g.title)}<i>${esc(g.note||'')}</i></div></a>`).join('')}</div>`;
+  h += S.links.filter(l=>l.group==='SHOP').map(l=>l.url?`<a class="lk" href="${esc(l.url)}" target="_blank" rel="noopener">${IC.link}<div><b>${esc(l.label)}</b><span class="s">${esc(l.sub||'')}</span></div><span class="go">›</span></a>`:`<div class="lk off">${IC.link}<div><b>${esc(l.label)}</b></div><span class="badge mono">準備中</span></div>`).join('');
+  return h;
+};
+
+P.fun = () => {
+  const goal=S.stampGoal;
+  return `<h2><span class="no mono">01</span>今日の処方箋(おみくじ)</h2><p class="muted">1日1回、ひいてみてください。</p><div id="rx"></div><button class="btn" id="draw">処方をもらう</button>
+  <h2><span class="no mono">02</span>通院カード(スタンプ)</h2><p class="muted">1日1回、押せます。${goal}個たまったら満たんです。</p><div class="card" id="card"></div><button class="btn line" id="stamp">今日のスタンプ</button> <span class="muted" id="stmsg"></span>`;
+};
+function bindFun(){
+  const rx=$('#rx'), draw=$('#draw');
+  const showRx=f=>{ rx.innerHTML = f?`<div class="rx"><div class="sub mono">${esc(f.sub)}</div><div class="rank">${esc(f.rank)}</div><div class="msg">${esc(f.msg)}</div></div>`:''; };
+  const saved=store.get('rx',null);
+  if(saved&&saved.d===today()){ showRx(S.fortunes[saved.i]); draw.textContent='今日はもらいました'; draw.disabled=true; draw.style.opacity=.5; }
+  draw.addEventListener('click',()=>{
+    const i=Math.floor(Math.random()*S.fortunes.length); store.set('rx',{d:today(),i}); showRx(S.fortunes[i]); draw.textContent='今日はもらいました'; draw.disabled=true; draw.style.opacity=.5;
+  });
+  const goal=S.stampGoal, card=$('#card'), st=$('#stamp'), msg=$('#stmsg');
+  const render=()=>{
+    const s=store.get('stamps',{n:0,d:''});
+    card.style.gridTemplateColumns=`repeat(${goal>5?5:goal},1fr)`;
+    card.innerHTML=Array.from({length:goal},(_,i)=>`<div class="slot ${i<s.n?'on':''}">${i<s.n?'✝':i+1}</div>`).join('');
+    if(s.d===today()){st.disabled=true;st.style.opacity=.5;msg.textContent='今日は押しました';}
+    if(s.n>=goal){msg.textContent='満たんです。おつかれさま。';}
+  };
+  st.addEventListener('click',()=>{
+    let s=store.get('stamps',{n:0,d:''}); if(s.d===today())return;
+    s.n = s.n>=goal?1:s.n+1; s.d=today(); store.set('stamps',s); render();
+  });
+  render();
+}
+
+/* mount */
+const tabsEl=$('#tabs'), main=$('#main');
+tabsEl.innerHTML = tabs.map(t=>`<button class="tab" role="tab" data-id="${t.id}" aria-selected="false">${t.ja}<small class="mono">${t.en}</small></button>`).join('');
+function show(id){
+  if(!P[id]) id='chart';
+  main.innerHTML = `<section class="panel on">${P[id]()}</section>`;
+  tabsEl.querySelectorAll('.tab').forEach(b=>{const on=b.dataset.id===id;b.setAttribute('aria-selected',on);if(on)b.scrollIntoView({inline:'center',block:'nearest'})});
+  if(id==='gal'){ drawGal('すべて'); $('#chips').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;$('#chips').querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-pressed',x===b));drawGal(b.dataset.c)}); }
+  if(id==='fun') bindFun();
+  if(id==='req'){ const c=$('#cpy'); c&&c.addEventListener('click',()=>{ const t=S.commission.template; (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{c.textContent='コピーしました'}).catch(()=>{const r=document.createRange();r.selectNodeContents($('#tpl'));const s=getSelection();s.removeAllRanges();s.addRange(r);c.textContent='選択しました。コピーしてください'}) }); }
+  try{history.replaceState(null,'','#'+id)}catch(e){}
+  window.scrollTo({top:0});
+}
+tabsEl.addEventListener('click',e=>{const b=e.target.closest('.tab');if(b)show(b.dataset.id)});
+show((location.hash||'').slice(1)||'chart');
+})();
+</script>
+</body>
+</html>

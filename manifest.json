@@ -1,0 +1,11 @@
+{
+  "name": "偲睡れーか 研究ノート",
+  "short_name": "れーか",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#eef1fa",
+  "theme_color": "#eef1fa",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

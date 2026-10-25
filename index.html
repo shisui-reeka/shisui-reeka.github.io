@@ -16,7 +16,7 @@
   --card:#f8f9fe;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html{scroll-behavior:smooth}
+html{scroll-behavior:auto;overflow-anchor:none}
 body{margin:0;color:var(--ink);background-color:var(--paper);
   background-image:
     linear-gradient(var(--line) 1px,transparent 1px),
@@ -42,6 +42,9 @@ h1{margin:10px 0 0;font-size:30px;font-weight:600;letter-spacing:.18em;color:var
 .tabs{position:sticky;top:0;z-index:20;background:rgba(238,241,250,.92);backdrop-filter:blur(6px);margin:8px -16px 0;padding:6px 10px 0;border-bottom:1px solid var(--blue);
   display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
+.tabs{touch-action:pan-x;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;scroll-padding:0 24px}
+.tab{touch-action:pan-x;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+
 .tab{flex:0 0 auto;border:1px solid var(--line);border-bottom:none;background:transparent;color:var(--sub);font:inherit;font-size:13px;padding:7px 13px 6px;border-radius:8px 8px 0 0;cursor:pointer;white-space:nowrap}
 .tab small{display:block;font-size:9px;line-height:1.1;letter-spacing:.12em;color:var(--blue)}
 .tab[aria-selected=true]{background:var(--card);color:var(--ink);border-color:var(--blue);position:relative;top:1px}
@@ -507,19 +510,40 @@ function bindHero(){
 /* mount */
 const tabsEl=$('#tabs'), main=$('#main');
 tabsEl.innerHTML = tabs.map(t=>`<button class="tab" role="tab" data-id="${t.id}" aria-selected="false">${t.ja}<small class="mono">${t.en}</small></button>`).join('');
+/* tab bar: no jumpy scrolling */
+function centerTab(b){
+  const c=tabsEl, l=b.offsetLeft, r=l+b.offsetWidth, v0=c.scrollLeft, v1=v0+c.clientWidth, m=24;
+  let to=v0;
+  if(l-m<v0) to=Math.max(0,l-m); else if(r+m>v1) to=r+m-c.clientWidth;
+  if(Math.abs(to-v0)>1) c.scrollTo({left:to,behavior:'smooth'});
+}
+function fitMin(){main.style.minHeight=Math.max(300,window.innerHeight-tabsEl.offsetHeight)+'px'}
+window.addEventListener('resize',fitMin);
+function keepTabsInPlace(){
+  fitMin();
+  /* if the page was scrolled past the tabs, pull it up so the sticky tab bar stays exactly where it is */
+  const nat=main.getBoundingClientRect().top+window.scrollY-tabsEl.offsetHeight;
+  if(window.scrollY>nat) window.scrollTo(0,Math.round(nat));
+}
 function show(id){
   if(!P[id]) id='chart';
   main.innerHTML = `<section class="panel on ${id==='chart'?'home':''}">${P[id]()}</section>`;
-  tabsEl.querySelectorAll('.tab').forEach(b=>{const on=b.dataset.id===id;b.setAttribute('aria-selected',on);if(on)b.scrollIntoView({inline:'center',block:'nearest'})});
+  tabsEl.querySelectorAll('.tab').forEach(b=>{const on=b.dataset.id===id;b.setAttribute('aria-selected',on);if(on)centerTab(b)});
   if(id==='gal'){ drawGal('すべて'); $('#chips').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;$('#chips').querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-pressed',x===b));drawGal(b.dataset.c)}); }
   if(id==='fun') bindFun();
   if(id==='chart') bindHero();
   if(id==='chart') main.querySelectorAll('.tile').forEach(t=>t.addEventListener('click',()=>show(t.dataset.go)));
   if(id==='req'){ const c=$('#cpy'); c&&c.addEventListener('click',()=>{ const t=S.commission.template; (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{c.textContent='コピーしました'}).catch(()=>{const r=document.createRange();r.selectNodeContents($('#tpl'));const s=getSelection();s.removeAllRanges();s.addRange(r);c.textContent='選択しました。コピーしてください'}) }); }
   try{history.replaceState(null,'','#'+id)}catch(e){}
-  window.scrollTo({top:0});
+  keepTabsInPlace();
 }
-tabsEl.addEventListener('click',e=>{const b=e.target.closest('.tab');if(b)show(b.dataset.id)});
+let dn=null;
+tabsEl.addEventListener('pointerdown',e=>{dn={x:e.clientX,l:tabsEl.scrollLeft}},{passive:true});
+tabsEl.addEventListener('click',e=>{
+  const b=e.target.closest('.tab');if(!b)return;
+  if(dn&&(Math.abs(e.clientX-dn.x)>8||Math.abs(tabsEl.scrollLeft-dn.l)>4)){dn=null;return}
+  dn=null; show(b.dataset.id);
+});
 show((location.hash||'').slice(1)||'chart');
 })();
 </script>

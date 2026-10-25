@@ -592,6 +592,10 @@ p,li,summary,h2,.cap,.tag,.muted,.remarks,.lk .s{text-wrap:pretty}
   body.menuoff{padding-bottom:calc(56px + env(safe-area-inset-bottom))}
   body{padding-bottom:calc(168px + env(safe-area-inset-bottom))}
 }
+
+.figcap .fcm{display:none}
+@media(max-width:899px){body.homeview .figcap .fcp{display:none}body.homeview .figcap .fcm{display:inline}}
+.figcap .fcm b{color:var(--pink);font-weight:400}
 </style>
 </head>
 <body>
@@ -629,14 +633,14 @@ p,li,summary,h2,.cap,.tag,.muted,.remarks,.lk .s{text-wrap:pretty}
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="lbnav"><button class="lbn" id="lbp" aria-label="前へ">‹</button><div class="t" id="lbt"></div><button class="lbn" id="lbn" aria-label="次へ">›</button></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1792945870";
+window.BUILD="1792946038";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1792945870"></script>
-<script src="core.js?v=1792945870"></script>
-<script src="data.js?v=1792945870"></script>
+<script src="icons.js?v=1792946038"></script>
+<script src="core.js?v=1792946038"></script>
+<script src="data.js?v=1792946038"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -744,7 +748,7 @@ const MENU=[
 ];
 function menuHtml(){return '<div class="menu">'+MENU.map((m,i)=>`<button class="tile${i===MENU.length-1?' wide':''}" data-go="${m[0]}"><span class="tic">${ico(m[4],26)}</span><span class="n mono">No.${String(i+2).padStart(2,'0')}</span><b>${m[1]}</b><span class="e mono">${m[2]}</span><span class="d">${m[3]}</span></button>`).join('')+'</div>'}
 P.chart = () => {
-  let h = `<div class="hero"><div class="hint mono">▼ タップしてみて</div>${S.hero?`<div class="stage"><img class="stand" src="${esc(S.hero)}" alt="${esc(S.name)}"></div><div class="figcap"><b>FIG.00</b> ─ ${esc(S.name)} / 立ち絵</div>`:heroSvg}<div class="row">${S.heroChibi?`<img src="${esc(S.heroChibi)}" alt="">`:''}<div><p>${esc(S.sub)}</p>${S.about.map(t=>`<p class="muted">${esc(t)}</p>`).join('')}</div></div></div>
+  let h = `<div class="hero"><div class="hint mono">▼ タップしてみて</div>${S.hero?`<div class="stage"><img class="stand" src="${esc(S.hero)}" alt="${esc(S.name)}"></div><div class="figcap"><span class="fcp"><b>FIG.00</b> ─ ${esc(S.name)} / 立ち絵</span><span class="fcm"><b>▼</b> 下のメニューから、好きな部屋へどうぞ</span></div>`:heroSvg}<div class="row">${S.heroChibi?`<img src="${esc(S.heroChibi)}" alt="">`:''}<div><p>${esc(S.sub)}</p>${S.about.map(t=>`<p class="muted">${esc(t)}</p>`).join('')}</div></div></div>
   <h2><span class="no mono">01</span>プロフィール</h2>
   <table class="chart">${S.chart.map(r=>`<tr><th class="mono">${esc(r[0])}</th><td>${emo(r[1])}</td></tr>`).join('')}</table>`;
   h += `<h2><span class="no mono">02</span>ご案内</h2>` + S.notes.map(n=>`<details><summary>${esc(n.title)}</summary><div class="in">${n.body.map(b=>`<p>${esc(b)}</p>`).join('')}</div></details>`).join('');

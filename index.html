@@ -570,6 +570,23 @@ body.enter .panel.home .hero .stand{animation:artin 1s cubic-bezier(.3,1.35,.5,1
   .tab[aria-selected=true]{background:var(--tc);color:#fff;top:0;transform:translateY(-3px);box-shadow:none;border-top-color:var(--tc)}
   .tab[aria-selected=true]::after{display:none}
 }
+
+/* ===== もっと研究資料の雰囲気 ===== */
+.tabs{counter-reset:tn}
+.tab{counter-increment:tn}
+.tab::before{content:"No." counter(tn,decimal-leading-zero);position:absolute;left:0;right:0;top:3px;text-align:center;font:8px/1 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.18em;color:var(--tc);opacity:.9;pointer-events:none}
+.tab[aria-selected=true]::before{color:#fff}
+.pg{text-align:center;margin:30px 0 0;font-size:10.5px;letter-spacing:.3em;color:var(--violet)}
+.pg b{color:var(--pink);font-weight:400}
+.hole{position:fixed;left:34px;width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#cfd7ee,#eef1fa 70%);box-shadow:inset 1px 2px 3px rgba(80,70,140,.45),0 0 0 1px rgba(143,119,194,.35);z-index:-1;pointer-events:none;display:none}
+@media(min-width:1200px){.hole{display:block}}
+@media(max-width:899px){
+  .tabs{filter:drop-shadow(0 2px 2px rgba(80,70,140,.22))}
+  .tab{padding-top:15px}
+  .tab:nth-child(odd){transform:rotate(-.8deg)}.tab:nth-child(even){transform:rotate(.7deg)}
+  .tab[aria-selected=true]{transform:translateY(-4px) rotate(0)}
+}
+@media(min-width:900px){.tab{padding-top:16px}}
 </style>
 </head>
 <body>
@@ -607,14 +624,14 @@ body.enter .panel.home .hero .stand{animation:artin 1s cubic-bezier(.3,1.35,.5,1
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="lbnav"><button class="lbn" id="lbp" aria-label="前へ">‹</button><div class="t" id="lbt"></div><button class="lbn" id="lbn" aria-label="次へ">›</button></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1792944794";
+window.BUILD="1792944926";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1792944794"></script>
-<script src="core.js?v=1792944794"></script>
-<script src="data.js?v=1792944794"></script>
+<script src="icons.js?v=1792944926"></script>
+<script src="core.js?v=1792944926"></script>
+<script src="data.js?v=1792944926"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -932,6 +949,7 @@ function show(id,byTab){
   if(id==='req'){ const c=$('#cpy'); c&&c.addEventListener('click',()=>{ const t=S.commission.template; (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{c.textContent='コピーしました'}).catch(()=>{const r=document.createRange();r.selectNodeContents($('#tpl'));const s=getSelection();s.removeAllRanges();s.addRange(r);c.textContent='選択しました。コピーしてください'}) }); }
   if(id!=='chart') document.body.classList.remove('homeview');
   if(id!=='chart'){const ix=tabs.findIndex(t=>t.id===id);main.firstChild.insertAdjacentHTML('afterbegin','<div class="meta mono"><span>EXP.No.<b>'+String(ix+1).padStart(2,'0')+'</b></span><span>REC. '+today().replace(/-/g,'.')+'</span><span>OBSERVER: Shisui Re-ka</span></div>');}
+  if(id!=='chart'){const ix=tabs.findIndex(t=>t.id===id);main.firstChild.insertAdjacentHTML('beforeend','<div class="pg mono">─ p.<b>'+String(ix+1).padStart(2,'0')+'</b> / '+String(tabs.length).padStart(2,'0')+' ─</div>')}
   if(PEEK[id]) main.firstChild.insertAdjacentHTML('afterbegin',`<img class="peek" data-i="0" src="img/${PEEK[id]}.webp" alt="">`);
   main.querySelectorAll('.empty').forEach(e=>e.insertAdjacentHTML('afterbegin','<img class="mini" src="img/chibi9.webp" alt="">'));
   {const ix=tabs.findIndex(t=>t.id===id),sn=document.getElementById('sheetNo');if(sn){const nn=String(ix+1).padStart(2,'0'),en=(tabs[ix]?tabs[ix].en:''),std='<span>SHEET <b>'+nn+'</b> / '+String(tabs.length).padStart(2,'0')+'</span><span>'+en+'</span>';const tk=(window.__ck=(window.__ck||0)+1);
@@ -954,6 +972,7 @@ document.querySelector('.walker').addEventListener('click',e=>{const im=e.target
     const build=()=>{const box=el.parentElement,W=box.clientWidth||360;el.innerHTML='<i>'+esc(msg)+'</i>';const w1=el.firstChild.getBoundingClientRect().width||200;const k=Math.max(1,Math.ceil((W*1.1)/w1));const grp=Array(k).fill('<i>'+esc(msg)+'</i>').join('');el.innerHTML=grp+grp;const gw=w1*k;el.style.setProperty('--wd',Math.max(12,gw/48).toFixed(1)+'s')};
     build(); addEventListener('resize',build); if(document.fonts&&document.fonts.ready)document.fonts.ready.then(build);}
   })();
+[18,50,82].forEach(y=>{const h=document.createElement('i');h.className='hole';h.style.top=y+'%';document.body.appendChild(h)});
 show('chart');
 });
 </script>

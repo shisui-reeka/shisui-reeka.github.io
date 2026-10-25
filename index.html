@@ -280,6 +280,25 @@ footer{text-align:center;font-size:11px;color:var(--sub);margin-top:22px}
 details{background:rgba(255,255,255,.4)}
 .bub,.bub::after{background:#fff}
 @media(min-width:900px){.sheet{border:none;box-shadow:none}}
+
+/* ミニキャラ・タップ演出 */
+.panel{position:relative}
+.peek{position:absolute;right:2px;top:-4px;width:54px;height:auto;cursor:pointer;z-index:3;-webkit-user-drag:none;user-select:none;animation:peekb 3.6s ease-in-out infinite}
+@keyframes peekb{50%{transform:translateY(-4px)}}
+.empty .mini{display:block;width:62px;margin:0 auto 8px}
+.rx .rxc{width:78px;display:block;margin:8px auto 0}
+.walker{height:52px;position:relative;overflow:hidden;margin-top:14px}
+.walker img{position:absolute;left:-48px;bottom:0;width:40px;cursor:pointer;animation:walk 20s linear infinite;-webkit-user-drag:none;user-select:none}
+.walker img.hop{animation:walk 20s linear infinite,hop .45s ease}
+@keyframes walk{0%{left:-48px;transform:scaleX(1)}49%{left:calc(100% + 8px);transform:scaleX(1)}50%{left:calc(100% + 8px);transform:scaleX(-1)}99%{left:-48px;transform:scaleX(-1)}100%{left:-48px;transform:scaleX(1)}}
+@keyframes hop{50%{bottom:20px}}
+.ring{position:absolute;left:50%;top:44%;width:30%;aspect-ratio:1;border:2px solid var(--pink);border-radius:50%;transform:translate(-50%,-50%) scale(.3);opacity:.8;pointer-events:none;animation:ringp .7s ease-out forwards}
+@keyframes ringp{to{transform:translate(-50%,-50%) scale(3.2);opacity:0}}
+.frame.press{animation:press .3s ease}
+@keyframes press{40%{transform:scale(.93) rotate(-1.2deg)}100%{transform:none}}
+#lb.on #lbi{animation:lbi .6s cubic-bezier(.2,.7,.2,1) both}
+@keyframes lbi{from{clip-path:inset(0 100% 0 0);transform:scale(.92)}to{clip-path:inset(0 0 0 0);transform:none}}
+#lb.on .t{animation:in .5s .35s both}
 </style>
 </head>
 <body>
@@ -303,20 +322,21 @@ details{background:rgba(255,255,255,.4)}
 
   <nav class="tabs" role="tablist" id="tabs"></nav>
   <main class="sheet" id="main"></main>
+  <div class="walker"><img src="img/chibi7.webp" alt=""></div>
   <footer class="mono">© Shisui Re-ka · all works are protected<br><span style="opacity:.75">Icons: <a href="licenses/tabler-icons-LICENSE.txt" style="color:inherit">Tabler Icons</a> (MIT License)</span></footer>
 </div>
 
 <div id="lb" role="dialog" aria-label="拡大表示"><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="t" id="lbt"></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1792936257";
+window.BUILD="1792936475";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1792936257"></script>
-<script src="core.js?v=1792936257"></script>
-<script src="data.js?v=1792936257"></script>
+<script src="icons.js?v=1792936475"></script>
+<script src="core.js?v=1792936475"></script>
+<script src="data.js?v=1792936475"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -343,7 +363,7 @@ $('#opTag').textContent = S.tagline;
 if(S.logo){const lg=$('#hLogo');lg.src=S.logo;lg.alt=S.name;lg.hidden=false;$('#hName').style.cssText='position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)';}
 /* lightbox */
 const lb=$('#lb');
-function openLb(src,t){$('#lbsec').style.display='none';$('#lbi').style.display='';$('#lbi').src=src;$('#lbt').textContent=t||'';lb.classList.add('on')}
+function openLb(src,t){$('#lbsec').style.display='none';$('#lbi').style.display='';$('#lbi').src=src;$('#lbt').textContent=t||'';lb.classList.add('on');window.burst&&window.burst(innerWidth/2,innerHeight/2,12)}
 $('#lbx').addEventListener('click',()=>lb.classList.remove('on'));
 lb.addEventListener('click',e=>{if(e.target===lb)lb.classList.remove('on')});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')lb.classList.remove('on')});
@@ -457,7 +477,7 @@ function drawGal(cat){
   const g=$('#gal'); if(!g) return;
   const items = S.gallery.filter(x=>cat==='すべて'||x.cat===cat);
   g.innerHTML = items.map(x=>`<div class="frame" data-src="${esc(x.img)}" data-t="${esc(x.title)}"><div class="ph">${x.img?`<img loading="lazy" src="${esc(x.img)}" alt="${esc(x.title)}">`:IC.cross.replace('width="22" height="22"','width="34" height="34"')}</div><div class="cap">${esc(x.title)}<i>${esc(x.cat)}${x.by?' / '+esc(x.by):''}</i></div></div>`).join('') || `<div class="empty" style="grid-column:1/-1">この分類の作品はまだありません。</div>`;
-  g.onclick=e=>{const f=e.target.closest('.frame');if(f&&f.dataset.src)openLb(f.dataset.src,f.dataset.t)};
+  g.onclick=e=>{const f=e.target.closest('.frame');if(!f||!f.dataset.src)return;f.classList.remove('press');void f.offsetWidth;f.classList.add('press');const r=f.getBoundingClientRect();window.burst&&window.burst(r.left+r.width/2,r.top+r.height/2,8);setTimeout(()=>openLb(f.dataset.src,f.dataset.t),260)};
 }
 
 P.req = () => {
@@ -484,7 +504,8 @@ P.fun = () => {
 let stampNew=false;
 function bindFun(){
   const rx=$('#rx'), draw=$('#draw');
-  const showRx=f=>{ rx.innerHTML = f?`<div class="rx"><div class="sub mono">${esc(f.sub)}</div><div class="rank">${esc(f.rank)}</div><div class="msg">${esc(f.msg)}</div></div>`:''; };
+  const RXC={'特効薬':'chibi8','良薬':'chibi8','常備薬':'chibi7','経過観察':'chibi12','要安静':'chibi9'};
+  const showRx=f=>{ rx.innerHTML = f?`<div class="rx"><div class="sub mono">${esc(f.sub)}</div><div class="rank">${esc(f.rank)}</div><div class="msg">${esc(f.msg)}</div><img class="rxc" src="img/${RXC[f.rank]||'chibi8'}.webp" alt=""></div>`:''; };
   const saved=store.get('rx',null);
   if(saved&&saved.d===today()){ showRx(S.fortunes[saved.i]); draw.textContent='今日はもらいました'; draw.disabled=true; draw.style.opacity=.5; }
   draw.addEventListener('click',()=>{
@@ -515,8 +536,8 @@ function bindFun(){
   const cols=['#8ca9ec','#8f77c2','#ff63bd'], sym=['✝','✚','✦','♡','＋'];
   function burst(x,y,n){
     for(let i=0;i<n;i++){
-      const s=document.createElement('span'); s.className='fx';
-      s.textContent=sym[Math.floor(Math.random()*sym.length)];
+      const s=document.createElement('span'); s.className='fx';const ic=[IC.pill,IC.cross,IC.heart];
+      if(i%4===1){s.innerHTML=ic[(i>>2)%3].replace(/width="\d+" height="\d+"/,'width="17" height="17"')}else s.textContent=sym[Math.floor(Math.random()*sym.length)];
       const a=Math.random()*Math.PI*2, r=26+Math.random()*34;
       s.style.cssText=`left:${x}px;top:${y}px;color:${cols[i%3]};--dx:${Math.cos(a)*r}px;--dy:${Math.sin(a)*r}px;--r:${(Math.random()*120-60)|0}deg`;
       document.body.appendChild(s); setTimeout(()=>s.remove(),950);
@@ -530,12 +551,14 @@ function talkBubble(el,text){
   const hr=el.closest('.hero')||el.parentElement;let b=hr.querySelector('.bub'); if(!b){b=document.createElement('div');b.className='bub';hr.appendChild(b)}
   b.classList.remove('on'); void b.offsetWidth; b.textContent=text; b.classList.add('on');
 }
-let tapN=0,lastTalk=-1;
+let tapN=0,lastTalk=-1,faceI=0;
 function bindHero(){
   const st=main.querySelector('.hero .stand'), ch=main.querySelector('.hero .row img');
   const say=(el,cls)=>{
     tapN++; el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); el.addEventListener('animationend',()=>el.classList.remove(cls),{once:true});
-    const r=el.getBoundingClientRect(); if(window.burst) window.burst(r.left+r.width/2,r.top+r.height*0.3,8);
+    const r=el.getBoundingClientRect(); if(window.burst) window.burst(r.left+r.width/2,r.top+r.height*(el.classList.contains('stand')?0.4:0.3),el.classList.contains('stand')?16:8);
+    if(el.classList.contains('stand')){const sg=el.parentElement,rg=document.createElement('div');rg.className='ring';sg.appendChild(rg);setTimeout(()=>rg.remove(),800)}
+    else{const F=S.chibiFaces||[];if(F.length){faceI=(faceI+1)%F.length;el.src=F[faceI]}}
     let t;
     if(tapN%10===0) t=S.talkOver; else { let i; do{i=Math.floor(Math.random()*S.talk.length)}while(i===lastTalk&&S.talk.length>1); lastTalk=i; t=S.talk[i]; }
     talkBubble(el.classList.contains('stand')?el:el.closest('.hero').querySelector('.stand'),t);
@@ -561,6 +584,7 @@ function keepTabsInPlace(){
   const nat=main.getBoundingClientRect().top+window.scrollY-tabsEl.offsetHeight;
   if(window.scrollY>nat) window.scrollTo(0,Math.round(nat));
 }
+const PEEK={links:'chibi7',x:'chibi8',arc:'chibi9',gal:'chibi12',req:'chibi7',shop:'chibi8',fun:'chibi12'};
 function show(id,byTab){
   if(!P[id]) id='chart';
   main.innerHTML = `<section class="panel on ${id==='chart'?'home':''}">${P[id]()}</section>`;
@@ -570,6 +594,8 @@ function show(id,byTab){
   if(id==='chart') bindHero();
   if(id==='chart') main.querySelectorAll('.tile').forEach(t=>t.addEventListener('click',()=>show(t.dataset.go)));
   if(id==='req'){ const c=$('#cpy'); c&&c.addEventListener('click',()=>{ const t=S.commission.template; (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{c.textContent='コピーしました'}).catch(()=>{const r=document.createRange();r.selectNodeContents($('#tpl'));const s=getSelection();s.removeAllRanges();s.addRange(r);c.textContent='選択しました。コピーしてください'}) }); }
+  if(PEEK[id]) main.firstChild.insertAdjacentHTML('afterbegin',`<img class="peek" data-i="0" src="img/${PEEK[id]}.webp" alt="">`);
+  main.querySelectorAll('.empty').forEach(e=>e.insertAdjacentHTML('afterbegin','<img class="mini" src="img/chibi9.webp" alt="">'));
   try{history.replaceState(null,'','#'+id)}catch(e){}
   keepTabsInPlace();
 }
@@ -580,6 +606,8 @@ tabsEl.addEventListener('click',e=>{
   if(dn&&(Math.abs(e.clientX-dn.x)>8||Math.abs(tabsEl.scrollLeft-dn.l)>4)){dn=null;return}
   dn=null; show(b.dataset.id,true);
 });
+main.addEventListener('click',e=>{const pk=e.target.closest('.peek');if(!pk)return;const F=S.chibiFaces||[];let i=(+pk.dataset.i+1)%(F.length||1);pk.dataset.i=i;if(F.length)pk.src=F[i];pk.classList.remove('wig');void pk.offsetWidth;pk.classList.add('wig');const r=pk.getBoundingClientRect();window.burst&&window.burst(r.left+r.width/2,r.top+r.height/2,8)});
+document.querySelector('.walker').addEventListener('click',e=>{const im=e.target.closest('img');if(!im)return;im.classList.remove('hop');void im.offsetWidth;im.classList.add('hop');const r=im.getBoundingClientRect();window.burst&&window.burst(r.left+r.width/2,r.top,8);setTimeout(()=>im.classList.remove('hop'),500)});
 show('chart');
 });
 </script>

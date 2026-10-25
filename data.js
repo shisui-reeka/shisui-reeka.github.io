@@ -138,6 +138,7 @@ window.SITE = {
   opStyle: "cool",   /* cool = かっこいいOP / cute = ふんわりOP */
   opBg: "img/kv10.webp",
   heroChibi: "img/chibi8.webp",
+  chibiFaces: ["img/chibi8.webp", "img/chibi7.webp", "img/chibi9.webp", "img/chibi12.webp"],
 
   /* 依頼 */
   commission: {

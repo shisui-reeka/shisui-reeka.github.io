@@ -171,6 +171,34 @@ a.frame{cursor:pointer}
 #sec h2{margin-top:0}
 .secretgrid{display:grid;gap:14px}
 
+/* play */
+.fx{position:fixed;pointer-events:none;z-index:300;font-size:16px;font-weight:700;line-height:1;animation:fxp .9s ease-out forwards}
+@keyframes fxp{from{opacity:1;transform:translate(-50%,-50%) scale(.4)}to{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1.25) rotate(var(--r))}}
+.hero{position:relative}
+.hero .stand,.hero .row img{cursor:pointer;-webkit-user-select:none;user-select:none;-webkit-user-drag:none}
+.bounce{animation:bounce .5s cubic-bezier(.3,1.6,.5,1)!important}
+@keyframes bounce{0%{transform:scale(1)}30%{transform:scale(.94,1.05) translateY(4px)}60%{transform:scale(1.05,.96) translateY(-10px)}100%{transform:scale(1)}}
+.wig{animation:wig .5s ease!important}
+@keyframes wig{20%{transform:rotate(-12deg)}50%{transform:rotate(10deg)}80%{transform:rotate(-5deg)}}
+.bub{position:absolute;left:50%;top:6px;transform:translateX(-50%) scale(.6);transform-origin:50% 100%;max-width:92%;background:#fff;border:1.5px solid var(--violet);border-radius:14px;padding:7px 14px;font-size:13px;line-height:1.5;color:var(--ink);opacity:0;pointer-events:none;z-index:5;box-shadow:3px 3px 0 var(--line);text-align:center}
+.bub::after{content:"";position:absolute;left:50%;bottom:-8px;width:12px;height:12px;background:#fff;border-right:1.5px solid var(--violet);border-bottom:1.5px solid var(--violet);transform:translateX(-50%) rotate(45deg)}
+.bub.on{animation:bub 2.6s forwards}
+@keyframes bub{0%{opacity:0;transform:translateX(-50%) scale(.6)}10%{opacity:1;transform:translateX(-50%) scale(1.04)}16%{transform:translateX(-50%) scale(1)}86%{opacity:1}100%{opacity:0;transform:translateX(-50%) scale(.96)}}
+.tile:hover b,.tile:active b{color:var(--violet)}
+.tile:hover::after{transform:scale(2.4)}
+.tile::after{transition:transform .35s}
+.tile:active{transform:scale(.97)}
+.capsule{display:block;margin:6px auto 2px;width:110px;height:110px;overflow:visible}
+.capsule .hi,.capsule .lo{transform-box:fill-box;transform-origin:50% 50%}
+.capsule.shake{animation:shk .9s ease-in-out}
+@keyframes shk{0%,100%{transform:rotate(0)}10%{transform:rotate(-18deg)}25%{transform:rotate(16deg)}40%{transform:rotate(-14deg)}55%{transform:rotate(12deg)}70%{transform:rotate(-8deg)}85%{transform:rotate(5deg)}}
+.capsule.open .hi{animation:hi .6s forwards}.capsule.open .lo{animation:lo .6s forwards}
+@keyframes hi{to{transform:translate(-22px,-34px) rotate(-26deg);opacity:0}}
+@keyframes lo{to{transform:translate(22px,26px) rotate(22deg);opacity:0}}
+.rx.pop{animation:rxp .6s cubic-bezier(.3,1.5,.5,1)}
+@keyframes rxp{from{opacity:0;transform:scale(.7) translateY(14px)}to{opacity:1;transform:none}}
+.slot.stamped{animation:stp .55s cubic-bezier(.3,1.7,.5,1)}
+@keyframes stp{0%{transform:scale(2.2) rotate(-30deg);opacity:0}100%{transform:none;opacity:1}}
 /* tile menu */
 .menu{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:0 0 6px}
 .tile{position:relative;text-align:left;border:1px solid var(--blue);background:#fff;font:inherit;color:var(--ink);padding:12px 12px 10px 14px;border-radius:4px;cursor:pointer;display:flex;flex-direction:column;gap:2px;min-height:78px;transition:.15s;overflow:hidden}
@@ -403,29 +431,68 @@ P.fun = () => {
   return `<h2><span class="no mono">01</span>今日の処方箋(おみくじ)</h2><p class="muted">1日1回、ひいてみてください。</p><div id="rx"></div><button class="btn" id="draw">処方をもらう</button>
   <h2><span class="no mono">02</span>通院カード(スタンプ)</h2><p class="muted">1日1回、押せます。${goal}個たまったら満たんです。</p><div class="card" id="card"></div><button class="btn line" id="stamp">今日のスタンプ</button> <span class="muted" id="stmsg"></span>`;
 };
+let stampNew=false;
 function bindFun(){
   const rx=$('#rx'), draw=$('#draw');
   const showRx=f=>{ rx.innerHTML = f?`<div class="rx"><div class="sub mono">${esc(f.sub)}</div><div class="rank">${esc(f.rank)}</div><div class="msg">${esc(f.msg)}</div></div>`:''; };
   const saved=store.get('rx',null);
   if(saved&&saved.d===today()){ showRx(S.fortunes[saved.i]); draw.textContent='今日はもらいました'; draw.disabled=true; draw.style.opacity=.5; }
   draw.addEventListener('click',()=>{
-    const i=Math.floor(Math.random()*S.fortunes.length); store.set('rx',{d:today(),i}); showRx(S.fortunes[i]); draw.textContent='今日はもらいました'; draw.disabled=true; draw.style.opacity=.5;
+    const i=Math.floor(Math.random()*S.fortunes.length); store.set('rx',{d:today(),i}); draw.disabled=true; draw.style.opacity=.5; draw.textContent='調合中…';
+    rx.innerHTML=`<svg class="capsule" viewBox="0 0 110 110"><g transform="rotate(-35 55 55)"><path class="hi" d="M55 36h-14a19 19 0 0 0 0 38h14z" fill="#ff63bd"/><path class="lo" d="M55 36h14a19 19 0 0 1 0 38h-14z" fill="#8ca9ec"/><path d="M55 36v38" stroke="#fff" stroke-width="2"/></g></svg>`;
+    const cp=rx.firstChild; cp.classList.add('shake');
+    setTimeout(()=>cp.classList.add('open'),950);
+    setTimeout(()=>{ showRx(S.fortunes[i]); const c=rx.firstChild; if(c){c.classList.add('pop');const r=c.getBoundingClientRect();window.burst&&window.burst(r.left+r.width/2,r.top+30,14)} draw.textContent='今日はもらいました'; },1500);
   });
   const goal=S.stampGoal, card=$('#card'), st=$('#stamp'), msg=$('#stmsg');
   const render=()=>{
     const s=store.get('stamps',{n:0,d:''});
     card.style.gridTemplateColumns=`repeat(${goal>5?5:goal},1fr)`;
-    card.innerHTML=Array.from({length:goal},(_,i)=>`<div class="slot ${i<s.n?'on':''}">${i<s.n?'✝':i+1}</div>`).join('');
+    card.innerHTML=Array.from({length:goal},(_,i)=>`<div class="slot ${i<s.n?'on':''}${stampNew&&i===s.n-1?' stamped':''}">${i<s.n?'✝':i+1}</div>`).join(''); stampNew=false;
     if(s.d===today()){st.disabled=true;st.style.opacity=.5;msg.textContent='今日は押しました';}
     if(s.n>=goal){msg.textContent='満たんです。おつかれさま。';}
   };
   st.addEventListener('click',()=>{
     let s=store.get('stamps',{n:0,d:''}); if(s.d===today())return;
-    s.n = s.n>=goal?1:s.n+1; s.d=today(); store.set('stamps',s); render();
+    s.n = s.n>=goal?1:s.n+1; s.d=today(); store.set('stamps',s); stampNew=true; render();
+    { const sl=card.querySelectorAll('.slot')[s.n-1]; if(sl&&window.burst){const r=sl.getBoundingClientRect();window.burst(r.left+r.width/2,r.top+r.height/2,12)} }
   });
   render();
 }
 
+/* play: tap sparkles anywhere */
+(function(){
+  const cols=['#8ca9ec','#8f77c2','#ff63bd'], sym=['✝','✚','✦','♡','＋'];
+  function burst(x,y,n){
+    for(let i=0;i<n;i++){
+      const s=document.createElement('span'); s.className='fx';
+      s.textContent=sym[Math.floor(Math.random()*sym.length)];
+      const a=Math.random()*Math.PI*2, r=26+Math.random()*34;
+      s.style.cssText=`left:${x}px;top:${y}px;color:${cols[i%3]};--dx:${Math.cos(a)*r}px;--dy:${Math.sin(a)*r}px;--r:${(Math.random()*120-60)|0}deg`;
+      document.body.appendChild(s); setTimeout(()=>s.remove(),950);
+    }
+  }
+  window.burst=burst;
+  document.addEventListener('pointerdown',e=>{ if(e.pointerType==='mouse'&&e.button!==0)return; burst(e.clientX,e.clientY,5); },{passive:true});
+})();
+/* play: tap the character */
+function talkBubble(el,text){
+  let b=el.parentElement.querySelector('.bub'); if(!b){b=document.createElement('div');b.className='bub';el.parentElement.appendChild(b)}
+  b.classList.remove('on'); void b.offsetWidth; b.textContent=text; b.classList.add('on');
+}
+let tapN=0,lastTalk=-1;
+function bindHero(){
+  const st=main.querySelector('.hero .stand'), ch=main.querySelector('.hero .row img');
+  const say=(el,cls)=>{
+    tapN++; el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); el.addEventListener('animationend',()=>el.classList.remove(cls),{once:true});
+    const r=el.getBoundingClientRect(); if(window.burst) window.burst(r.left+r.width/2,r.top+r.height*0.3,8);
+    let t;
+    if(tapN%10===0) t=S.talkOver; else { let i; do{i=Math.floor(Math.random()*S.talk.length)}while(i===lastTalk&&S.talk.length>1); lastTalk=i; t=S.talk[i]; }
+    talkBubble(el.classList.contains('stand')?el:el.closest('.hero').querySelector('.stand'),t);
+  };
+  if(st) st.addEventListener('click',()=>say(st,'bounce'));
+  if(ch) ch.addEventListener('click',()=>say(ch,'wig'));
+}
 /* mount */
 const tabsEl=$('#tabs'), main=$('#main');
 tabsEl.innerHTML = tabs.map(t=>`<button class="tab" role="tab" data-id="${t.id}" aria-selected="false">${t.ja}<small class="mono">${t.en}</small></button>`).join('');
@@ -435,6 +502,7 @@ function show(id){
   tabsEl.querySelectorAll('.tab').forEach(b=>{const on=b.dataset.id===id;b.setAttribute('aria-selected',on);if(on)b.scrollIntoView({inline:'center',block:'nearest'})});
   if(id==='gal'){ drawGal('すべて'); $('#chips').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;$('#chips').querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-pressed',x===b));drawGal(b.dataset.c)}); }
   if(id==='fun') bindFun();
+  if(id==='chart') bindHero();
   if(id==='chart') main.querySelectorAll('.tile').forEach(t=>t.addEventListener('click',()=>show(t.dataset.go)));
   if(id==='req'){ const c=$('#cpy'); c&&c.addEventListener('click',()=>{ const t=S.commission.template; (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{c.textContent='コピーしました'}).catch(()=>{const r=document.createRange();r.selectNodeContents($('#tpl'));const s=getSelection();s.removeAllRanges();s.addRange(r);c.textContent='選択しました。コピーしてください'}) }); }
   try{history.replaceState(null,'','#'+id)}catch(e){}

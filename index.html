@@ -320,7 +320,7 @@ body:not(.homeview) .tabs{top:calc(26px + env(safe-area-inset-top))}
   .lk{padding:14px 18px}
   .menu{grid-template-columns:repeat(2,1fr);gap:12px}
   .tile{min-height:92px}
-  #lb img{max-height:86vh}
+  #lb img{max-height:calc(100vh - 200px)}
   #lbsec{max-width:980px!important}
   .secretgrid{grid-template-columns:repeat(2,1fr)}
   #op.cool{align-items:flex-start;text-align:left;padding-left:9vw;justify-content:center}
@@ -528,7 +528,9 @@ body.enter .panel.home .hero .stand{animation:artin 1s cubic-bezier(.3,1.35,.5,1
 #diag .dgs{position:absolute;right:16px;bottom:10px;border:3px double var(--pink);color:var(--pink);font-size:20px;letter-spacing:.2em;padding:3px 12px;background:rgba(255,255,255,.9);transform:rotate(-8deg);opacity:0;animation:dgst .4s 2.25s cubic-bezier(.3,1.7,.5,1) forwards}
 @keyframes dgst{0%{transform:scale(2.4) rotate(-20deg);opacity:0}100%{transform:rotate(-8deg);opacity:1}}
 
-.lbnav{display:flex;align-items:center;justify-content:center;gap:14px;width:100%;max-width:560px}
+.lbnav{display:flex;align-items:center;justify-content:center;gap:14px;width:calc(100% - 32px);max-width:560px;position:absolute;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%);min-height:48px}
+#lb{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
+#lb img{max-height:calc(100vh - 220px);max-height:calc(100dvh - 220px)}
 .lbnav .t{flex:1;text-align:center;min-width:0}
 .lbn{flex:none;width:48px;height:48px;border-radius:50%;border:1.5px solid var(--violet);background:#fff;color:var(--violet);font:inherit;font-size:28px;line-height:1;cursor:pointer;padding:0 0 3px;box-shadow:2px 2px 0 var(--line)}
 .lbn:active{transform:scale(.94)}
@@ -655,14 +657,14 @@ table.cred td{padding-top:6px;padding-bottom:6px}
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="lbnav"><button class="lbn" id="lbp" aria-label="前へ">‹</button><div class="t" id="lbt"></div><button class="lbn" id="lbn" aria-label="次へ">›</button></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1792948289";
+window.BUILD="1792948393";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1792948289"></script>
-<script src="core.js?v=1792948289"></script>
-<script src="data.js?v=1792948289"></script>
+<script src="icons.js?v=1792948393"></script>
+<script src="core.js?v=1792948393"></script>
+<script src="data.js?v=1792948393"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;

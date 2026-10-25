@@ -307,9 +307,16 @@ details{background:rgba(255,255,255,.4)}
 </div>
 
 <div id="lb" role="dialog" aria-label="拡大表示"><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="t" id="lbt"></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
-<script src="icons.js?v=5"></script>
-<script src="core.js?v=14"></script>
-<script src="data.js?v=11"></script>
+<script>
+/* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
+window.BUILD="1792934892";
+(function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
+ if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
+}).catch(function(){})}catch(e){}})();
+</script>
+<script src="icons.js?v=1792934892"></script>
+<script src="core.js?v=1792934892"></script>
+<script src="data.js?v=1792934892"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;

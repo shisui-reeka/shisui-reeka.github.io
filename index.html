@@ -581,6 +581,7 @@ body.enter .panel.home .hero .stand{animation:artin 1s cubic-bezier(.3,1.35,.5,1
 /* 日本語の改行: 文節で折り返す */
 html{word-break:normal;line-break:strict;overflow-wrap:break-word}
 .ot{white-space:nowrap}
+.emj{font-size:20px;line-height:1.3;letter-spacing:.15em;font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif}
 a.ht{color:var(--pink);text-decoration:underline dotted;text-underline-offset:3px;word-break:keep-all;white-space:nowrap}
 a.ht:active{background:rgba(255,99,189,.15)}
 
@@ -655,14 +656,14 @@ table.cred td{padding-top:6px;padding-bottom:6px}
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="lbnav"><button class="lbn" id="lbp" aria-label="前へ">‹</button><div class="t" id="lbt"></div><button class="lbn" id="lbn" aria-label="次へ">›</button></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1792947794";
+window.BUILD="1792947882";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1792947794"></script>
-<script src="core.js?v=1792947794"></script>
-<script src="data.js?v=1792947794"></script>
+<script src="icons.js?v=1792947882"></script>
+<script src="core.js?v=1792947882"></script>
+<script src="data.js?v=1792947882"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -739,7 +740,7 @@ document.title = S.name + ' | 研究ノート';
 
 /* icons */
 window.ICONS.drip='<path d="M7 4h10v7a5 5 0 0 1-10 0z"/><path d="M7 8h10"/><path d="M10 1h4"/><path d="M12 1v3"/><path d="M12 16v2"/><path d="M12 19.5c-1 1.2-1.6 2-1.6 2.6a1.6 1.6 0 0 0 3.2 0c0-.6-.6-1.4-1.6-2.6z"/>';
-const emo=t=>esc(t).replace(/💊/g,'<span class="ei">'+ico('pill',16)+'</span>').replace(/✝️?/g,'<span class="ei">'+ico('cross',16)+'</span>');
+const emo=t=>'<span class="emj">'+esc(t).replace(/✝(?!\uFE0F)/g,'\u271D\uFE0F')+'</span>';
 const IC = {
   link:ico('link'), pill:ico('pill'), cross:ico('cross'), vaccine:ico('vaccine'), drip:ico('drip'), bandage:ico('bandage'), kit:ico('first-aid-kit'), heart:ico('heartbeat'), cap:ico('capsule-horizontal')
 };

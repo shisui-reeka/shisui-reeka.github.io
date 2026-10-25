@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#eef1fa">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="icon.svg">
+<link rel="apple-touch-icon" href="icon-180.png">
 <style>
 :root{
   --blue:#8ca9ec; --violet:#8f77c2; --pink:#ff63bd;
@@ -208,6 +208,7 @@ a.frame{cursor:pointer}
 @keyframes rxp{from{opacity:0;transform:scale(.7) translateY(14px)}to{opacity:1;transform:none}}
 .slot.stamped{animation:stp .55s cubic-bezier(.3,1.7,.5,1)}
 @keyframes stp{0%{transform:scale(2.2) rotate(-30deg);opacity:0}100%{transform:none;opacity:1}}
+.ei{display:inline-flex;vertical-align:-3px;color:var(--violet);margin:0 2px}
 /* tile menu */
 .menu{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:0 0 6px}
 .tile{position:relative;text-align:left;border:1px solid var(--blue);background:#fff;font:inherit;color:var(--ink);padding:12px 12px 10px 14px;border-radius:4px;cursor:pointer;display:flex;flex-direction:column;gap:2px;min-height:78px;transition:.15s;overflow:hidden}
@@ -291,10 +292,11 @@ footer{text-align:center;font-size:11px;color:var(--sub);margin-top:22px}
 </div>
 
 <div id="lb" role="dialog" aria-label="拡大表示"><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="t" id="lbt"></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
-<script src="icons.js?v=4"></script>
-<script src="data.js?v=4"></script>
+<script src="icons.js?v=5"></script>
+<script src="core.js?v=5"></script>
+<script src="data.js?v=5"></script>
 <script>
-(function(){
+loadContent().then(function(){
 const S = window.SITE;
 const $ = (s,r=document)=>r.querySelector(s);
 const esc = t => String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -349,10 +351,12 @@ document.title = S.name + ' | 研究ノート';
 })();
 
 /* icons */
+window.ICONS.drip='<path d="M7 4h10v7a5 5 0 0 1-10 0z"/><path d="M7 8h10"/><path d="M10 1h4"/><path d="M12 1v3"/><path d="M12 16v2"/><path d="M12 19.5c-1 1.2-1.6 2-1.6 2.6a1.6 1.6 0 0 0 3.2 0c0-.6-.6-1.4-1.6-2.6z"/>';
+const emo=t=>esc(t).replace(/💊/g,'<span class="ei">'+ico('pill',16)+'</span>').replace(/✝️?/g,'<span class="ei">'+ico('cross',16)+'</span>');
 const IC = {
-  link:ico('link'), pill:ico('pill'), cross:ico('cross'), vaccine:ico('vaccine'), bandage:ico('bandage'), kit:ico('first-aid-kit'), heart:ico('heartbeat'), cap:ico('capsule-horizontal')
+  link:ico('link'), pill:ico('pill'), cross:ico('cross'), vaccine:ico('vaccine'), drip:ico('drip'), bandage:ico('bandage'), kit:ico('first-aid-kit'), heart:ico('heartbeat'), cap:ico('capsule-horizontal')
 };
-const ROT=[IC.pill,IC.vaccine,IC.cross,IC.bandage,IC.kit,IC.cap];
+const ROT=[IC.pill,IC.drip,IC.vaccine,IC.cross,IC.bandage,IC.drip,IC.kit,IC.cap];
 const heroSvg = `<svg viewBox="0 0 96 96" fill="none" stroke="#8f77c2" stroke-width="1.5"><circle cx="48" cy="48" r="44" stroke="#8ca9ec" stroke-dasharray="3 4"/><path d="M48 18v60M32 36h32" stroke="#ff63bd" stroke-width="2"/><rect x="14" y="60" width="30" height="11" rx="5.5" transform="rotate(-30 29 65)"/><path d="M80 22l-3 3M70 32l8-8M72 34l-9 9 5 5 9-9z" /><circle cx="22" cy="24" r="1.6" fill="#8ca9ec" stroke="none"/><circle cx="78" cy="72" r="1.6" fill="#ff63bd" stroke="none"/><circle cx="70" cy="14" r="1.2" fill="#8f77c2" stroke="none"/></svg>`;
 
 /* panels */
@@ -375,14 +379,14 @@ const MENU=[
   ['gal','ギャラリー','GALLERY','立ち絵・ロゴ・制作実績','photo'],
   ['req','依頼','COMMISSION','受付状況・料金・テンプレ','pencil'],
   ['shop','ショップ','SHOP','BOOTH・FANBOX','shopping-bag'],
-  ['fun','処方箋','FORTUNE','おみくじ・スタンプカード','pill']
+  ['fun','処方箋','FORTUNE','おみくじ・スタンプカード','drip']
 ];
 function menuHtml(){return '<div class="menu">'+MENU.map((m,i)=>`<button class="tile${i===MENU.length-1?' wide':''}" data-go="${m[0]}"><span class="tic">${ico(m[4],26)}</span><span class="n mono">No.${String(i+2).padStart(2,'0')}</span><b>${m[1]}</b><span class="e mono">${m[2]}</span><span class="d">${m[3]}</span></button>`).join('')+'</div>'}
 P.chart = () => {
   let h = `<div class="hero"><div class="hint mono">▼ タップしてみて</div>${S.hero?`<img class="stand" src="${esc(S.hero)}" alt="${esc(S.name)}">`:heroSvg}<div class="row">${S.heroChibi?`<img src="${esc(S.heroChibi)}" alt="">`:''}<div><p>${esc(S.sub)}</p>${S.about.map(t=>`<p class="muted">${esc(t)}</p>`).join('')}</div></div></div>
   <h2><span class="no mono">MENU</span>目次</h2>${menuHtml()}
   <h2><span class="no mono">01</span>プロフィール</h2>
-  <table class="chart">${S.chart.map(r=>`<tr><th class="mono">${esc(r[0])}</th><td>${esc(r[1])}</td></tr>`).join('')}</table>`;
+  <table class="chart">${S.chart.map(r=>`<tr><th class="mono">${esc(r[0])}</th><td>${emo(r[1])}</td></tr>`).join('')}</table>`;
   h += `<h2><span class="no mono">02</span>ご案内</h2>` + S.notes.map(n=>`<details><summary>${esc(n.title)}</summary><div class="in">${n.body.map(b=>`<p>${esc(b)}</p>`).join('')}</div></details>`).join('');
   h += `<h2><span class="no mono">03</span>配信のお約束</h2><details open><summary>みんなで気持ちよく過ごすために</summary><div class="in"><ol class="rules">${S.rules.map(r=>`<li>${esc(r)}</li>`).join('')}</ol></div></details>`;
   h += `<h2><span class="no mono">04</span>お願いごと</h2>` + S.wish.map(n=>`<details><summary>${esc(n.title)}</summary><div class="in"><p>${esc(n.body)}</p></div></details>`).join('');
@@ -556,7 +560,7 @@ tabsEl.addEventListener('click',e=>{
   dn=null; show(b.dataset.id,true);
 });
 show((location.hash||'').slice(1)||'chart');
-})();
+});
 </script>
 </body>
 </html>

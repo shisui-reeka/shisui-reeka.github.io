@@ -65,12 +65,15 @@ window.SITE = {
 
   /* リンク — url が空なら「準備中」 */
   links: [
+    { group: "SNS", label: "微睡観測所", sub: "もうひとつのHP", url: "https://nelsonplayroom.github.io/bisuikansokujo/" },
+    { group: "SNS", label: "HP (短縮リンク)", sub: "リットリンクの「HP」欄にあるもの", url: "https://x.gd/1789O" },
     { group: "SNS", label: "X (メイン)", sub: "@xreeekax", url: "https://twitter.com/xreeekax" },
     { group: "SNS", label: "X (サブ)", sub: "@000_reka", url: "https://twitter.com/000_reka" },
     { group: "SNS", label: "YouTube", sub: "歌を投稿しています", url: "https://www.youtube.com/@000re_ka" },
     { group: "SNS", label: "Mirrativ", sub: "配信はこちら", url: "https://www.mirrativ.com/user/150109300" },
     { group: "SNS", label: "#Re画 (ファンアート)", sub: "Xのタグ検索で見る", url: "https://x.com/search?q=%23Re%E7%94%BB&f=live" },
     { group: "SNS", label: "#れーかのたまりば (総合)", sub: "Xのタグ検索で見る", url: "https://x.com/search?q=%23%E3%82%8C%E3%83%BC%E3%81%8B%E3%81%AE%E3%81%9F%E3%81%BE%E3%82%8A%E3%81%B0&f=live" },
+    { group: "SNS", label: "TikTok", sub: "ダンス・振り付け", url: "" },
     { group: "SNS", label: "Discord", sub: "コミュニティ", url: "https://discord.gg/4h3ECCtwTJ" },
     { group: "SHOP", label: "BOOTH", sub: "グッズ・データ", url: "https://xreeekax.booth.pm/" },
     { group: "SHOP", label: "FANBOX", sub: "支援・限定公開", url: "https://xreeekax.fanbox.cc/" },

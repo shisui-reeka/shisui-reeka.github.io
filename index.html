@@ -577,6 +577,18 @@ html{word-break:auto-phrase;line-break:strict;overflow-wrap:break-word}
 p,li,summary,h2,.cap,.tag,.muted,.remarks,.lk .s{text-wrap:pretty}
 .nb{display:inline-block;white-space:nowrap;max-width:100%}
 .bub{text-wrap:balance}
+
+/* スマホ: メニューの収納 */
+.tabsH{display:none}
+@media(max-width:899px){
+  body .tabs,body.homeview .tabs,body:not(.homeview) .tabs{padding-top:30px;transition:transform .28s cubic-bezier(.3,.8,.3,1)}
+  .tabsH{display:flex;align-items:center;justify-content:center;gap:6px;position:absolute;top:5px;left:50%;transform:translateX(-50%);width:120px;height:20px;border:1.5px solid var(--violet);border-radius:10px;background:#fff;color:var(--violet);font:inherit;font-size:11px;letter-spacing:.18em;cursor:pointer;padding:0;z-index:2}
+  .tabsH::before{content:"";width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid var(--pink);transition:transform .25s}
+  body.menuoff .tabs{transform:translateY(calc(100% - 32px))}
+  body.menuoff .tabsH::before{transform:rotate(180deg)}
+  body.menuoff{padding-bottom:calc(46px + env(safe-area-inset-bottom))}
+  body{padding-bottom:calc(158px + env(safe-area-inset-bottom))}
+}
 </style>
 </head>
 <body>
@@ -614,14 +626,14 @@ p,li,summary,h2,.cap,.tag,.muted,.remarks,.lk .s{text-wrap:pretty}
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="lbnav"><button class="lbn" id="lbp" aria-label="前へ">‹</button><div class="t" id="lbt"></div><button class="lbn" id="lbn" aria-label="次へ">›</button></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1792945405";
+window.BUILD="1792945476";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1792945405"></script>
-<script src="core.js?v=1792945405"></script>
-<script src="data.js?v=1792945405"></script>
+<script src="icons.js?v=1792945476"></script>
+<script src="core.js?v=1792945476"></script>
+<script src="data.js?v=1792945476"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -905,6 +917,15 @@ function centerTab(b,instant){
   if(l-m<v0) to=Math.max(0,l-m); else if(r+m>v1) to=r+m-c.clientWidth;
   if(Math.abs(to-v0)>1) c.scrollTo({left:to,behavior:instant?'auto':'smooth'});
 }
+
+(function(){
+  const h=document.createElement('button');h.type='button';h.className='tabsH mono';h.setAttribute('aria-label','メニューの収納');
+  const lab=()=>{h.textContent=document.body.classList.contains('menuoff')?'メニュー':'しまう'};
+  tabsEl.appendChild(h);
+  try{if(localStorage.getItem('rk_menu')==='off')document.body.classList.add('menuoff')}catch(e){}
+  lab();
+  h.addEventListener('click',e=>{e.stopPropagation();document.body.classList.toggle('menuoff');lab();try{localStorage.setItem('rk_menu',document.body.classList.contains('menuoff')?'off':'on')}catch(e){}});
+})();
 function fitMin(){main.style.minHeight=Math.max(300,window.innerHeight-tabsEl.offsetHeight)+'px'}
 window.addEventListener('resize',fitMin);
 function keepTabsInPlace(){

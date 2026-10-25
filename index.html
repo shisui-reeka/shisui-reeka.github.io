@@ -132,13 +132,15 @@ pre.tpl{white-space:pre-wrap;background:#fff;border:1px solid var(--line);paddin
 #op{position:fixed;inset:0;z-index:100;background-color:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;transition:opacity .7s,visibility .7s;
   background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:32px 32px}
 #op.gone{opacity:0;visibility:hidden}
+#op{--wz:cubic-bezier(.2,.7,.2,1)}
+@keyframes wipe{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
 #op .stars{position:absolute;inset:0;pointer-events:none}
-#op .t1{font-size:11px;color:var(--violet);letter-spacing:.4em;margin-top:6px;opacity:0;animation:fd 1s 1.1s forwards;position:relative}
-#op .t2{font-size:32px;letter-spacing:.2em;opacity:0;animation:fd 1s .6s forwards;display:none}
-#op .t3{font-size:13px;color:var(--sub);margin:6px 0 18px;opacity:0;animation:fd 1s 1.3s forwards;position:relative}
-#op .btn{opacity:0;animation:fd 1s 1.7s forwards;position:relative;padding:10px 30px;font-size:14px;letter-spacing:.3em}
+#op .t1{font-size:11px;color:var(--violet);letter-spacing:.4em;margin-top:6px;animation:wipe .8s 1.5s var(--wz) both;position:relative}
+#op .t2{font-size:32px;letter-spacing:.2em;animation:wipe .9s .6s var(--wz) both;display:none}
+#op .t3{font-size:13px;color:var(--sub);margin:6px 0 18px;animation:wipe .9s 1.7s var(--wz) both;position:relative}
+#op .btn{animation:wipe .8s 3.6s var(--wz) both;position:relative;padding:10px 30px;font-size:14px;letter-spacing:.3em}
 #op .art{height:min(46vh,380px);width:auto;opacity:0;transform:translateY(18px);animation:rise 1.2s .2s forwards;filter:drop-shadow(0 10px 18px rgba(143,119,194,.3));position:relative}
-#op .lg{width:min(70%,300px);opacity:0;animation:fd 1s .9s forwards;margin-top:6px;position:relative}
+#op .lg{width:min(70%,300px);animation:wipe 1s .9s var(--wz) both;margin-top:6px;position:relative}
 @keyframes rise{to{opacity:1;transform:none}}
 /* cool opening */
 #op.cool{background-color:#0d1022;background-image:linear-gradient(rgba(140,169,236,.10) 1px,transparent 1px),linear-gradient(90deg,rgba(140,169,236,.10) 1px,transparent 1px);background-size:32px 32px;color:#e9ecff;overflow:hidden}
@@ -146,10 +148,10 @@ pre.tpl{white-space:pre-wrap;background:#fff;border:1px solid var(--line);paddin
 #op.cool .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,16,34,.35) 0%,rgba(13,16,34,.55) 45%,rgba(13,16,34,.96) 100%)}
 #op.cool .scan{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 1px,transparent 1px 3px);mix-blend-mode:screen}
 #op.cool .art{display:none}
-#op.cool .lg{filter:drop-shadow(0 0 14px rgba(143,119,194,.7));animation:fd .6s .8s forwards,glitch 4s 1.6s infinite;margin-top:40vh}
+#op.cool .lg{filter:drop-shadow(0 0 14px rgba(143,119,194,.7));animation:wipe .9s .5s var(--wz) both,glitch 4s 2.6s infinite;margin-top:40vh}
 @keyframes glitch{0%,92%,100%{transform:none;clip-path:none}93%{transform:translateX(-4px);clip-path:inset(10% 0 55% 0)}95%{transform:translateX(5px);clip-path:inset(55% 0 10% 0)}97%{transform:translateX(-2px);clip-path:none}}
 #op.cool .t1{color:#8ca9ec;margin-top:18px}
-#op.cool .term{font-size:11.5px;line-height:1.9;color:#8ca9ec;text-align:left;margin:14px 0 4px;position:relative;min-height:5.6em;letter-spacing:.12em}
+#op.cool .term{animation:wipe .6s 1.9s var(--wz) both;font-size:11.5px;line-height:1.9;color:#8ca9ec;text-align:left;margin:14px 0 4px;position:relative;min-height:5.6em;letter-spacing:.12em}
 #op.cool .term b{color:#ff63bd;font-weight:400}
 #op.cool .t3{color:#c9cffc}
 #op.cool .btn{background:transparent;border:1px solid #8ca9ec;color:#e9ecff;box-shadow:0 0 16px rgba(140,169,236,.35),inset 0 0 12px rgba(143,119,194,.25)}
@@ -302,7 +304,7 @@ $('#opName').textContent = S.name;
 if(S.opStyle==='cool'){const o=$('#op');o.classList.add('cool');if(S.opBg){const b=$('#opBg');b.style.backgroundImage='url('+S.opBg+')';b.hidden=false}
   const lines=['PATIENT : '+S.en.toUpperCase(),'STATUS  : <b>ONLINE</b>','RX      : '+S.tagline];let li=0,ci=0,out='';const T=$('#opTerm');
   const tick=()=>{if(li>=lines.length)return;const raw=lines[li].replace(/<[^>]+>/g,'');ci++;if(ci>raw.length){out+=lines[li]+'<br>';li++;ci=0;T.innerHTML=out;return setTimeout(tick,160)}T.innerHTML=out+raw.slice(0,ci)+'▍';setTimeout(tick,28)};
-  setTimeout(tick,1500);$('#opTag').style.display='none'}
+  setTimeout(tick,2000);$('#opTag').style.display='none'}
 else if(S.hero){const a=$('#opArt');a.src=S.hero;a.hidden=false}
 if(S.logo){const a=$('#opLogo');a.src=S.logo;a.hidden=false}
 $('#opTag').textContent = S.tagline;

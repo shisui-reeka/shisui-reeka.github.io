@@ -357,12 +357,27 @@ body::after{content:"";position:fixed;left:11px;top:0;bottom:0;width:1px;z-index
   .panel.home>.hero .stage::before{width:calc(var(--artH,420px)*.86);top:45%}
   .panel.home>.hero .stage::after{width:calc(var(--artH,420px)*.5)}
 }
+
+/* オープニングの動き: 背景のゆっくりした呼吸・走査線・漂う薬や十字・心電図・ボタンの脈動 */
+#op.cool .bg{animation:fd 1.6s .1s forwards,kb 22s ease-in-out 1.7s infinite alternate;will-change:transform}
+@keyframes kb{from{transform:scale(1) translate(0,0)}to{transform:scale(1.12) translate(-1.5%,-1%)}}
+#op.cool .sweep{position:absolute;left:0;right:0;top:0;height:22%;pointer-events:none;background:linear-gradient(180deg,transparent,rgba(140,169,236,.10) 70%,rgba(255,99,189,.12) 96%,transparent);animation:sweep 7s linear 2s infinite;transform:translateY(-120%)}
+@keyframes sweep{to{transform:translateY(520%)}}
+#op .fl{position:absolute;bottom:-30px;color:var(--c,#8ca9ec);opacity:0;pointer-events:none;animation:flo var(--d,12s) linear var(--w,0s) infinite}
+#op .fl svg{width:var(--s,16px);height:var(--s,16px)}
+@keyframes flo{0%{transform:translateY(0) rotate(0);opacity:0}12%{opacity:.55}85%{opacity:.4}100%{transform:translateY(-112vh) rotate(var(--r,200deg));opacity:0}}
+#op .ecg{position:absolute;left:0;right:0;bottom:3.2vh;width:100%;height:46px;pointer-events:none;opacity:.7}
+#op .ecg path{fill:none;stroke:#ff63bd;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:420 1200;stroke-dashoffset:420;animation:ecg 3.2s linear 3.2s infinite;filter:drop-shadow(0 0 4px rgba(255,99,189,.7))}
+#op .ecg path.g{stroke:rgba(140,169,236,.35);stroke-width:1;stroke-dasharray:none;stroke-dashoffset:0;animation:none;filter:none}
+@keyframes ecg{to{stroke-dashoffset:-1200}}
+#op.cool .btn{animation:wipe .8s 3.8s var(--wz) both,pulse 2.8s ease-in-out 5s infinite}
+@keyframes pulse{50%{box-shadow:0 0 26px rgba(255,99,189,.5),inset 0 0 14px rgba(143,119,194,.35)}}
 </style>
 </head>
 <body>
 
 <div id="op" role="dialog" aria-label="オープニング">
-  <div class="bg" id="opBg" hidden></div><div class="scan"></div><svg class="stars" id="ops" width="100%" height="100%"></svg>
+  <div class="bg" id="opBg" hidden></div><div class="scan"></div><div class="sweep"></div><svg class="stars" id="ops" width="100%" height="100%"></svg>
   <img class="art" id="opArt" alt="" hidden><img class="lg" id="opLogo" alt="" hidden>
   <div class="t1 mono">RESEARCH LOG : START</div><div class="term mono" id="opTerm"></div>
   <div class="t2" id="opName"></div>
@@ -392,14 +407,14 @@ body::after{content:"";position:fixed;left:11px;top:0;bottom:0;width:1px;z-index
 <div id="lb" role="dialog" aria-label="拡大表示"><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="t" id="lbt"></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1792939516";
+window.BUILD="1792939788";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1792939516"></script>
-<script src="core.js?v=1792939516"></script>
-<script src="data.js?v=1792939516"></script>
+<script src="icons.js?v=1792939788"></script>
+<script src="core.js?v=1792939788"></script>
+<script src="data.js?v=1792939788"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -417,7 +432,9 @@ $('#hRead').textContent = S.reading + ' / ' + S.en;
 $('#hTag').textContent = S.tagline;
 $('#noDay').textContent = today().replace(/-/g,'');
 $('#opName').textContent = S.name;
-if(S.opStyle==='cool'){const o=$('#op');o.classList.add('cool');if(S.opBg){const b=$('#opBg');b.style.backgroundImage='url('+S.opBg+')';b.hidden=false}
+if(S.opStyle==='cool'){const o=$('#op');o.classList.add('cool');
+  {const ic=[ico('pill'),ico('cross'),ico('drip'),ico('heartbeat')],cl=['#8ca9ec','#8f77c2','#ff63bd'];let h='';for(let i=0;i<11;i++){h+=`<span class="fl" style="left:${(4+i*9+(i%3)*2)%96}%;--d:${10+(i*7)%9}s;--w:-${(i*1.7).toFixed(1)}s;--s:${13+(i%4)*3}px;--c:${cl[i%3]};--r:${(i%2?1:-1)*(120+i*20)}deg">${ic[i%4].replace(/width="\d+" height="\d+"/,'')}</span>`}h+='<svg class="ecg" viewBox="0 0 400 46" preserveAspectRatio="none"><path class="g" d="M0 23H400"/><path d="M0 23H110l8-4 6 4h10l6-18 8 38 8-30 6 10h14H400"/></svg>';document.getElementById('ops').insertAdjacentHTML('afterend',h)}
+  if(S.opBg){const b=$('#opBg');b.style.backgroundImage='url('+S.opBg+')';b.hidden=false}
   const lines=['NAME   : '+S.en.toUpperCase(),'TYPE   : 頓服 (ヒト型おくすり)','STATUS : <b>ONLINE</b>','RX     : '+S.tagline];const T=$('#opTerm');T.innerHTML=lines.map((l,i)=>`<div class="tl" style="animation-delay:${(1.9+i*.4).toFixed(1)}s">${l.replace(/ /g,'&nbsp;')}</div>`).join('');
   $('#opTag').style.display='none'}
 else if(S.hero){const a=$('#opArt');a.src=S.hero;a.hidden=false}

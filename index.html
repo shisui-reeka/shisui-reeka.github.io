@@ -571,6 +571,12 @@ body.enter .panel.home .hero .stand{animation:artin 1s cubic-bezier(.3,1.35,.5,1
   .tab small{display:block;font-size:9px;letter-spacing:.14em}
   .tabs{align-items:flex-end;padding-bottom:6px;gap:8px}
 }
+
+/* 日本語の改行: 文節で折り返す */
+html{word-break:auto-phrase;line-break:strict;overflow-wrap:break-word}
+p,li,summary,h2,.cap,.tag,.muted,.remarks,.lk .s{text-wrap:pretty}
+.nb{display:inline-block;white-space:nowrap;max-width:100%}
+.bub{text-wrap:balance}
 </style>
 </head>
 <body>
@@ -608,14 +614,14 @@ body.enter .panel.home .hero .stand{animation:artin 1s cubic-bezier(.3,1.35,.5,1
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="lbnav"><button class="lbn" id="lbp" aria-label="前へ">‹</button><div class="t" id="lbt"></div><button class="lbn" id="lbn" aria-label="次へ">›</button></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1792945351";
+window.BUILD="1792945405";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1792945351"></script>
-<script src="core.js?v=1792945351"></script>
-<script src="data.js?v=1792945351"></script>
+<script src="icons.js?v=1792945405"></script>
+<script src="core.js?v=1792945405"></script>
+<script src="data.js?v=1792945405"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -922,6 +928,31 @@ function fitHero(){
   tabsEl.style.setProperty('--tabsTop',Math.round(top+h-th+8)+'px');
 }
 let __fw=innerWidth;addEventListener('resize',()=>{if(innerWidth===__fw)return;__fw=innerWidth;fitHero()});addEventListener('orientationchange',()=>setTimeout(()=>{__fw=innerWidth;fitHero()},300));
+
+/* 文節分割(auto-phrase未対応ブラウザ用: Safari/Firefoxなど) */
+const PHR_P=new Set('は が を に で と も の へ や か ね よ な て た だ です ます ない する し れ ら から まで より など けど って ので のに ので ため こと もの という ください ました ません でした ます。'.split(' '));
+function phr(root){
+  if(!window.__forcePhr&&CSS.supports&&CSS.supports('word-break','auto-phrase'))return;
+  if(!(window.Intl&&Intl.Segmenter))return;
+  const sg=new Intl.Segmenter('ja',{granularity:'word'});
+  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>{const v=n.nodeValue;if(v.length<8||!/[\u3040-\u30ff\u4e00-\u9fff]/.test(v))return 2;const pe=n.parentElement;if(!pe||pe.closest('pre,textarea,script,style,svg,.nb,.mono,#wtx,.bub'))return 2;return 1}});
+  const nodes=[];while(w.nextNode())nodes.push(w.currentNode);
+  nodes.forEach(n=>{
+    const ch=[];let pre='';
+    for(const t of sg.segment(n.nodeValue)){
+      const x=t.segment;
+      if(/^[「『（(\[【]$/.test(x)){pre+=x;continue}
+      if(ch.length&&/^[\u4e00-\u9fff]$/.test(x)&&/[\u4e00-\u9fff]$/.test(ch[ch.length-1])){ch[ch.length-1]+=x;continue}
+      if(ch.length&&(PHR_P.has(x)||/^[、。，．!?！？」』）)\]】…・ー〜]+$/.test(x)||(/^\s+$/.test(x)))){ch[ch.length-1]+=x;continue}
+      ch.push(pre+x);pre='';
+    }
+    if(pre)ch.push(pre);
+    if(ch.length<2)return;
+    const f=document.createDocumentFragment();
+    ch.forEach((c,i)=>{ if(/^\s+$/.test(c)){f.append(c);return} const sp=document.createElement('span');sp.className='nb';sp.textContent=c;f.append(sp)});
+    n.replaceWith(f);
+  });
+}
 const PEEK={links:'chibi7',x:'chibi8',arc:'chibi9',gal:'chibi12',req:'chibi7',shop:'chibi8',fun:'chibi12'};
 function show(id,byTab){
   if(!P[id]) id='chart';
@@ -941,6 +972,7 @@ function show(id,byTab){
  if(window.__sh&&id!=='chart'){sn.innerHTML='<span>▶ CALL No.<b>'+nn+'</b></span><span>'+en+'</span>';sn.classList.remove('call');void sn.offsetWidth;sn.classList.add('call');setTimeout(()=>{if(window.__ck===tk){sn.classList.remove('call');sn.innerHTML=std}},1500)}else{sn.classList.remove('call');sn.innerHTML=std}
  window.__sh=1}}
   try{history.replaceState(null,'','#'+id)}catch(e){}
+  phr(main);
   keepTabsInPlace();
 }
 let dn=null;
@@ -957,6 +989,7 @@ document.querySelector('.walker').addEventListener('click',e=>{const im=e.target
     const build=()=>{const box=el.parentElement,W=box.clientWidth||360;el.innerHTML='<i>'+esc(msg)+'</i>';const w1=el.firstChild.getBoundingClientRect().width||200;const k=Math.max(1,Math.ceil((W*1.1)/w1));const grp=Array(k).fill('<i>'+esc(msg)+'</i>').join('');el.innerHTML=grp+grp;const gw=w1*k;el.style.setProperty('--wd',Math.max(12,gw/48).toFixed(1)+'s')};
     build(); addEventListener('resize',build); if(document.fonts&&document.fonts.ready)document.fonts.ready.then(build);}
   })();
+phr(document.querySelector('header'));phr(document.querySelector('.remarks'));
 show('chart');
 });
 </script>

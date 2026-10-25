@@ -354,7 +354,7 @@ body::after{content:"";position:fixed;left:11px;top:0;bottom:0;width:1px;z-index
   .hero .hint{top:2px}
   .panel.home>.hero .stage .stand{height:var(--artH,420px);width:auto;max-width:100%;margin:0 auto;object-fit:contain}
   .panel.home>.hero .figcap{margin:2px 0 4px}
-  .panel.home>.hero .stage::before{width:calc(var(--artH,420px)*.86);top:45%}
+  .panel.home>.hero .stage::before{width:min(calc(var(--artH,420px)*.86),94%);top:45%}
   .panel.home>.hero .stage::after{width:calc(var(--artH,420px)*.5)}
 }
 
@@ -372,6 +372,13 @@ body::after{content:"";position:fixed;left:11px;top:0;bottom:0;width:1px;z-index
 @keyframes ecg{to{stroke-dashoffset:-1200}}
 #op.cool .btn{animation:wipe .8s 3.8s var(--wz) both,pulse 2.8s ease-in-out 5s infinite}
 @keyframes pulse{50%{box-shadow:0 0 26px rgba(255,99,189,.5),inset 0 0 14px rgba(143,119,194,.35)}}
+
+/* スマホのホーム: 立ち絵を大きく、タブを絵の下部に重ねる「ぎゅっと」構図 */
+@media(max-width:899px){
+  body.homeview .tabs{position:absolute;left:16px;right:16px;top:var(--tabsTop,520px);z-index:15;margin:0;padding:6px;background:rgba(238,241,250,.74);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);border:1px solid var(--line);border-radius:4px}
+  body.homeview #sheetNo{display:none}
+  body.homeview .hero{padding-top:14px}
+}
 </style>
 </head>
 <body>
@@ -407,14 +414,14 @@ body::after{content:"";position:fixed;left:11px;top:0;bottom:0;width:1px;z-index
 <div id="lb" role="dialog" aria-label="拡大表示"><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="t" id="lbt"></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1792939788";
+window.BUILD="1792939817";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1792939788"></script>
-<script src="core.js?v=1792939788"></script>
-<script src="data.js?v=1792939788"></script>
+<script src="icons.js?v=1792939817"></script>
+<script src="core.js?v=1792939817"></script>
+<script src="data.js?v=1792939817"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -669,10 +676,14 @@ function keepTabsInPlace(){
 (function(){const syr=document.getElementById('syr'),bar=syr.firstChild;const f=()=>{const h=document.documentElement.scrollHeight-innerHeight;bar.style.setProperty('--p',h>0?Math.min(1,scrollY/h):0);syr.style.setProperty('--p',h>0?Math.min(1,scrollY/h):0)};addEventListener('scroll',f,{passive:true});addEventListener('resize',f);f();
  document.getElementById('rxline').innerHTML=IC.pill+'<span><b>Rx</b> 用法・用量を守って、ゆっくり見てね</span>'+IC.cross+IC.drip})();
 function fitHero(){
-  if(innerWidth>=900)return;const st=document.querySelector('.panel.home .stand');if(!st)return;
+  const mob=innerWidth<900, home=!!document.querySelector('.panel.home');
+  document.body.classList.toggle('homeview',mob&&home);
+  if(!mob)return;const st=document.querySelector('.panel.home .stand');if(!st)return;
   const sg=st.parentElement,top=sg.getBoundingClientRect().top+scrollY,cap=26;
-  const h=Math.max(260,Math.min(620,innerHeight-top-cap-6));
+  const h=Math.max(260,Math.min(680,innerHeight-top-cap-4));
   st.style.setProperty('--artH',h+'px');sg.parentElement.style.setProperty('--artH',h+'px');
+  const th=tabsEl.offsetHeight;
+  tabsEl.style.setProperty('--tabsTop',Math.round(top+h-th+8)+'px');
 }
 addEventListener('resize',fitHero);addEventListener('orientationchange',()=>setTimeout(fitHero,300));
 const PEEK={links:'chibi7',x:'chibi8',arc:'chibi9',gal:'chibi12',req:'chibi7',shop:'chibi8',fun:'chibi12'};
@@ -682,9 +693,10 @@ function show(id,byTab){
   tabsEl.querySelectorAll('.tab').forEach(b=>{const on=b.dataset.id===id;b.setAttribute('aria-selected',on);if(on&&!byTab)centerTab(b,true)});
   if(id==='gal'){ drawGal('すべて'); $('#chips').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;$('#chips').querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-pressed',x===b));drawGal(b.dataset.c)}); }
   if(id==='fun') bindFun();
-  if(id==='chart'){ bindHero(); fitHero(); setTimeout(fitHero,350); const lg=document.getElementById('hLogo'); if(lg&&!lg.complete) lg.addEventListener('load',fitHero,{once:true}); }
+  if(id==='chart'){ bindHero(); fitHero(); fitHero(); setTimeout(fitHero,350); const lg=document.getElementById('hLogo'); if(lg&&!lg.complete) lg.addEventListener('load',fitHero,{once:true}); }
   if(id==='chart') main.querySelectorAll('.tile').forEach(t=>t.addEventListener('click',()=>show(t.dataset.go)));
   if(id==='req'){ const c=$('#cpy'); c&&c.addEventListener('click',()=>{ const t=S.commission.template; (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{c.textContent='コピーしました'}).catch(()=>{const r=document.createRange();r.selectNodeContents($('#tpl'));const s=getSelection();s.removeAllRanges();s.addRange(r);c.textContent='選択しました。コピーしてください'}) }); }
+  if(id!=='chart') document.body.classList.remove('homeview');
   if(PEEK[id]) main.firstChild.insertAdjacentHTML('afterbegin',`<img class="peek" data-i="0" src="img/${PEEK[id]}.webp" alt="">`);
   main.querySelectorAll('.empty').forEach(e=>e.insertAdjacentHTML('afterbegin','<img class="mini" src="img/chibi9.webp" alt="">'));
   {const ix=tabs.findIndex(t=>t.id===id),sn=document.getElementById('sheetNo');if(sn)sn.innerHTML='<span>SHEET <b>'+String(ix+1).padStart(2,'0')+'</b> / '+String(tabs.length).padStart(2,'0')+'</span><span>'+(tabs[ix]?tabs[ix].en:'')+'</span>'}

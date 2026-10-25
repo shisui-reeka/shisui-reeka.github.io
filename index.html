@@ -491,10 +491,10 @@ body.enter .panel.home .hero .stand{animation:artin 1s cubic-bezier(.3,1.35,.5,1
 
 /* スマホ: メニューを画面下に固定(どの画面でも) */
 @media(max-width:899px){
-  body .tabs,body.homeview .tabs,body:not(.homeview) .tabs{position:fixed;left:0;right:0;bottom:0;top:auto;margin:0;padding:5px 8px calc(5px + env(safe-area-inset-bottom));gap:4px;z-index:70;background:rgba(238,241,250,.95);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border:none;border-top:1px solid var(--blue);border-radius:0;box-shadow:0 -3px 10px rgba(143,119,194,.14)}
-  .tab{padding:5px 2px 4px;font-size:12.5px}
+  body .tabs,body.homeview .tabs,body:not(.homeview) .tabs{position:fixed;left:0;right:0;bottom:0;top:auto;margin:0;padding:7px 8px calc(7px + env(safe-area-inset-bottom));gap:6px;z-index:70;background:rgba(238,241,250,.95);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border:none;border-top:1px solid var(--blue);border-radius:0;box-shadow:0 -3px 10px rgba(143,119,194,.14)}
+  .tab{padding:8px 2px 7px;font-size:14.5px;letter-spacing:.04em}
   .tab small{display:none}
-  body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+  body{padding-bottom:calc(104px + env(safe-area-inset-bottom))}
   #toTabs{display:none!important}
 }
 </style>
@@ -533,14 +533,14 @@ body.enter .panel.home .hero .stand{animation:artin 1s cubic-bezier(.3,1.35,.5,1
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="t" id="lbt"></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1792943359";
+window.BUILD="1792943406";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1792943359"></script>
-<script src="core.js?v=1792943359"></script>
-<script src="data.js?v=1792943359"></script>
+<script src="icons.js?v=1792943406"></script>
+<script src="core.js?v=1792943406"></script>
+<script src="data.js?v=1792943406"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -837,7 +837,7 @@ function fitHero(){
   document.body.classList.toggle('homeview',mob&&home);
   if(!mob)return;const st=document.querySelector('.panel.home .stand');if(!st)return;
   const sg=st.parentElement,top=sg.getBoundingClientRect().top+scrollY,cap=26;
-  const h=Math.max(260,Math.min(820,innerHeight-top-cap-tabsEl.offsetHeight+34));
+  const h=Math.max(260,Math.min(820,innerHeight-top-cap-tabsEl.offsetHeight+6));
   st.style.setProperty('--artH',h+'px');sg.parentElement.style.setProperty('--artH',h+'px');
   const th=tabsEl.offsetHeight;
   tabsEl.style.setProperty('--tabsTop',Math.round(top+h-th+8)+'px');

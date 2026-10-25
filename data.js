@@ -73,7 +73,6 @@ window.SITE = {
   /* リンク — url が空なら「準備中」 */
   links: [
     { group: "SNS", label: "微睡観測所", sub: "もうひとつのHP", url: "https://nelsonplayroom.github.io/bisuikansokujo/" },
-    { group: "SNS", label: "HP (短縮リンク)", sub: "リットリンクの「HP」欄にあるもの", url: "https://x.gd/1789O" },
     { group: "SNS", label: "X (メイン)", sub: "@xreeekax (活動用)", url: "https://twitter.com/xreeekax" },
     { group: "SNS", label: "X (サブ)", sub: "@000_reka (日常用・ネガティブ注意)", url: "https://twitter.com/000_reka" },
     { group: "SNS", label: "YouTube", sub: "歌を投稿しています／配信は平日午前中によくあるよ", url: "https://www.youtube.com/@000re_ka" },

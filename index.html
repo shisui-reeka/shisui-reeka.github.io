@@ -431,6 +431,15 @@ body::after{content:"";position:fixed;left:11px;top:0;bottom:0;width:1px;z-index
   body.homeview .tabs{position:absolute;left:16px;right:16px;top:var(--tabsTop,520px);z-index:15;margin:0;padding:6px;background:rgba(238,241,250,.74);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);border:1px solid var(--line);border-radius:4px}
   body.homeview #sheetNo{display:none}
   body.homeview .hero{padding-top:14px}
+  body.homeview header{display:flex;align-items:center;justify-content:space-between;gap:10px;text-align:left;padding:8px 0 0}
+  body.homeview header .read,body.homeview header .tag{display:none}
+  body.homeview header .logo{height:58px;width:auto;max-width:56%;flex:none;margin:0;object-fit:contain;object-position:left center}
+  body.homeview header h1{margin:0;font-size:22px}
+  body.homeview header .stamp-top{order:2;font-size:8.5px;letter-spacing:0;padding:1px 5px;white-space:nowrap;transform:none;flex:0 1 auto;min-width:0;overflow:hidden}
+  body.homeview .hero{padding-top:2px}
+  body.homeview .panel.home>.hero .stage{margin:0 -16px}
+  body.homeview .panel.home>.hero .stage .stand{max-width:100vw}
+  body.homeview .hero .hint{top:-4px;left:auto;right:0;text-align:right}
 }
 
 /* オープニング→ホームの移行演出: 光る走査線が左から右へ抜けて、オープニングを消し、ホームが順に立ち上がる */
@@ -480,14 +489,14 @@ body.enter .panel.home .hero .stand{animation:artin 1s cubic-bezier(.3,1.35,.5,1
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="t" id="lbt"></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1792941165";
+window.BUILD="1792941320";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1792941165"></script>
-<script src="core.js?v=1792941165"></script>
-<script src="data.js?v=1792941165"></script>
+<script src="icons.js?v=1792941320"></script>
+<script src="core.js?v=1792941320"></script>
+<script src="data.js?v=1792941320"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -783,7 +792,7 @@ function fitHero(){
   document.body.classList.toggle('homeview',mob&&home);
   if(!mob)return;const st=document.querySelector('.panel.home .stand');if(!st)return;
   const sg=st.parentElement,top=sg.getBoundingClientRect().top+scrollY,cap=26;
-  const h=Math.max(260,Math.min(680,innerHeight-top-cap-4));
+  const h=Math.max(260,Math.min(820,innerHeight-top-cap-4));
   st.style.setProperty('--artH',h+'px');sg.parentElement.style.setProperty('--artH',h+'px');
   const th=tabsEl.offsetHeight;
   tabsEl.style.setProperty('--tabsTop',Math.round(top+h-th+8)+'px');

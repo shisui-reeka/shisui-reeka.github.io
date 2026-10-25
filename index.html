@@ -339,6 +339,24 @@ body::after{content:"";position:fixed;left:11px;top:0;bottom:0;width:1px;z-index
 .rxline{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;font:11px/1.6 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.1em;color:var(--violet);margin:18px 0 0}
 .rxline svg{width:15px;height:15px}
 .rxline b{color:var(--pink);font-weight:400}
+
+/* スマホ: ヘッダーとタブをコンパクトにして、開いた直後に立ち絵が全身見える構図に */
+@media(max-width:899px){
+  header{padding:calc(14px + env(safe-area-inset-top)) 0 4px}
+  .stamp-top{font-size:10px;padding:0 8px}
+  .logo{width:min(56%,230px);margin-top:6px}
+  .read{margin-top:4px;font-size:11px}
+  .tag{display:none}
+  .tabs{margin-top:6px;gap:4px;padding:2px 0 8px}
+  .tab{padding:6px 2px 5px;font-size:12.5px}
+  .sheetno{margin:5px 0 0}
+  .hero{padding-top:20px}
+  .hero .hint{top:2px}
+  .panel.home>.hero .stage .stand{height:var(--artH,420px);width:auto;max-width:100%;margin:0 auto;object-fit:contain}
+  .panel.home>.hero .figcap{margin:2px 0 4px}
+  .panel.home>.hero .stage::before{width:calc(var(--artH,420px)*.86);top:45%}
+  .panel.home>.hero .stage::after{width:calc(var(--artH,420px)*.5)}
+}
 </style>
 </head>
 <body>
@@ -374,14 +392,14 @@ body::after{content:"";position:fixed;left:11px;top:0;bottom:0;width:1px;z-index
 <div id="lb" role="dialog" aria-label="拡大表示"><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="t" id="lbt"></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1792938709";
+window.BUILD="1792939516";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1792938709"></script>
-<script src="core.js?v=1792938709"></script>
-<script src="data.js?v=1792938709"></script>
+<script src="icons.js?v=1792939516"></script>
+<script src="core.js?v=1792939516"></script>
+<script src="data.js?v=1792939516"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -633,6 +651,13 @@ function keepTabsInPlace(){
 (function(){const bt=document.getElementById('toTabs');const upd=()=>{const r=tabsEl.getBoundingClientRect();bt.classList.toggle('on',r.bottom<0)};addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd);bt.addEventListener('click',()=>{const y=tabsEl.getBoundingClientRect().top+window.scrollY-8;window.scrollTo({top:Math.max(0,y),behavior:'smooth'})});})();
 (function(){const syr=document.getElementById('syr'),bar=syr.firstChild;const f=()=>{const h=document.documentElement.scrollHeight-innerHeight;bar.style.setProperty('--p',h>0?Math.min(1,scrollY/h):0);syr.style.setProperty('--p',h>0?Math.min(1,scrollY/h):0)};addEventListener('scroll',f,{passive:true});addEventListener('resize',f);f();
  document.getElementById('rxline').innerHTML=IC.pill+'<span><b>Rx</b> 用法・用量を守って、ゆっくり見てね</span>'+IC.cross+IC.drip})();
+function fitHero(){
+  if(innerWidth>=900)return;const st=document.querySelector('.panel.home .stand');if(!st)return;
+  const sg=st.parentElement,top=sg.getBoundingClientRect().top+scrollY,cap=26;
+  const h=Math.max(260,Math.min(620,innerHeight-top-cap-6));
+  st.style.setProperty('--artH',h+'px');sg.parentElement.style.setProperty('--artH',h+'px');
+}
+addEventListener('resize',fitHero);addEventListener('orientationchange',()=>setTimeout(fitHero,300));
 const PEEK={links:'chibi7',x:'chibi8',arc:'chibi9',gal:'chibi12',req:'chibi7',shop:'chibi8',fun:'chibi12'};
 function show(id,byTab){
   if(!P[id]) id='chart';
@@ -640,7 +665,7 @@ function show(id,byTab){
   tabsEl.querySelectorAll('.tab').forEach(b=>{const on=b.dataset.id===id;b.setAttribute('aria-selected',on);if(on&&!byTab)centerTab(b,true)});
   if(id==='gal'){ drawGal('すべて'); $('#chips').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;$('#chips').querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-pressed',x===b));drawGal(b.dataset.c)}); }
   if(id==='fun') bindFun();
-  if(id==='chart') bindHero();
+  if(id==='chart'){ bindHero(); fitHero(); setTimeout(fitHero,350); const lg=document.getElementById('hLogo'); if(lg&&!lg.complete) lg.addEventListener('load',fitHero,{once:true}); }
   if(id==='chart') main.querySelectorAll('.tile').forEach(t=>t.addEventListener('click',()=>show(t.dataset.go)));
   if(id==='req'){ const c=$('#cpy'); c&&c.addEventListener('click',()=>{ const t=S.commission.template; (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{c.textContent='コピーしました'}).catch(()=>{const r=document.createRange();r.selectNodeContents($('#tpl'));const s=getSelection();s.removeAllRanges();s.addRange(r);c.textContent='選択しました。コピーしてください'}) }); }
   if(PEEK[id]) main.firstChild.insertAdjacentHTML('afterbegin',`<img class="peek" data-i="0" src="img/${PEEK[id]}.webp" alt="">`);

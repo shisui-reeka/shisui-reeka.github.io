@@ -6,9 +6,9 @@
 <title>偲睡れーか | 研究ノート</title>
 <meta name="description" content="本日の処方を開始します。偲睡れーかの公式サイト">
 <meta name="theme-color" content="#eef1fa">
-<link rel="manifest" href="manifest.json">
-<link rel="icon" href="icon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="manifest" href="manifest.json?v=3">
+<link rel="icon" href="icon.svg?v=3" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png?v=3">
 <style>
 :root{
   --blue:#8ca9ec; --violet:#8f77c2; --pink:#ff63bd;
@@ -478,7 +478,7 @@ body::after{content:"";position:fixed;left:11px;top:0;bottom:0;width:1px;z-index
 }
 
 /* オープニング→ホームの移行演出: 光る走査線が左から右へ抜けて、オープニングを消し、ホームが順に立ち上がる */
-#op.leave{pointer-events:none;animation:opwipe 1.15s cubic-bezier(.7,0,.25,1) forwards}
+#op.leave{pointer-events:none;animation:none;opacity:0;transition:opacity .45s ease .1s}
 @keyframes opwipe{from{clip-path:inset(0 0 0 0)}to{clip-path:inset(0 0 0 100%)}}
 .opedge{position:fixed;top:0;bottom:0;left:0;width:3px;z-index:101;pointer-events:none;background:linear-gradient(180deg,var(--blue),var(--pink),var(--violet));box-shadow:0 0 26px 8px rgba(255,99,189,.55),0 0 60px 20px rgba(140,169,236,.35);animation:edgemove 1.15s cubic-bezier(.7,0,.25,1) forwards}
 @keyframes edgemove{from{transform:translateX(0)}to{transform:translateX(100vw)}}
@@ -497,6 +497,31 @@ body.enter .panel.home .hero .stand{animation:artin 1s cubic-bezier(.3,1.35,.5,1
   body{padding-bottom:calc(104px + env(safe-area-inset-bottom))}
   #toTabs{display:none!important}
 }
+
+/* 診察室への移行 */
+#diag{position:fixed;inset:0;z-index:102;display:flex;align-items:center;justify-content:center;background:#eef1fa linear-gradient(rgba(140,169,236,.22) 1px,transparent 1px) 0 0/22px 22px,linear-gradient(90deg,rgba(140,169,236,.22) 1px,transparent 1px) 0 0/22px 22px;animation:dgin .5s ease both;transition:opacity .65s ease}
+#diag.out{opacity:0;pointer-events:none}
+@keyframes dgin{from{opacity:0}to{opacity:1}}
+#diag .dgc{width:min(86vw,360px);background:rgba(255,255,255,.92);border:1.5px solid var(--blue);box-shadow:4px 4px 0 var(--line);padding:16px 18px 54px;position:relative;color:var(--ink)}
+#diag .dgh{display:flex;justify-content:space-between;font-size:10px;letter-spacing:.2em;color:var(--violet);border-bottom:1px dashed var(--violet);padding-bottom:6px}
+#diag .dgt{font-size:22px;letter-spacing:.3em;margin:14px 0 4px;color:var(--violet)}
+#diag .dgt i{font-style:normal;animation:dots 1.2s steps(4) infinite}
+@keyframes dots{50%{opacity:.2}}
+#diag .dge{width:100%;height:44px;display:block}
+#diag .dge path{fill:none;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+#diag .dge .g{stroke:rgba(140,169,236,.5);stroke-width:1}
+#diag .dge .p{stroke:#ff63bd;stroke-width:2;stroke-dasharray:420;stroke-dashoffset:420;animation:ecgd 1.7s .3s linear forwards}
+@keyframes ecgd{to{stroke-dashoffset:0}}
+#diag .dgb{height:8px;border:1px solid var(--violet);margin:8px 0 12px;position:relative;background:#fff}
+#diag .dgb i{position:absolute;left:0;top:0;bottom:0;width:100%;background:repeating-linear-gradient(90deg,var(--violet) 0 6px,transparent 6px 8px);transform-origin:0 50%;animation:dgf 2s .2s steps(14) forwards;transform:scaleX(0)}
+@keyframes dgf{to{transform:scaleX(1)}}
+#diag .dgl{list-style:none;margin:0;padding:0;font-size:12px}
+#diag .dgl li{display:grid;grid-template-columns:3.2em 1fr auto;gap:8px;padding:4px 0;border-bottom:1px dotted var(--blue);opacity:0;animation:dgr .3s steps(3) forwards}
+#diag .dgl li:nth-child(1){animation-delay:.55s}#diag .dgl li:nth-child(2){animation-delay:1s}#diag .dgl li:nth-child(3){animation-delay:1.45s}#diag .dgl li:nth-child(4){animation-delay:1.9s}
+@keyframes dgr{to{opacity:1}}
+#diag .dgl span{color:var(--violet)}#diag .dgl em{font-style:normal;color:var(--blue)}#diag .dgl .last em{color:var(--pink)}
+#diag .dgs{position:absolute;right:16px;bottom:10px;border:3px double var(--pink);color:var(--pink);font-size:20px;letter-spacing:.2em;padding:3px 12px;background:rgba(255,255,255,.9);transform:rotate(-8deg);opacity:0;animation:dgst .4s 2.25s cubic-bezier(.3,1.7,.5,1) forwards}
+@keyframes dgst{0%{transform:scale(2.4) rotate(-20deg);opacity:0}100%{transform:rotate(-8deg);opacity:1}}
 </style>
 </head>
 <body>
@@ -533,14 +558,14 @@ body.enter .panel.home .hero .stand{animation:artin 1s cubic-bezier(.3,1.35,.5,1
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="t" id="lbt"></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1792943574";
+window.BUILD="1792943790";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1792943574"></script>
-<script src="core.js?v=1792943574"></script>
-<script src="data.js?v=1792943574"></script>
+<script src="icons.js?v=1792943790"></script>
+<script src="core.js?v=1792943790"></script>
+<script src="data.js?v=1792943790"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -601,14 +626,12 @@ document.title = S.name + ' | 研究ノート';
     if(!document.querySelector('.panel.home'))show('chart');window.scrollTo(0,0);
     const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
     if(reduce){op.classList.add('gone');return}
-    const edge=document.createElement('div');edge.className='opedge';document.body.appendChild(edge);
-    document.body.classList.add('enter');op.classList.add('leave');
-    const T=1150,t0=performance.now(),ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
-    (function step(now){const t=Math.min(1,(now-t0)/T),x=ease(t)*innerWidth;
-      if(window.burst&&Math.random()<.55)window.burst(x,Math.random()*innerHeight,2);
-      if(t<1)requestAnimationFrame(step)})(t0);
-    setTimeout(()=>{op.classList.add('gone');edge.remove()},T+30);
-    setTimeout(()=>document.body.classList.remove('enter'),2200);
+    const dg=document.createElement('div');dg.id='diag';
+    dg.innerHTML='<div class="dgc"><div class="dgh mono"><span>EXAMINATION ROOM</span><span>診察室</span></div><div class="dgt">診察中<i>…</i></div><svg class="dge" viewBox="0 0 300 40" preserveAspectRatio="none"><path class="g" d="M0 22H300"/><path class="p" d="M0 22H70l8-4 6 4h12l6-16 8 32 8-16h14l8-5 6 5H300"/></svg><div class="dgb"><i></i></div><ul class="dgl mono"><li><span>体温</span><b>36.5℃</b><em>正常</em></li><li><span>脈拍</span><b>72 bpm</b><em>正常</em></li><li><span>睡眠</span><b>ぎりぎり</b><em>要観察</em></li><li class="last"><span>診断</span><b>頓服として良好</b><em>異常なし</em></li></ul><div class="dgs">診察完了</div></div>';
+    document.body.appendChild(dg); op.classList.add('leave');
+    let done=false; const fin=()=>{ if(done)return; done=true; document.body.classList.add('enter'); dg.classList.add('out'); setTimeout(()=>{dg.remove();op.classList.add('gone')},650); setTimeout(()=>document.body.classList.remove('enter'),2300) };
+    setTimeout(()=>{ if(window.burst){const r=dg.querySelector('.dgs').getBoundingClientRect();window.burst(r.left+r.width/2,r.top+r.height/2,16)} },2250);
+    const tm=setTimeout(fin,3100); dg.addEventListener('click',()=>{clearTimeout(tm);fin()});
   });
 })();
 

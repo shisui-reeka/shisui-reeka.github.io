@@ -272,6 +272,14 @@ footer{text-align:center;font-size:11px;color:var(--sub);margin-top:22px}
 .hero .stage::before{content:"";position:absolute;z-index:-1;left:50%;top:46%;width:86%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;border:1.5px dashed rgba(143,119,194,.45);background:radial-gradient(circle,rgba(140,169,236,.16),rgba(140,169,236,0) 68%)}
 .hero .stage::after{content:"";position:absolute;z-index:-1;left:50%;bottom:3.5%;width:62%;height:9%;transform:translateX(-50%);border-radius:50%;background:radial-gradient(ellipse,rgba(143,119,194,.38),rgba(143,119,194,0) 70%);border:1px dashed rgba(143,119,194,.35)}
 .hero .stage .stand{animation:none!important;filter:drop-shadow(0 2px 3px rgba(60,50,110,.22));-webkit-mask-image:linear-gradient(#000 96%,transparent);mask-image:linear-gradient(#000 96%,transparent)}
+
+/* 方眼の背景をしっかり見せる: 台紙を透明にして、カードは半透明の付箋風に */
+.sheet{background:transparent;border:none;box-shadow:none}
+.tab[aria-selected=true]{background:rgba(255,255,255,.72)}
+.lk,.tile,.frame,.rx,pre.tpl,.slot,.status{background:rgba(255,255,255,.58)}
+details{background:rgba(255,255,255,.4)}
+.bub,.bub::after{background:#fff}
+@media(min-width:900px){.sheet{border:none;box-shadow:none}}
 </style>
 </head>
 <body>
@@ -300,7 +308,7 @@ footer{text-align:center;font-size:11px;color:var(--sub);margin-top:22px}
 
 <div id="lb" role="dialog" aria-label="拡大表示"><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="t" id="lbt"></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script src="icons.js?v=5"></script>
-<script src="core.js?v=10"></script>
+<script src="core.js?v=11"></script>
 <script src="data.js?v=10"></script>
 <script>
 loadContent().then(function(){

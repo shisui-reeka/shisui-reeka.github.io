@@ -112,7 +112,6 @@ window.SITE = {
     { title: "ミニキャラ", cat: "ちび・アイコン", by: "", img: "img/chibi12.webp" },
     { title: "ロゴ", cat: "ロゴ", by: "", img: "img/logo.webp" },
     { title: "ロゴ (カラー)", cat: "ロゴ", by: "", img: "img/logo2.webp" },
-    { title: "ロゴ (ブルー)", cat: "ロゴ", by: "", img: "img/logo3.webp" },
     { title: "ロゴ (モノクロ)", cat: "ロゴ", by: "", img: "img/logo1.webp" },
     { title: "ロゴ (ライン)", cat: "ロゴ", by: "", img: "img/logo30.webp" },
     { title: "TAKE A DOSE Tシャツ", cat: "グッズ", by: "", img: "img/tee.webp" },
@@ -134,7 +133,7 @@ window.SITE = {
     { label: "FA・過去実績を見る (#Re画)", url: "https://x.com/search?q=%23Re%E7%94%BB&f=live" }
   ],
   logo: "img/logo.webp?v=4",
-  logoVariants: ["img/logo.webp?v=4", "img/logo2.webp?v=4", "img/logo3.webp?v=4", "img/logo1.webp?v=4", "img/logo30.webp?v=4"],
+  logoVariants: ["img/logo.webp?v=4", "img/logo2.webp?v=4", "img/logo1.webp?v=4"],
   hero: "img/kv_c.webp",
   opStyle: "cool",   /* cool = かっこいいOP / cute = ふんわりOP */
   opBg: "img/kv10.webp",

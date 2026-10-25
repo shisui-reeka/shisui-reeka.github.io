@@ -302,6 +302,17 @@ details{background:rgba(255,255,255,.4)}
 #lb.on #lbi{animation:lbi .6s cubic-bezier(.2,.7,.2,1) both}
 @keyframes lbi{from{clip-path:inset(0 100% 0 0);transform:scale(.92)}to{clip-path:inset(0 0 0 0);transform:none}}
 #lb.on .t{animation:in .5s .35s both}
+
+/* スマホ: タブを横スクロールなしの2段・4列に。カルテの見出し札のまま */
+@media(max-width:899px){
+  .tabs{position:static;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;overflow:visible;margin:12px 0 0;padding:4px 0 12px;background:none;backdrop-filter:none;border-bottom:1px dashed var(--blue);touch-action:auto}
+  .tab{touch-action:manipulation;padding:9px 2px 7px;border:1px solid var(--line);border-radius:3px;background:rgba(255,255,255,.35);text-align:center;position:relative;top:0;border-bottom:1px solid var(--line)}
+  .tab[aria-selected=true]{background:rgba(255,255,255,.92);border-color:var(--violet);top:0;box-shadow:2px 2px 0 var(--line)}
+  .tab[aria-selected=true]::after{content:"";position:absolute;left:8px;right:8px;bottom:-1px;height:3px;background:var(--pink)}
+}
+#toTabs{display:none;position:fixed;right:14px;bottom:calc(16px + env(safe-area-inset-bottom));width:46px;height:46px;border-radius:50%;border:1.5px solid var(--violet);background:rgba(255,255,255,.94);color:var(--violet);font:inherit;font-size:10px;line-height:1.15;flex-direction:column;align-items:center;justify-content:center;z-index:60;box-shadow:2px 2px 0 var(--line);opacity:0;pointer-events:none;transition:opacity .2s;padding:0}
+#toTabs.on{opacity:1;pointer-events:auto}
+@media(max-width:899px){#toTabs{display:flex}}
 </style>
 </head>
 <body>
@@ -325,6 +336,7 @@ details{background:rgba(255,255,255,.4)}
 
   <nav class="tabs" role="tablist" id="tabs"></nav>
   <main class="sheet" id="main"></main>
+  <button id="toTabs" aria-label="目次へ">▲<span>目次</span></button>
   <div class="walker"><img src="img/chibi7.webp" alt=""></div>
   <footer class="mono">© Shisui Re-ka · all works are protected<br><span style="opacity:.75">Icons: <a href="licenses/tabler-icons-LICENSE.txt" style="color:inherit">Tabler Icons</a> (MIT License)</span></footer>
 </div>
@@ -332,14 +344,14 @@ details{background:rgba(255,255,255,.4)}
 <div id="lb" role="dialog" aria-label="拡大表示"><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="t" id="lbt"></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1792937261";
+window.BUILD="1792937421";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1792937261"></script>
-<script src="core.js?v=1792937261"></script>
-<script src="data.js?v=1792937261"></script>
+<script src="icons.js?v=1792937421"></script>
+<script src="core.js?v=1792937421"></script>
+<script src="data.js?v=1792937421"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -583,10 +595,12 @@ function fitMin(){main.style.minHeight=Math.max(300,window.innerHeight-tabsEl.of
 window.addEventListener('resize',fitMin);
 function keepTabsInPlace(){
   fitMin();
+  if(getComputedStyle(tabsEl).position!=='sticky')return;
   /* if the page was scrolled past the tabs, pull it up so the sticky tab bar stays exactly where it is */
   const nat=main.getBoundingClientRect().top+window.scrollY-tabsEl.offsetHeight;
   if(window.scrollY>nat) window.scrollTo(0,Math.round(nat));
 }
+(function(){const bt=document.getElementById('toTabs');const upd=()=>{const r=tabsEl.getBoundingClientRect();bt.classList.toggle('on',r.bottom<0)};addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd);bt.addEventListener('click',()=>{const y=tabsEl.getBoundingClientRect().top+window.scrollY-8;window.scrollTo({top:Math.max(0,y),behavior:'smooth'})});})();
 const PEEK={links:'chibi7',x:'chibi8',arc:'chibi9',gal:'chibi12',req:'chibi7',shop:'chibi8',fun:'chibi12'};
 function show(id,byTab){
   if(!P[id]) id='chart';

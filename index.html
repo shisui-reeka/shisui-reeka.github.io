@@ -579,8 +579,9 @@ body.enter .panel.home .hero .stand{animation:artin 1s cubic-bezier(.3,1.35,.5,1
 }
 
 /* 日本語の改行: 文節で折り返す */
-html{word-break:auto-phrase;line-break:strict;overflow-wrap:break-word}
-p,li,summary,h2,.cap,.tag,.muted,.remarks,.lk .s{text-wrap:pretty}
+html{word-break:normal;line-break:strict;overflow-wrap:break-word}
+.ot{white-space:nowrap}
+
 .ph{display:inline}
 .nb{display:inline-block;white-space:nowrap;max-width:100%}
 .bub{text-wrap:balance}
@@ -645,21 +646,21 @@ table.cred td{padding-top:6px;padding-bottom:6px}
   <button id="toTabs" aria-label="目次へ">▲<span>目次</span></button>
   <div class="walker"><img src="img/chibi7.webp" alt=""></div>
   <div class="rxline" id="rxline"></div>
-  <div class="remarks mono"><b>✚ 院内でのお願い</b><br><span class="rt"><span class="bk">画像・文章の無断転載、</span><span class="bk">AI学習への利用は</span><span class="bk">お控えください。</span><span class="bk">ご協力ありがとうございます。</span></span><span class="end">─── どうぞご自愛ください ───</span></div>
+  <div class="remarks mono"><b>✚ 院内でのお願い</b><br><span class="rt">画像・文章の無断転載、AI学習への利用はお控えください。ご協力ありがとうございます。</span><span class="end">─── どうぞご自愛ください ───</span></div>
   <footer class="mono">© Shisui Re-ka · all works are protected<br><span style="opacity:.75">Icons: <a href="licenses/tabler-icons-LICENSE.txt" style="color:inherit">Tabler Icons</a> (MIT License)</span></footer>
 </div>
 
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="lbnav"><button class="lbn" id="lbp" aria-label="前へ">‹</button><div class="t" id="lbt"></div><button class="lbn" id="lbn" aria-label="次へ">›</button></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1792947013";
+window.BUILD="1792947334";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1792947013"></script>
-<script src="core.js?v=1792947013"></script>
-<script src="data.js?v=1792947013"></script>
+<script src="icons.js?v=1792947334"></script>
+<script src="core.js?v=1792947334"></script>
+<script src="data.js?v=1792947334"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -976,28 +977,15 @@ function fitHero(){
 }
 let __fw=innerWidth;addEventListener('resize',()=>{if(innerWidth===__fw)return;__fw=innerWidth;fitHero()});addEventListener('orientationchange',()=>setTimeout(()=>{__fw=innerWidth;fitHero()},300));
 
-/* 文節分割(auto-phrase未対応ブラウザ用: Safari/Firefoxなど) */
-const PHR_P=new Set('は が を に で と も の へ や か ね よ な て た だ です ます ない する し れ ら から まで より など けど って ので のに ので ため こと もの という ください ました ません でした ます。'.split(' '));
+/* 行末に1〜2文字だけ残らないように、末尾3文字をひとかたまりにする */
 function phr(root){
-  if(!window.__forcePhr&&CSS.supports&&CSS.supports('word-break','auto-phrase'))return;
-  if(!(window.Intl&&Intl.Segmenter))return;
-  const sg=new Intl.Segmenter('ja',{granularity:'word'});
-  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>{const v=n.nodeValue;if(v.length<8||!/[\u3040-\u30ff\u4e00-\u9fff]/.test(v))return 2;const pe=n.parentElement;if(!pe||pe.closest('pre,textarea,script,style,svg,.nb,#wtx,.bub,.tab,.tabsH'))return 2;return 1}});
-  const nodes=[];while(w.nextNode())nodes.push(w.currentNode);
-  nodes.forEach(n=>{
-    const ch=[];let pre='';
-    for(const t of sg.segment(n.nodeValue)){
-      const x=t.segment;
-      if(/^[「『（(\[【おご]$/.test(x)){pre+=x;continue}
-      if(ch.length&&/^[\u4e00-\u9fff]$/.test(x)&&/[\u4e00-\u9fff]$/.test(ch[ch.length-1])){ch[ch.length-1]+=x;continue}
-      if(ch.length&&/^[\u3041-\u3093]+$/.test(x)&&(ch[ch.length-1]+x).length<=9&&!/[、。!?！？\s]$/.test(ch[ch.length-1])){ch[ch.length-1]+=x;continue}
-      if(ch.length&&(PHR_P.has(x)||/^[、。，．!?！？」』）)\]】…・ー〜]+$/.test(x)||(/^\s+$/.test(x)))){ch[ch.length-1]+=x;continue}
-      ch.push(pre+x);pre='';
-    }
-    if(pre)ch.push(pre);
-    if(ch.length<2)return;
-    const WJ='\u2060',ZW='\u200b';
-    n.nodeValue=ch.map(c=>c.replace(/([^\x00-\x7f\s])(?=[^\x00-\x7f\s])/g,'$1'+WJ)).join(ZW);
+  if(!root)return;
+  root.querySelectorAll('p,li,.cap,.tag,.muted,.s,.rt,td,.lead').forEach(el=>{
+    if(el.closest('pre,textarea,.bub,#wtx,.tab,.tabsH'))return;
+    const n=el.lastChild;if(!n||n.nodeType!==3)return;
+    const v=n.nodeValue.replace(/\s+$/,'');if(v.length<8)return;
+    const k=3;n.nodeValue=v.slice(0,-k);
+    const sp=document.createElement('span');sp.className='ot';sp.textContent=v.slice(-k);el.appendChild(sp);
   });
 }
 const PEEK={links:'chibi7',x:'chibi8',arc:'chibi9',gal:'chibi12',req:'chibi7',shop:'chibi8',fun:'chibi12'};

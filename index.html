@@ -511,11 +511,11 @@ function bindHero(){
 const tabsEl=$('#tabs'), main=$('#main');
 tabsEl.innerHTML = tabs.map(t=>`<button class="tab" role="tab" data-id="${t.id}" aria-selected="false">${t.ja}<small class="mono">${t.en}</small></button>`).join('');
 /* tab bar: no jumpy scrolling */
-function centerTab(b){
+function centerTab(b,instant){
   const c=tabsEl, l=b.offsetLeft, r=l+b.offsetWidth, v0=c.scrollLeft, v1=v0+c.clientWidth, m=24;
   let to=v0;
   if(l-m<v0) to=Math.max(0,l-m); else if(r+m>v1) to=r+m-c.clientWidth;
-  if(Math.abs(to-v0)>1) c.scrollTo({left:to,behavior:'smooth'});
+  if(Math.abs(to-v0)>1) c.scrollTo({left:to,behavior:instant?'auto':'smooth'});
 }
 function fitMin(){main.style.minHeight=Math.max(300,window.innerHeight-tabsEl.offsetHeight)+'px'}
 window.addEventListener('resize',fitMin);
@@ -525,10 +525,10 @@ function keepTabsInPlace(){
   const nat=main.getBoundingClientRect().top+window.scrollY-tabsEl.offsetHeight;
   if(window.scrollY>nat) window.scrollTo(0,Math.round(nat));
 }
-function show(id){
+function show(id,byTab){
   if(!P[id]) id='chart';
   main.innerHTML = `<section class="panel on ${id==='chart'?'home':''}">${P[id]()}</section>`;
-  tabsEl.querySelectorAll('.tab').forEach(b=>{const on=b.dataset.id===id;b.setAttribute('aria-selected',on);if(on)centerTab(b)});
+  tabsEl.querySelectorAll('.tab').forEach(b=>{const on=b.dataset.id===id;b.setAttribute('aria-selected',on);if(on&&!byTab)centerTab(b,true)});
   if(id==='gal'){ drawGal('すべて'); $('#chips').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;$('#chips').querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-pressed',x===b));drawGal(b.dataset.c)}); }
   if(id==='fun') bindFun();
   if(id==='chart') bindHero();
@@ -542,7 +542,7 @@ tabsEl.addEventListener('pointerdown',e=>{dn={x:e.clientX,l:tabsEl.scrollLeft}},
 tabsEl.addEventListener('click',e=>{
   const b=e.target.closest('.tab');if(!b)return;
   if(dn&&(Math.abs(e.clientX-dn.x)>8||Math.abs(tabsEl.scrollLeft-dn.l)>4)){dn=null;return}
-  dn=null; show(b.dataset.id);
+  dn=null; show(b.dataset.id,true);
 });
 show((location.hash||'').slice(1)||'chart');
 })();

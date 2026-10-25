@@ -204,6 +204,8 @@ a.frame{cursor:pointer}
 .tile{position:relative;text-align:left;border:1px solid var(--blue);background:#fff;font:inherit;color:var(--ink);padding:12px 12px 10px 14px;border-radius:4px;cursor:pointer;display:flex;flex-direction:column;gap:2px;min-height:78px;transition:.15s;overflow:hidden}
 .tile::after{content:"";position:absolute;right:-14px;top:-14px;width:44px;height:44px;border-radius:50%;background:rgba(255,99,189,.10)}
 .tile:hover,.tile:active{border-color:var(--pink);transform:translateY(-2px);box-shadow:3px 3px 0 var(--line)}
+.tile .tic{position:absolute;right:12px;top:12px;color:var(--violet);opacity:.75;z-index:1;transition:.25s}
+.tile:hover .tic{color:var(--pink);transform:rotate(-12deg) scale(1.12);opacity:1}
 .tile .n{font-size:10px;color:var(--pink);letter-spacing:.14em}
 .tile b{font-weight:500;font-size:16px;letter-spacing:.1em}
 .tile .e{font-size:10px;color:var(--violet);letter-spacing:.18em}
@@ -267,10 +269,11 @@ footer{text-align:center;font-size:11px;color:var(--sub);margin-top:22px}
 
   <nav class="tabs" role="tablist" id="tabs"></nav>
   <main class="sheet" id="main"></main>
-  <footer class="mono">© Shisui Re-ka · all works are protected</footer>
+  <footer class="mono">© Shisui Re-ka · all works are protected<br><span style="opacity:.75">Icons: <a href="licenses/tabler-icons-LICENSE.txt" style="color:inherit">Tabler Icons</a> (MIT License)</span></footer>
 </div>
 
 <div id="lb" role="dialog" aria-label="拡大表示"><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="t" id="lbt"></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
+<script src="icons.js"></script>
 <script src="data.js"></script>
 <script>
 (function(){
@@ -324,10 +327,9 @@ document.title = S.name + ' | 研究ノート';
 
 /* icons */
 const IC = {
-  link:'<svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>',
-  pill:'<svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="8.5" width="19" height="7" rx="3.5" transform="rotate(-35 12 12)"/><path d="M9.5 6.5l6 9" /></svg>',
-  cross:'<svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v18M6 9h12"/></svg>'
+  link:ico('link'), pill:ico('pill'), cross:ico('cross'), vaccine:ico('vaccine'), bandage:ico('bandage'), kit:ico('first-aid-kit'), heart:ico('heartbeat'), cap:ico('capsule-horizontal')
 };
+const ROT=[IC.pill,IC.vaccine,IC.cross,IC.bandage,IC.kit,IC.cap];
 const heroSvg = `<svg viewBox="0 0 96 96" fill="none" stroke="#8f77c2" stroke-width="1.5"><circle cx="48" cy="48" r="44" stroke="#8ca9ec" stroke-dasharray="3 4"/><path d="M48 18v60M32 36h32" stroke="#ff63bd" stroke-width="2"/><rect x="14" y="60" width="30" height="11" rx="5.5" transform="rotate(-30 29 65)"/><path d="M80 22l-3 3M70 32l8-8M72 34l-9 9 5 5 9-9z" /><circle cx="22" cy="24" r="1.6" fill="#8ca9ec" stroke="none"/><circle cx="78" cy="72" r="1.6" fill="#ff63bd" stroke="none"/><circle cx="70" cy="14" r="1.2" fill="#8f77c2" stroke="none"/></svg>`;
 
 /* panels */
@@ -344,15 +346,15 @@ const tabs = [
 const P = {};
 
 const MENU=[
-  ['links','リンク','LINKS','SNS・支援・ほしい物'],
-  ['x','ポスト','POSTS','Xの最新ポスト'],
-  ['arc','アーカイブ','ARCHIVE','配信・ハイライト'],
-  ['gal','ギャラリー','GALLERY','立ち絵・ロゴ・制作実績'],
-  ['req','依頼','COMMISSION','受付状況・料金・テンプレ'],
-  ['shop','ショップ','SHOP','BOOTH・FANBOX'],
-  ['fun','処方箋','FORTUNE','おみくじ・スタンプカード']
+  ['links','リンク','LINKS','SNS・支援・ほしい物','link'],
+  ['x','ポスト','POSTS','Xの最新ポスト','brand-x'],
+  ['arc','アーカイブ','ARCHIVE','配信・ハイライト','player-play'],
+  ['gal','ギャラリー','GALLERY','立ち絵・ロゴ・制作実績','photo'],
+  ['req','依頼','COMMISSION','受付状況・料金・テンプレ','pencil'],
+  ['shop','ショップ','SHOP','BOOTH・FANBOX','shopping-bag'],
+  ['fun','処方箋','FORTUNE','おみくじ・スタンプカード','pill']
 ];
-function menuHtml(){return '<div class="menu">'+MENU.map((m,i)=>`<button class="tile${i===MENU.length-1?' wide':''}" data-go="${m[0]}"><span class="n mono">No.${String(i+2).padStart(2,'0')}</span><b>${m[1]}</b><span class="e mono">${m[2]}</span><span class="d">${m[3]}</span></button>`).join('')+'</div>'}
+function menuHtml(){return '<div class="menu">'+MENU.map((m,i)=>`<button class="tile${i===MENU.length-1?' wide':''}" data-go="${m[0]}"><span class="tic">${ico(m[4],26)}</span><span class="n mono">No.${String(i+2).padStart(2,'0')}</span><b>${m[1]}</b><span class="e mono">${m[2]}</span><span class="d">${m[3]}</span></button>`).join('')+'</div>'}
 P.chart = () => {
   let h = `<div class="hero">${S.hero?`<img class="stand" src="${esc(S.hero)}" alt="${esc(S.name)}">`:heroSvg}<div class="row">${S.heroChibi?`<img src="${esc(S.heroChibi)}" alt="">`:''}<div><p>${esc(S.sub)}</p>${S.about.map(t=>`<p class="muted">${esc(t)}</p>`).join('')}</div></div></div>
   <h2><span class="no mono">MENU</span>目次</h2>${menuHtml()}
@@ -372,7 +374,7 @@ P.links = () => {
   for(const g in groups){
     h += `<div class="group mono">▼ ${esc(nm[g]||g)}</div>`;
     groups[g].forEach((l,i)=>{
-      const ic = [IC.pill,IC.cross,IC.link][i%3];
+      const ic = ROT[i%ROT.length];
       if(l.url) h += `<a class="lk" href="${esc(l.url)}" target="_blank" rel="noopener">${ic}<div><b>${esc(l.label)}</b><span class="s">${esc(l.sub||'')}</span></div><span class="go">›</span></a>`;
       else h += `<div class="lk off">${ic}<div><b>${esc(l.label)}</b><span class="s">${esc(l.sub||'')}</span></div><span class="badge mono">準備中</span></div>`;
     });

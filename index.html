@@ -534,6 +534,42 @@ body.enter .panel.home .hero .stand{animation:artin 1s cubic-bezier(.3,1.35,.5,1
 #diag .dgm i{position:absolute;left:0;right:0;height:3px;top:0;background:linear-gradient(90deg,transparent,#ff63bd,#8ca9ec,transparent);box-shadow:0 0 8px #ff63bd;animation:dgsc 1.3s .15s steps(13) forwards}
 @keyframes dgm{to{clip-path:inset(0 0 0 0)}}
 @keyframes dgsc{to{top:100%;opacity:0}}
+
+/* ===== 研究資料らしさ: 付箋・栞メニュー / トンボ / 記録ヘッダ ===== */
+.tab:nth-child(3n+1){--tc:#8ca9ec;--tb:rgba(140,169,236,.22)}
+.tab:nth-child(3n+2){--tc:#8f77c2;--tb:rgba(143,119,194,.22)}
+.tab:nth-child(3n){--tc:#ff63bd;--tb:rgba(255,99,189,.16)}
+.sheet{position:relative}
+.sheet::before{content:"";position:absolute;inset:16px -8px -8px -8px;pointer-events:none;z-index:1;
+  background:
+   linear-gradient(var(--violet),var(--violet)) 0 0/16px 1px no-repeat,linear-gradient(var(--violet),var(--violet)) 0 0/1px 16px no-repeat,
+   linear-gradient(var(--violet),var(--violet)) 100% 0/16px 1px no-repeat,linear-gradient(var(--violet),var(--violet)) 100% 0/1px 16px no-repeat,
+   linear-gradient(var(--violet),var(--violet)) 0 100%/16px 1px no-repeat,linear-gradient(var(--violet),var(--violet)) 0 100%/1px 16px no-repeat,
+   linear-gradient(var(--violet),var(--violet)) 100% 100%/16px 1px no-repeat,linear-gradient(var(--violet),var(--violet)) 100% 100%/1px 16px no-repeat;opacity:.55}
+.meta{display:flex;flex-wrap:wrap;gap:2px 14px;font-size:10px;letter-spacing:.14em;color:var(--violet);margin:0 0 12px;padding:0 0 5px;border-bottom:1px solid rgba(143,119,194,.45);padding-right:76px;position:relative}
+.meta::after{content:"";position:absolute;right:0;bottom:-1px;width:70px;height:1px;background:repeating-linear-gradient(90deg,var(--violet) 0 1px,transparent 1px 5px)}
+.meta b{font-weight:400;color:var(--pink)}
+.meta+h2{margin-top:10px}
+.remarks{margin:26px 0 0;padding:10px 12px;border:1px dashed var(--violet);font-size:10.5px;line-height:1.8;letter-spacing:.06em;color:var(--sub);background:rgba(255,255,255,.5)}
+.remarks b{color:var(--pink);font-weight:400;letter-spacing:.2em}
+.remarks .end{display:block;text-align:center;color:var(--violet);letter-spacing:.3em;margin-top:6px}
+/* PC: 付箋(ふせん) */
+@media(min-width:900px){
+  .tab{border:1px solid var(--tc);border-left:5px solid var(--tc);border-bottom:1px solid var(--tc);border-radius:2px 2px 0 0;background:var(--tb);padding:9px 18px 8px;position:relative;transform:rotate(var(--r,0deg));transition:transform .15s;box-shadow:2px 3px 0 rgba(143,119,194,.18)}
+  .tab:nth-child(odd){--r:-.8deg}.tab:nth-child(even){--r:.7deg}
+  .tab::after{content:"";position:absolute;right:0;top:0;border-style:solid;border-width:0 9px 9px 0;border-color:transparent #fff transparent transparent;opacity:.9}
+  .tab:hover{transform:translateY(-2px) rotate(0)}
+  .tab[aria-selected=true]{background:var(--tc);color:#fff;top:0;transform:translateY(-3px) rotate(0)}
+  .tab[aria-selected=true] small{color:#fff}
+}
+/* スマホ: 栞(しおり)メニュー */
+@media(max-width:899px){
+  body .tabs,body.homeview .tabs,body:not(.homeview) .tabs{background:rgba(238,241,250,.96);padding-top:10px}
+  .tab{border:none;border-top:4px solid var(--tc);background:linear-gradient(180deg,var(--tb),rgba(255,255,255,.88) 75%);clip-path:polygon(0 0,100% 0,100% 100%,50% 84%,0 100%);padding:8px 2px 17px;border-radius:0;box-shadow:none;position:relative;top:0;transition:transform .15s}
+  .tab::after{display:none}
+  .tab[aria-selected=true]{background:var(--tc);color:#fff;top:0;transform:translateY(-3px);box-shadow:none;border-top-color:var(--tc)}
+  .tab[aria-selected=true]::after{display:none}
+}
 </style>
 </head>
 <body>
@@ -564,20 +600,21 @@ body.enter .panel.home .hero .stand{animation:artin 1s cubic-bezier(.3,1.35,.5,1
   <button id="toTabs" aria-label="目次へ">▲<span>目次</span></button>
   <div class="walker"><img src="img/chibi7.webp" alt=""></div>
   <div class="rxline" id="rxline"></div>
+  <div class="remarks mono"><b>※ REMARKS</b><br>本資料内の画像・文章の無断転載、AI学習への利用を禁じます。<span class="end">─── END OF SHEET ───</span></div>
   <footer class="mono">© Shisui Re-ka · all works are protected<br><span style="opacity:.75">Icons: <a href="licenses/tabler-icons-LICENSE.txt" style="color:inherit">Tabler Icons</a> (MIT License)</span></footer>
 </div>
 
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="lbnav"><button class="lbn" id="lbp" aria-label="前へ">‹</button><div class="t" id="lbt"></div><button class="lbn" id="lbn" aria-label="次へ">›</button></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1792944533";
+window.BUILD="1792944794";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1792944533"></script>
-<script src="core.js?v=1792944533"></script>
-<script src="data.js?v=1792944533"></script>
+<script src="icons.js?v=1792944794"></script>
+<script src="core.js?v=1792944794"></script>
+<script src="data.js?v=1792944794"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -894,6 +931,7 @@ function show(id,byTab){
   if(id==='chart') main.querySelectorAll('.tile').forEach(t=>t.addEventListener('click',()=>show(t.dataset.go)));
   if(id==='req'){ const c=$('#cpy'); c&&c.addEventListener('click',()=>{ const t=S.commission.template; (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{c.textContent='コピーしました'}).catch(()=>{const r=document.createRange();r.selectNodeContents($('#tpl'));const s=getSelection();s.removeAllRanges();s.addRange(r);c.textContent='選択しました。コピーしてください'}) }); }
   if(id!=='chart') document.body.classList.remove('homeview');
+  if(id!=='chart'){const ix=tabs.findIndex(t=>t.id===id);main.firstChild.insertAdjacentHTML('afterbegin','<div class="meta mono"><span>EXP.No.<b>'+String(ix+1).padStart(2,'0')+'</b></span><span>REC. '+today().replace(/-/g,'.')+'</span><span>OBSERVER: Shisui Re-ka</span></div>');}
   if(PEEK[id]) main.firstChild.insertAdjacentHTML('afterbegin',`<img class="peek" data-i="0" src="img/${PEEK[id]}.webp" alt="">`);
   main.querySelectorAll('.empty').forEach(e=>e.insertAdjacentHTML('afterbegin','<img class="mini" src="img/chibi9.webp" alt="">'));
   {const ix=tabs.findIndex(t=>t.id===id),sn=document.getElementById('sheetNo');if(sn){const nn=String(ix+1).padStart(2,'0'),en=(tabs[ix]?tabs[ix].en:''),std='<span>SHEET <b>'+nn+'</b> / '+String(tabs.length).padStart(2,'0')+'</span><span>'+en+'</span>';const tk=(window.__ck=(window.__ck||0)+1);

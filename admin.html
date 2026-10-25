@@ -167,7 +167,7 @@ const VIEWS={
    b.append(el('label',{},'料金(ここに書くとサイトにも表の形で出ます)'));
    b.append(listEditor(c.prices,(it,card)=>{app(card,fText('内容(例: アイコン)',it,'item'));app(card,fText('金額(例: 3,000円〜)',it,'price'));app(card,fText('メモ',it,'note'))},()=>({item:'',price:'',note:''}),'＋ 料金をふやす'));}},
  talk:{t:'セリフ',s:'立ち絵をタップした時のひとこと',i:'pill',r(b){
-   b.append(el('h2',{},'立ち絵のセリフ'));b.append(el('p',{class:'note'},'立ち絵やミニキャラをタップするとランダムに出ます。1行=1セリフ。'));
+   b.append(el('h2',{},'立ち絵のセリフ'));b.append(el('p',{class:'note'},'立ち絵やミニキャラをタップするとランダムに出ます。1行=1セリフ。吹き出しで改行してよい場所に「/」を入れると、きれいに折り返します(例: 本日の処方、/始めますか?)。'));
    app(b,fArea('セリフ(1行=1つ)',C,'talk',v=>(v||[]).join('\n'),s=>s.split('\n').filter(x=>x.trim())));
    app(b,fText('タップしすぎた時のセリフ',C,'talkOver'));}},
  fortunes:{t:'おみくじ',s:'今日の処方箋の文言',i:'pill',r(b){

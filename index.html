@@ -277,6 +277,13 @@ body:not(.homeview) .tabs{top:calc(26px + env(safe-area-inset-top))}
  58%{transform:translateX(-5px);clip-path:inset(70% 0 0 0)}
  72%{transform:translateX(3px);clip-path:inset(0);filter:drop-shadow(2px 0 0 #ff63bd) drop-shadow(-2px 0 0 #8ca9ec)}
  100%{transform:none;clip-path:inset(0);filter:none}}
+
+/* 立ち絵の浮遊感 */
+.hero .stage{animation:floaty 5.2s ease-in-out infinite;will-change:translate}
+@keyframes floaty{0%,100%{translate:0 2px;rotate:-.5deg}50%{translate:0 -11px;rotate:.5deg}}
+.hero .stage::after{animation:gshadow 5.2s ease-in-out infinite}
+@keyframes gshadow{0%,100%{opacity:1;scale:1;translate:0 -2px}50%{opacity:.55;scale:.82;translate:0 11px}}
+@media(prefers-reduced-motion:reduce){.hero .stage,.hero .stage::after{animation:none}}
 /* tile menu */
 .menu{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:0 0 6px}
 .tile{position:relative;text-align:left;border:1px solid var(--blue);background:#fff;font:inherit;color:var(--ink);padding:12px 12px 10px 14px;border-radius:4px;cursor:pointer;display:flex;flex-direction:column;gap:2px;min-height:78px;transition:.15s;overflow:hidden}
@@ -515,14 +522,14 @@ body.enter .panel.home .hero .stand{animation:artin 1s cubic-bezier(.3,1.35,.5,1
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="t" id="lbt"></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1792942070";
+window.BUILD="1792942203";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1792942070"></script>
-<script src="core.js?v=1792942070"></script>
-<script src="data.js?v=1792942070"></script>
+<script src="icons.js?v=1792942203"></script>
+<script src="core.js?v=1792942203"></script>
+<script src="data.js?v=1792942203"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;

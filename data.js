@@ -103,8 +103,6 @@ window.SITE = {
   galleryCats: ["すべて", "立ち絵・三面図", "キービジュアル", "ちび・アイコン", "ロゴ", "グッズ", "制作実績"],
   gallery: [
     { title: "立ち絵", cat: "立ち絵・三面図", by: "", img: "img/kv.webp" },
-    { title: "立ち絵 (私服)", cat: "立ち絵・三面図", by: "", img: "img/full26.webp" },
-    { title: "立ち絵 (衣装)", cat: "立ち絵・三面図", by: "", img: "img/full5.webp" },
     { title: "キービジュアル", cat: "キービジュアル", by: "", img: "img/kv0.webp" },
     { title: "キービジュアル (夜空)", cat: "キービジュアル", by: "", img: "img/kv10.webp" },
     { title: "Love me like a drug", cat: "キービジュアル", by: "", img: "img/loveme.webp" },
@@ -127,7 +125,9 @@ window.SITE = {
   secret: [
     { title: "三面図", img: "img/sheet.webp" },
     { title: "立ち絵 (ニット帽なし)", img: "img/full27.webp" },
-    { title: "立ち絵 (上着なし)", img: "img/full33.webp" }
+    { title: "立ち絵 (上着なし)", img: "img/full33.webp" },
+    { title: "立ち絵 (私服)", img: "img/full26.webp" },
+    { title: "立ち絵 (衣装)", img: "img/full5.webp" }
   ],
   secretLead: "設定資料です。見つけてくれてありがとう。",
   tagLinks: [

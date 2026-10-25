@@ -164,7 +164,7 @@ pre.tpl{white-space:pre-wrap;background:#fff;border:1px solid var(--line);paddin
 @keyframes lgs{0%{opacity:1}20%{opacity:.35;filter:hue-rotate(40deg) blur(1px)}40%{opacity:1;clip-path:inset(0 0 45% 0)}60%{clip-path:inset(45% 0 0 0)}100%{clip-path:none;filter:none;opacity:1}}
 .logo{display:block;margin:10px auto 0;width:min(78%,360px);aspect-ratio:900/340;height:auto;object-fit:contain;cursor:pointer;-webkit-user-select:none;user-select:none}
 .hero{flex-direction:column;text-align:center;gap:10px}
-.hero .stand{width:min(94%,400px);height:auto;filter:drop-shadow(0 8px 14px rgba(143,119,194,.28));animation:float 6s ease-in-out infinite}
+.hero .stand{width:min(104%,440px);margin-left:-2%;height:auto;filter:drop-shadow(0 8px 14px rgba(143,119,194,.28));animation:float 6s ease-in-out infinite}
 @keyframes float{50%{transform:translateY(-6px)}}
 .hero .row{display:flex;gap:12px;align-items:center;text-align:left}
 .hero .row img{flex:0 0 64px;width:64px;height:auto}
@@ -232,12 +232,11 @@ a.frame{cursor:pointer}
   .frame .cap{font-size:13px}
   .panel.home{display:grid;grid-template-columns:minmax(300px,36%) 1fr;column-gap:44px;align-items:start}
   .panel.home>*{grid-column:2}
-  .panel.home>.hero{grid-column:1;grid-row:1 / span 30;position:sticky;top:76px;margin:0;padding:20px 8px;border:1px dashed var(--violet);background:rgba(255,255,255,.55)}
-  .hero .stand{width:min(96%,400px);max-height:72vh;object-fit:contain}
+  .panel.home>.hero{grid-column:1;grid-row:1 / span 30;position:sticky;top:76px;margin:0;padding:56px 0 0;border:0;background:none}
+  .hero .stand{width:min(100%,420px);max-height:76vh;object-fit:contain}
   .panel.home>h2:nth-of-type(1){margin-top:0}
   .lk{padding:14px 18px}
-  .menu{grid-template-columns:repeat(4,1fr);gap:12px}
-  .menu .tile.wide{grid-column:span 2}
+  .menu{grid-template-columns:repeat(2,1fr);gap:12px}
   .tile{min-height:92px}
   #lb img{max-height:86vh}
   #lbsec{max-width:980px!important}
@@ -249,6 +248,16 @@ a.frame{cursor:pointer}
   #op.cool .t1,#op.cool .term,#op.cool .t3,#op.cool .btn{margin-left:4px}
   #op.cool .btn{padding:12px 38px}
   #op .art{height:min(64vh,560px)}
+}
+@media(min-width:1200px){
+  /* pop the standing art out of the sheet to the left */
+  .panel.home>.hero{overflow:visible}
+  .hero .stand{width:calc(100% + 150px);max-width:560px;max-height:82vh;margin-left:-120px}
+  .hero .bub{left:calc(50% - 45px)}
+  .hero .hint{left:-90px}
+  .hero .row{padding-left:0}
+  .menu{grid-template-columns:repeat(4,1fr)}
+  .menu .tile.wide{grid-column:span 2}
 }
 @media(min-width:1500px){
   .wrap{max-width:1240px}

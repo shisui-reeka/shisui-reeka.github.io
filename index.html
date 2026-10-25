@@ -138,7 +138,7 @@ pre.tpl{white-space:pre-wrap;background:#fff;border:1px solid var(--line);paddin
 #op .t1{font-size:11px;color:var(--violet);letter-spacing:.4em;margin-top:6px;animation:wipe .8s 1.4s var(--wz) both;position:relative}
 #op .t2{font-size:32px;letter-spacing:.2em;animation:wipe .8s .6s var(--wz) both;display:none}
 #op .t3{font-size:13px;color:var(--sub);margin:6px 0 18px;animation:wipe .8s 1.7s var(--wz) both;position:relative}
-#op .btn{animation:wipe .8s 3.3s var(--wz) both;position:relative;padding:10px 30px;font-size:14px;letter-spacing:.3em}
+#op .btn{animation:wipe .8s 3.8s var(--wz) both;position:relative;padding:10px 30px;font-size:14px;letter-spacing:.3em}
 #op .art{height:min(46vh,380px);width:auto;opacity:0;transform:translateY(18px);animation:rise 1.2s .2s forwards;filter:drop-shadow(0 10px 18px rgba(143,119,194,.3));position:relative}
 #op .lg{width:min(70%,300px);animation:wipe .8s .9s var(--wz) both;margin-top:6px;position:relative}
 @keyframes rise{to{opacity:1;transform:none}}
@@ -308,7 +308,7 @@ details{background:rgba(255,255,255,.4)}
 
 <div id="lb" role="dialog" aria-label="拡大表示"><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="t" id="lbt"></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script src="icons.js?v=5"></script>
-<script src="core.js?v=12"></script>
+<script src="core.js?v=13"></script>
 <script src="data.js?v=11"></script>
 <script>
 loadContent().then(function(){
@@ -328,7 +328,7 @@ $('#hTag').textContent = S.tagline;
 $('#noDay').textContent = today().replace(/-/g,'');
 $('#opName').textContent = S.name;
 if(S.opStyle==='cool'){const o=$('#op');o.classList.add('cool');if(S.opBg){const b=$('#opBg');b.style.backgroundImage='url('+S.opBg+')';b.hidden=false}
-  const lines=['PATIENT : '+S.en.toUpperCase(),'STATUS  : <b>ONLINE</b>','RX      : '+S.tagline];const T=$('#opTerm');T.innerHTML=lines.map((l,i)=>`<div class="tl" style="animation-delay:${(1.9+i*.4).toFixed(1)}s">${l.replace(/ /g,'&nbsp;')}</div>`).join('');
+  const lines=['NAME   : '+S.en.toUpperCase(),'TYPE   : 頓服 (ヒト型おくすり)','STATUS : <b>ONLINE</b>','RX     : '+S.tagline];const T=$('#opTerm');T.innerHTML=lines.map((l,i)=>`<div class="tl" style="animation-delay:${(1.9+i*.4).toFixed(1)}s">${l.replace(/ /g,'&nbsp;')}</div>`).join('');
   $('#opTag').style.display='none'}
 else if(S.hero){const a=$('#opArt');a.src=S.hero;a.hidden=false}
 if(S.logo){const a=$('#opLogo');a.src=S.logo;a.hidden=false}

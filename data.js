@@ -130,7 +130,7 @@ window.SITE = {
     { label: "FA・過去実績を見る (#Re画)", url: "https://x.com/search?q=%23Re%E7%94%BB&f=live" }
   ],
   logo: "img/logo.webp",
-  hero: "img/kv.webp",
+  hero: "img/kv_c.webp",
   opStyle: "cool",   /* cool = かっこいいOP / cute = ふんわりOP */
   opBg: "img/kv10.webp",
   heroChibi: "img/chibi8.webp",

@@ -157,7 +157,7 @@ pre.tpl{white-space:pre-wrap;background:#fff;border:1px solid var(--line);paddin
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01s!important}}
 .logo{display:block;margin:10px auto 0;width:min(78%,360px);height:auto;cursor:pointer;-webkit-user-select:none;user-select:none}
 .hero{flex-direction:column;text-align:center;gap:10px}
-.hero .stand{width:min(72%,300px);height:auto;filter:drop-shadow(0 8px 14px rgba(143,119,194,.28));animation:float 6s ease-in-out infinite}
+.hero .stand{width:min(94%,400px);height:auto;filter:drop-shadow(0 8px 14px rgba(143,119,194,.28));animation:float 6s ease-in-out infinite}
 @keyframes float{50%{transform:translateY(-6px)}}
 .hero .row{display:flex;gap:12px;align-items:center;text-align:left}
 .hero .row img{flex:0 0 64px;width:64px;height:auto}
@@ -174,13 +174,15 @@ a.frame{cursor:pointer}
 /* play */
 .fx{position:fixed;pointer-events:none;z-index:300;font-size:16px;font-weight:700;line-height:1;animation:fxp .9s ease-out forwards}
 @keyframes fxp{from{opacity:1;transform:translate(-50%,-50%) scale(.4)}to{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1.25) rotate(var(--r))}}
-.hero{position:relative}
+.hero{position:relative;padding-top:56px}
+.hero .hint{position:absolute;top:18px;left:0;right:0;text-align:center;font-size:11px;letter-spacing:.2em;color:var(--violet);animation:hnt 2.4s ease-in-out infinite;pointer-events:none}
+@keyframes hnt{50%{transform:translateY(4px);opacity:.55}}
 .hero .stand,.hero .row img{cursor:pointer;-webkit-user-select:none;user-select:none;-webkit-user-drag:none}
 .bounce{animation:bounce .5s cubic-bezier(.3,1.6,.5,1)!important}
 @keyframes bounce{0%{transform:scale(1)}30%{transform:scale(.94,1.05) translateY(4px)}60%{transform:scale(1.05,.96) translateY(-10px)}100%{transform:scale(1)}}
 .wig{animation:wig .5s ease!important}
 @keyframes wig{20%{transform:rotate(-12deg)}50%{transform:rotate(10deg)}80%{transform:rotate(-5deg)}}
-.bub{position:absolute;left:50%;top:6px;transform:translateX(-50%) scale(.6);transform-origin:50% 100%;max-width:92%;background:#fff;border:1.5px solid var(--violet);border-radius:14px;padding:7px 14px;font-size:13px;line-height:1.5;color:var(--ink);opacity:0;pointer-events:none;z-index:5;box-shadow:3px 3px 0 var(--line);text-align:center}
+.bub{position:absolute;left:50%;top:2px;transform:translateX(-50%) scale(.6);transform-origin:50% 100%;max-width:92%;background:#fff;border:1.5px solid var(--violet);border-radius:14px;padding:7px 14px;font-size:13px;line-height:1.5;color:var(--ink);opacity:0;pointer-events:none;z-index:5;box-shadow:3px 3px 0 var(--line);text-align:center}
 .bub::after{content:"";position:absolute;left:50%;bottom:-8px;width:12px;height:12px;background:#fff;border-right:1.5px solid var(--violet);border-bottom:1.5px solid var(--violet);transform:translateX(-50%) rotate(45deg)}
 .bub.on{animation:bub 2.6s forwards}
 @keyframes bub{0%{opacity:0;transform:translateX(-50%) scale(.6)}10%{opacity:1;transform:translateX(-50%) scale(1.04)}16%{transform:translateX(-50%) scale(1)}86%{opacity:1}100%{opacity:0;transform:translateX(-50%) scale(.96)}}
@@ -224,7 +226,7 @@ a.frame{cursor:pointer}
   .panel.home{display:grid;grid-template-columns:minmax(300px,36%) 1fr;column-gap:44px;align-items:start}
   .panel.home>*{grid-column:2}
   .panel.home>.hero{grid-column:1;grid-row:1 / span 30;position:sticky;top:76px;margin:0;padding:20px 8px;border:1px dashed var(--violet);background:rgba(255,255,255,.55)}
-  .hero .stand{width:min(88%,330px);max-height:62vh;object-fit:contain}
+  .hero .stand{width:min(96%,400px);max-height:72vh;object-fit:contain}
   .panel.home>h2:nth-of-type(1){margin-top:0}
   .lk{padding:14px 18px}
   .menu{grid-template-columns:repeat(4,1fr);gap:12px}
@@ -356,7 +358,7 @@ const MENU=[
 ];
 function menuHtml(){return '<div class="menu">'+MENU.map((m,i)=>`<button class="tile${i===MENU.length-1?' wide':''}" data-go="${m[0]}"><span class="tic">${ico(m[4],26)}</span><span class="n mono">No.${String(i+2).padStart(2,'0')}</span><b>${m[1]}</b><span class="e mono">${m[2]}</span><span class="d">${m[3]}</span></button>`).join('')+'</div>'}
 P.chart = () => {
-  let h = `<div class="hero">${S.hero?`<img class="stand" src="${esc(S.hero)}" alt="${esc(S.name)}">`:heroSvg}<div class="row">${S.heroChibi?`<img src="${esc(S.heroChibi)}" alt="">`:''}<div><p>${esc(S.sub)}</p>${S.about.map(t=>`<p class="muted">${esc(t)}</p>`).join('')}</div></div></div>
+  let h = `<div class="hero"><div class="hint mono">▼ タップしてみて</div>${S.hero?`<img class="stand" src="${esc(S.hero)}" alt="${esc(S.name)}">`:heroSvg}<div class="row">${S.heroChibi?`<img src="${esc(S.heroChibi)}" alt="">`:''}<div><p>${esc(S.sub)}</p>${S.about.map(t=>`<p class="muted">${esc(t)}</p>`).join('')}</div></div></div>
   <h2><span class="no mono">MENU</span>目次</h2>${menuHtml()}
   <h2><span class="no mono">01</span>プロフィール</h2>
   <table class="chart">${S.chart.map(r=>`<tr><th class="mono">${esc(r[0])}</th><td>${esc(r[1])}</td></tr>`).join('')}</table>`;

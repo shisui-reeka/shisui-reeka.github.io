@@ -128,6 +128,8 @@ window.SITE = {
   ],
   secret: [
     { title: "三面図", img: "img/sheet.webp" },
+    { title: "立ち絵 (ニット帽なし)", img: "img/full27.webp" },
+    { title: "立ち絵 (上着なし)", img: "img/full33.webp" }
   ],
   secretLead: "設定資料です。見つけてくれてありがとう。",
   tagLinks: [

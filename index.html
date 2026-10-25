@@ -190,8 +190,8 @@ a.frame{cursor:pointer}
 @keyframes bounce{0%{transform:scale(1)}30%{transform:scale(.94,1.05) translateY(4px)}60%{transform:scale(1.05,.96) translateY(-10px)}100%{transform:scale(1)}}
 .wig{animation:wig .5s ease!important}
 @keyframes wig{20%{transform:rotate(-12deg)}50%{transform:rotate(10deg)}80%{transform:rotate(-5deg)}}
-.bub{position:absolute;right:2%;left:auto;top:96px;transform:scale(.6);transform-origin:0 100%;width:max-content;max-width:34%;text-align:left;background:#fff;border:1.5px solid var(--violet);border-radius:14px;padding:7px 12px;font-size:13px;line-height:1.5;color:var(--ink);opacity:0;pointer-events:none;z-index:5;box-shadow:3px 3px 0 var(--line)}
-.bub::after{content:"";position:absolute;left:14px;bottom:-8px;width:12px;height:12px;background:#fff;border-right:1.5px solid var(--violet);border-bottom:1.5px solid var(--violet);transform:rotate(45deg)}
+.bub{position:absolute;right:0;left:auto;top:96px;transform:scale(.6);transform-origin:0 50%;width:max-content;max-width:32%;text-align:left;background:#fff;border:1.5px solid var(--violet);border-radius:14px;padding:7px 12px;font-size:13px;line-height:1.5;color:var(--ink);opacity:0;pointer-events:none;z-index:5;box-shadow:3px 3px 0 var(--line)}
+.bub::after{content:"";position:absolute;left:-7px;top:50%;margin-top:-6px;width:12px;height:12px;background:#fff;border-left:1.5px solid var(--violet);border-bottom:1.5px solid var(--violet);transform:rotate(45deg)}
 .bub.on{animation:bub 2.6s forwards}
 @keyframes bub{0%{opacity:0;transform:scale(.6)}10%{opacity:1;transform:scale(1.04)}16%{transform:scale(1)}86%{opacity:1}100%{opacity:0;transform:scale(.96)}}
 .tile:hover b,.tile:active b{color:var(--violet)}
@@ -332,14 +332,14 @@ details{background:rgba(255,255,255,.4)}
 <div id="lb" role="dialog" aria-label="拡大表示"><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="t" id="lbt"></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1792936950";
+window.BUILD="1792937261";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1792936950"></script>
-<script src="core.js?v=1792936950"></script>
-<script src="data.js?v=1792936950"></script>
+<script src="icons.js?v=1792937261"></script>
+<script src="core.js?v=1792937261"></script>
+<script src="data.js?v=1792937261"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;

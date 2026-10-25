@@ -379,6 +379,18 @@ body::after{content:"";position:fixed;left:11px;top:0;bottom:0;width:1px;z-index
   body.homeview #sheetNo{display:none}
   body.homeview .hero{padding-top:14px}
 }
+
+/* オープニング→ホームの移行演出: 光る走査線が左から右へ抜けて、オープニングを消し、ホームが順に立ち上がる */
+#op.leave{pointer-events:none;animation:opwipe 1.15s cubic-bezier(.7,0,.25,1) forwards}
+@keyframes opwipe{from{clip-path:inset(0 0 0 0)}to{clip-path:inset(0 0 0 100%)}}
+.opedge{position:fixed;top:0;bottom:0;left:0;width:3px;z-index:101;pointer-events:none;background:linear-gradient(180deg,var(--blue),var(--pink),var(--violet));box-shadow:0 0 26px 8px rgba(255,99,189,.55),0 0 60px 20px rgba(140,169,236,.35);animation:edgemove 1.15s cubic-bezier(.7,0,.25,1) forwards}
+@keyframes edgemove{from{transform:translateX(0)}to{transform:translateX(100vw)}}
+.opedge::after{content:"";position:absolute;left:-60px;width:60px;top:0;bottom:0;background:linear-gradient(90deg,transparent,rgba(255,99,189,.18))}
+body.enter header,body.enter .tabs:not(.x),body.enter .sheetno,body.enter .panel.home .hero{animation:enterUp .75s cubic-bezier(.2,.8,.2,1) both}
+body.enter header{animation-delay:.25s}body.enter .tabs{animation-delay:.4s}body.enter .panel.home .hero{animation-delay:.55s}
+@keyframes enterUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+body.enter .panel.home .hero .stand{animation:artin 1s cubic-bezier(.3,1.35,.5,1) .6s both!important}
+@keyframes artin{from{opacity:0;transform:translateY(22px) scale(.94)}to{opacity:1;transform:none}}
 </style>
 </head>
 <body>
@@ -414,14 +426,14 @@ body::after{content:"";position:fixed;left:11px;top:0;bottom:0;width:1px;z-index
 <div id="lb" role="dialog" aria-label="拡大表示"><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="t" id="lbt"></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1792939817";
+window.BUILD="1792939923";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1792939817"></script>
-<script src="core.js?v=1792939817"></script>
-<script src="data.js?v=1792939817"></script>
+<script src="icons.js?v=1792939923"></script>
+<script src="core.js?v=1792939923"></script>
+<script src="data.js?v=1792939923"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -475,7 +487,22 @@ document.title = S.name + ' | 研究ノート';
   const op=$('#op');
   const seen = (()=>{try{return sessionStorage.getItem('op')}catch(e){return null}})();
   if(seen){op.classList.add('gone');}
-  $('#opGo').addEventListener('click',()=>{op.classList.add('gone');if(!document.querySelector('.panel.home'))show('chart');window.scrollTo(0,0);try{sessionStorage.setItem('op','1')}catch(e){}});
+  let leaving=false;
+  $('#opGo').addEventListener('click',()=>{
+    if(leaving)return;leaving=true;
+    try{sessionStorage.setItem('op','1')}catch(e){}
+    if(!document.querySelector('.panel.home'))show('chart');window.scrollTo(0,0);
+    const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduce){op.classList.add('gone');return}
+    const edge=document.createElement('div');edge.className='opedge';document.body.appendChild(edge);
+    document.body.classList.add('enter');op.classList.add('leave');
+    const T=1150,t0=performance.now(),ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+    (function step(now){const t=Math.min(1,(now-t0)/T),x=ease(t)*innerWidth;
+      if(window.burst&&Math.random()<.55)window.burst(x,Math.random()*innerHeight,2);
+      if(t<1)requestAnimationFrame(step)})(t0);
+    setTimeout(()=>{op.classList.add('gone');edge.remove()},T+30);
+    setTimeout(()=>document.body.classList.remove('enter'),2200);
+  });
 })();
 
 /* icons */

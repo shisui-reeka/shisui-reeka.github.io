@@ -290,11 +290,11 @@ details{background:rgba(255,255,255,.4)}
 @keyframes peekb{50%{transform:translateY(-4px)}}
 .empty .mini{display:block;width:62px;margin:0 auto 8px}
 .rx .rxc{width:78px;display:block;margin:8px auto 0}
-.walker{height:52px;position:relative;overflow:hidden;margin-top:14px}
+.walker{height:86px;position:relative;overflow:hidden;margin-top:14px}
 .walker img{position:absolute;left:-48px;bottom:0;width:40px;cursor:pointer;animation:walk 20s linear infinite;-webkit-user-drag:none;user-select:none}
 .walker img.hop{animation:walk 20s linear infinite,hop .45s ease}
 @keyframes walk{0%{left:-48px;transform:scaleX(1)}49%{left:calc(100% + 8px);transform:scaleX(1)}50%{left:calc(100% + 8px);transform:scaleX(-1)}99%{left:-48px;transform:scaleX(-1)}100%{left:-48px;transform:scaleX(1)}}
-@keyframes hop{50%{bottom:20px}}
+@keyframes hop{50%{bottom:26px}}
 .ring{position:absolute;left:50%;top:44%;width:30%;aspect-ratio:1;border:2px solid var(--pink);border-radius:50%;transform:translate(-50%,-50%) scale(.3);opacity:.8;pointer-events:none;animation:ringp .7s ease-out forwards}
 @keyframes ringp{to{transform:translate(-50%,-50%) scale(3.2);opacity:0}}
 .frame.press{animation:press .3s ease}
@@ -332,14 +332,14 @@ details{background:rgba(255,255,255,.4)}
 <div id="lb" role="dialog" aria-label="拡大表示"><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="t" id="lbt"></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1792936655";
+window.BUILD="1792936747";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1792936655"></script>
-<script src="core.js?v=1792936655"></script>
-<script src="data.js?v=1792936655"></script>
+<script src="icons.js?v=1792936747"></script>
+<script src="core.js?v=1792936747"></script>
+<script src="data.js?v=1792936747"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;

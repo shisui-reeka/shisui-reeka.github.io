@@ -130,7 +130,8 @@ window.SITE = {
     { label: "FA・過去実績を見る (#Re画)", url: "https://x.com/search?q=%23Re%E7%94%BB&f=live" }
   ],
   logo: "img/logo.webp",
-  hero: "img/chibi8.webp",
+  hero: "img/kv.webp",
+  heroChibi: "img/chibi8.webp",
 
   /* 依頼 */
   commission: {

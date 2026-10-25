@@ -529,6 +529,11 @@ body.enter .panel.home .hero .stand{animation:artin 1s cubic-bezier(.3,1.35,.5,1
 #lb.nonav .lbnav{display:none}
 #lbi.sw{animation:lbsw .28s ease both}
 @keyframes lbsw{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+#diag .dgm{position:relative;height:133px;border:1px solid var(--blue);margin:6px 0 4px;background:#fff url(img/loveme.webp) 50% 51.2%/119% auto no-repeat;clip-path:inset(0 0 100% 0);animation:dgm 1.3s .15s steps(13) forwards}
+#diag .dgm i{position:absolute;left:0;right:0;height:3px;top:0;background:linear-gradient(90deg,transparent,#ff63bd,#8ca9ec,transparent);box-shadow:0 0 8px #ff63bd;animation:dgsc 1.3s .15s steps(13) forwards}
+@keyframes dgm{to{clip-path:inset(0 0 0 0)}}
+@keyframes dgsc{to{top:100%;opacity:0}}
 </style>
 </head>
 <body>
@@ -565,14 +570,14 @@ body.enter .panel.home .hero .stand{animation:artin 1s cubic-bezier(.3,1.35,.5,1
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="lbnav"><button class="lbn" id="lbp" aria-label="前へ">‹</button><div class="t" id="lbt"></div><button class="lbn" id="lbn" aria-label="次へ">›</button></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1792944074";
+window.BUILD="1792944239";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1792944074"></script>
-<script src="core.js?v=1792944074"></script>
-<script src="data.js?v=1792944074"></script>
+<script src="icons.js?v=1792944239"></script>
+<script src="core.js?v=1792944239"></script>
+<script src="data.js?v=1792944239"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -638,8 +643,9 @@ document.title = S.name + ' | 研究ノート';
     if(!document.querySelector('.panel.home'))show('chart');window.scrollTo(0,0);
     const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
     if(reduce){op.classList.add('gone');return}
+    new Image().src='img/loveme.webp';
     const dg=document.createElement('div');dg.id='diag';
-    dg.innerHTML='<div class="dgc"><div class="dgh mono"><span>RECEPTION</span><span>受付</span></div><div class="dgt">受付中<i>…</i></div><svg class="dge" viewBox="0 0 300 40" preserveAspectRatio="none"><path class="g" d="M0 22H300"/><path class="p" d="M0 22H70l8-4 6 4h12l6-16 8 32 8-16h14l8-5 6 5H300"/></svg><div class="dgb"><i></i></div><ul class="dgl mono"><li><span>体温</span><b>36.5℃</b><em>正常</em></li><li><span>脈拍</span><b>72 bpm</b><em>正常</em></li><li><span>睡眠</span><b>ぎりぎり</b><em>要観察</em></li><li class="last"><span>受付</span><b>ご来院ありがとう</b><em>どうぞ</em></li></ul><div class="dgs">受付完了</div></div>';
+    dg.innerHTML='<div class="dgc"><div class="dgh mono"><span>RECEPTION</span><span>受付</span></div><div class="dgt">受付中<i>…</i></div><div class="dgm"><i></i></div><svg class="dge" viewBox="0 0 300 40" preserveAspectRatio="none"><path class="g" d="M0 22H300"/><path class="p" d="M0 22H70l8-4 6 4h12l6-16 8 32 8-16h14l8-5 6 5H300"/></svg><div class="dgb"><i></i></div><ul class="dgl mono"><li><span>体温</span><b>36.5℃</b><em>正常</em></li><li><span>脈拍</span><b>72 bpm</b><em>正常</em></li><li><span>睡眠</span><b>ぎりぎり</b><em>要観察</em></li><li class="last"><span>受付</span><b>ご来院ありがとう</b><em>どうぞ</em></li></ul><div class="dgs">受付完了</div></div>';
     document.body.appendChild(dg); op.classList.add('leave');
     let done=false; const fin=()=>{ if(done)return; done=true; document.body.classList.add('enter'); dg.classList.add('out'); setTimeout(()=>{dg.remove();op.classList.add('gone')},650); setTimeout(()=>document.body.classList.remove('enter'),2300) };
     const tm=setTimeout(fin,3100); dg.addEventListener('click',()=>{clearTimeout(tm);fin()});

@@ -135,10 +135,10 @@ pre.tpl{white-space:pre-wrap;background:#fff;border:1px solid var(--line);paddin
 #op{--wz:cubic-bezier(.2,.7,.2,1)}
 @keyframes wipe{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
 #op .stars{position:absolute;inset:0;pointer-events:none}
-#op .t1{font-size:11px;color:var(--violet);letter-spacing:.4em;margin-top:6px;animation:wipe .8s 1.5s var(--wz) both;position:relative}
+#op .t1{font-size:11px;color:var(--violet);letter-spacing:.4em;margin-top:6px;animation:wipe .8s 1.4s var(--wz) both;position:relative}
 #op .t2{font-size:32px;letter-spacing:.2em;animation:wipe .9s .6s var(--wz) both;display:none}
 #op .t3{font-size:13px;color:var(--sub);margin:6px 0 18px;animation:wipe .9s 1.7s var(--wz) both;position:relative}
-#op .btn{animation:wipe .8s 3.6s var(--wz) both;position:relative;padding:10px 30px;font-size:14px;letter-spacing:.3em}
+#op .btn{animation:wipe .8s 3.3s var(--wz) both;position:relative;padding:10px 30px;font-size:14px;letter-spacing:.3em}
 #op .art{height:min(46vh,380px);width:auto;opacity:0;transform:translateY(18px);animation:rise 1.2s .2s forwards;filter:drop-shadow(0 10px 18px rgba(143,119,194,.3));position:relative}
 #op .lg{width:min(70%,300px);animation:wipe 1s .9s var(--wz) both;margin-top:6px;position:relative}
 @keyframes rise{to{opacity:1;transform:none}}
@@ -151,7 +151,8 @@ pre.tpl{white-space:pre-wrap;background:#fff;border:1px solid var(--line);paddin
 #op.cool .lg{filter:drop-shadow(0 0 14px rgba(143,119,194,.7));animation:wipe .9s .5s var(--wz) both,glitch 4s 2.6s infinite;margin-top:40vh}
 @keyframes glitch{0%,92%,100%{transform:none;clip-path:none}93%{transform:translateX(-4px);clip-path:inset(10% 0 55% 0)}95%{transform:translateX(5px);clip-path:inset(55% 0 10% 0)}97%{transform:translateX(-2px);clip-path:none}}
 #op.cool .t1{color:#8ca9ec;margin-top:18px}
-#op.cool .term{animation:wipe .6s 1.9s var(--wz) both;font-size:11.5px;line-height:1.9;color:#8ca9ec;text-align:left;margin:14px 0 4px;position:relative;min-height:5.6em;letter-spacing:.12em}
+#op.cool .tl{animation:wipe .8s var(--wz) both;white-space:nowrap;font-family:ui-monospace,Menlo,Consolas,monospace}
+#op.cool .term{font-size:11.5px;line-height:1.9;color:#8ca9ec;text-align:left;margin:14px 0 4px;position:relative;min-height:5.6em;letter-spacing:.12em}
 #op.cool .term b{color:#ff63bd;font-weight:400}
 #op.cool .t3{color:#c9cffc}
 #op.cool .btn{background:transparent;border:1px solid #8ca9ec;color:#e9ecff;box-shadow:0 0 16px rgba(140,169,236,.35),inset 0 0 12px rgba(143,119,194,.25)}
@@ -299,7 +300,7 @@ footer{text-align:center;font-size:11px;color:var(--sub);margin-top:22px}
 
 <div id="lb" role="dialog" aria-label="拡大表示"><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="t" id="lbt"></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script src="icons.js?v=5"></script>
-<script src="core.js?v=6"></script>
+<script src="core.js?v=7"></script>
 <script src="data.js?v=9"></script>
 <script>
 loadContent().then(function(){
@@ -319,9 +320,8 @@ $('#hTag').textContent = S.tagline;
 $('#noDay').textContent = today().replace(/-/g,'');
 $('#opName').textContent = S.name;
 if(S.opStyle==='cool'){const o=$('#op');o.classList.add('cool');if(S.opBg){const b=$('#opBg');b.style.backgroundImage='url('+S.opBg+')';b.hidden=false}
-  const lines=['PATIENT : '+S.en.toUpperCase(),'STATUS  : <b>ONLINE</b>','RX      : '+S.tagline];let li=0,ci=0,out='';const T=$('#opTerm');
-  const tick=()=>{if(li>=lines.length)return;const raw=lines[li].replace(/<[^>]+>/g,'');ci++;if(ci>raw.length){out+=lines[li]+'<br>';li++;ci=0;T.innerHTML=out;return setTimeout(tick,160)}T.innerHTML=out+raw.slice(0,ci)+'▍';setTimeout(tick,28)};
-  setTimeout(tick,2000);$('#opTag').style.display='none'}
+  const lines=['PATIENT : '+S.en.toUpperCase(),'STATUS  : <b>ONLINE</b>','RX      : '+S.tagline];const T=$('#opTerm');T.innerHTML=lines.map((l,i)=>`<div class="tl" style="animation-delay:${(1.9+i*.4).toFixed(1)}s">${l.replace(/ /g,'&nbsp;')}</div>`).join('');
+  $('#opTag').style.display='none'}
 else if(S.hero){const a=$('#opArt');a.src=S.hero;a.hidden=false}
 if(S.logo){const a=$('#opLogo');a.src=S.logo;a.hidden=false}
 $('#opTag').textContent = S.tagline;

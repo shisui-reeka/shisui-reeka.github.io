@@ -182,7 +182,7 @@ a.frame{cursor:pointer}
 /* play */
 .fx{position:fixed;pointer-events:none;z-index:300;font-size:16px;font-weight:700;line-height:1;animation:fxp .9s ease-out forwards}
 @keyframes fxp{from{opacity:1;transform:translate(-50%,-50%) scale(.4)}to{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1.25) rotate(var(--r))}}
-.hero{position:relative;padding-top:56px}
+.hero{position:relative;padding-top:104px}
 .hero .hint{position:absolute;top:18px;left:0;right:0;text-align:center;font-size:11px;letter-spacing:.2em;color:var(--violet);animation:hnt 2.4s ease-in-out infinite;pointer-events:none}
 @keyframes hnt{50%{transform:translateY(4px);opacity:.55}}
 .hero .stand,.hero .row img{cursor:pointer;-webkit-user-select:none;user-select:none;-webkit-user-drag:none}
@@ -190,7 +190,7 @@ a.frame{cursor:pointer}
 @keyframes bounce{0%{transform:scale(1)}30%{transform:scale(.94,1.05) translateY(4px)}60%{transform:scale(1.05,.96) translateY(-10px)}100%{transform:scale(1)}}
 .wig{animation:wig .5s ease!important}
 @keyframes wig{20%{transform:rotate(-12deg)}50%{transform:rotate(10deg)}80%{transform:rotate(-5deg)}}
-.bub{position:absolute;left:50%;top:2px;transform:translateX(-50%) scale(.6);transform-origin:50% 100%;max-width:92%;background:#fff;border:1.5px solid var(--violet);border-radius:14px;padding:7px 14px;font-size:13px;line-height:1.5;color:var(--ink);opacity:0;pointer-events:none;z-index:5;box-shadow:3px 3px 0 var(--line);text-align:center}
+.bub{position:absolute;left:50%;top:2px;transform:translateX(-50%) scale(.6);transform-origin:50% 100%;max-width:92%;top:30px!important;background:#fff;border:1.5px solid var(--violet);border-radius:14px;padding:7px 14px;font-size:13px;line-height:1.5;color:var(--ink);opacity:0;pointer-events:none;z-index:5;box-shadow:3px 3px 0 var(--line);text-align:center}
 .bub::after{content:"";position:absolute;left:50%;bottom:-8px;width:12px;height:12px;background:#fff;border-right:1.5px solid var(--violet);border-bottom:1.5px solid var(--violet);transform:translateX(-50%) rotate(45deg)}
 .bub.on{animation:bub 2.6s forwards}
 @keyframes bub{0%{opacity:0;transform:translateX(-50%) scale(.6)}10%{opacity:1;transform:translateX(-50%) scale(1.04)}16%{transform:translateX(-50%) scale(1)}86%{opacity:1}100%{opacity:0;transform:translateX(-50%) scale(.96)}}
@@ -234,7 +234,7 @@ a.frame{cursor:pointer}
   .frame .cap{font-size:13px}
   .panel.home{display:grid;grid-template-columns:minmax(300px,36%) 1fr;column-gap:44px;align-items:start}
   .panel.home>*{grid-column:2}
-  .panel.home>.hero{grid-column:1;grid-row:1 / span 30;position:sticky;top:76px;margin:0;padding:56px 0 0;border:0;background:none}
+  .panel.home>.hero{grid-column:1;grid-row:1 / span 30;position:sticky;top:76px;margin:0;padding:104px 0 0;border:0;background:none}
   .hero .stand{width:min(100%,420px);max-height:76vh;object-fit:contain}
   .panel.home>h2:nth-of-type(1){margin-top:0}
   .lk{padding:14px 18px}
@@ -308,7 +308,7 @@ details{background:rgba(255,255,255,.4)}
 
 <div id="lb" role="dialog" aria-label="拡大表示"><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="t" id="lbt"></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script src="icons.js?v=5"></script>
-<script src="core.js?v=11"></script>
+<script src="core.js?v=12"></script>
 <script src="data.js?v=10"></script>
 <script>
 loadContent().then(function(){
@@ -520,7 +520,7 @@ function bindFun(){
 })();
 /* play: tap the character */
 function talkBubble(el,text){
-  let b=el.parentElement.querySelector('.bub'); if(!b){b=document.createElement('div');b.className='bub';el.parentElement.appendChild(b)}
+  const hr=el.closest('.hero')||el.parentElement;let b=hr.querySelector('.bub'); if(!b){b=document.createElement('div');b.className='bub';hr.appendChild(b)}
   b.classList.remove('on'); void b.offsetWidth; b.textContent=text; b.classList.add('on');
 }
 let tapN=0,lastTalk=-1;

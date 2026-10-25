@@ -131,6 +131,8 @@ window.SITE = {
   ],
   logo: "img/logo.webp",
   hero: "img/kv.webp",
+  opStyle: "cool",   /* cool = かっこいいOP / cute = ふんわりOP */
+  opBg: "img/kv10.webp",
   heroChibi: "img/chibi8.webp",
 
   /* 依頼 */

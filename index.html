@@ -34,7 +34,7 @@ a{color:var(--violet)}
 header{padding:calc(26px + env(safe-area-inset-top)) 0 10px;text-align:center;position:relative}
 .stamp-top{font-size:11px;color:var(--violet);border:1px solid var(--violet);display:inline-block;padding:1px 10px;border-radius:2px;transform:rotate(-2deg)}
 h1{margin:10px 0 0;font-size:30px;font-weight:600;letter-spacing:.18em;color:var(--ink)}
-.read{font-size:12px;color:var(--sub);margin-top:2px}
+.read{font-size:12px;color:var(--sub);margin-top:-18px;position:relative}
 .tag{margin:8px 0 0;font-size:14px;color:var(--violet)}
 .tag::before,.tag::after{content:"✝";color:var(--pink);margin:0 .6em;font-size:11px}
 
@@ -170,6 +170,38 @@ a.frame{cursor:pointer}
 #lb .x{position:absolute;top:calc(12px + env(safe-area-inset-top));right:14px}
 #sec h2{margin-top:0}
 .secretgrid{display:grid;gap:14px}
+
+/* ===== PC layout ===== */
+@media(min-width:900px){
+  .wrap{max-width:1080px;padding:0 32px 48px}
+  .logo{width:340px;margin-bottom:-28px}
+  .tabs{margin:10px 0 0;padding:8px 14px 0;justify-content:center;gap:6px}
+  .tab{font-size:14px;padding:9px 20px 8px}
+  .sheet{padding:34px 40px 44px;font-size:15px}
+  h2{font-size:19px;margin:34px 0 14px}
+  .grid{grid-template-columns:repeat(4,1fr);gap:18px}
+  .frame .cap{font-size:13px}
+  .panel.home{display:grid;grid-template-columns:minmax(300px,36%) 1fr;column-gap:44px;align-items:start}
+  .panel.home>*{grid-column:2}
+  .panel.home>.hero{grid-column:1;grid-row:1 / span 30;position:sticky;top:76px;margin:0;padding:20px 8px;border:1px dashed var(--violet);background:rgba(255,255,255,.55)}
+  .hero .stand{width:min(88%,330px);max-height:62vh;object-fit:contain}
+  .panel.home>h2:nth-of-type(1){margin-top:0}
+  .lk{padding:14px 18px}
+  #lb img{max-height:86vh}
+  #lbsec{max-width:980px!important}
+  .secretgrid{grid-template-columns:repeat(2,1fr)}
+  #op.cool{align-items:flex-start;text-align:left;padding-left:9vw;justify-content:center}
+  #op.cool .bg{background-size:auto 100%;background-position:right center;background-repeat:no-repeat}
+  #op.cool .bg::after{background:linear-gradient(90deg,#0d1022 0%,#0d1022 34%,rgba(13,16,34,.55) 62%,rgba(13,16,34,.1) 100%)}
+  #op.cool .lg{margin-top:0;width:min(34vw,420px)}
+  #op.cool .t1,#op.cool .term,#op.cool .t3,#op.cool .btn{margin-left:4px}
+  #op.cool .btn{padding:12px 38px}
+  #op .art{height:min(64vh,560px)}
+}
+@media(min-width:1500px){
+  .wrap{max-width:1240px}
+  .grid{grid-template-columns:repeat(5,1fr)}
+}
 footer{text-align:center;font-size:11px;color:var(--sub);margin-top:22px}
 </style>
 </head>
@@ -271,8 +303,8 @@ const tabs = [
 const P = {};
 
 P.chart = () => {
-  let h = `<h2><span class="no mono">01</span>プロフィール</h2>
-  <div class="hero">${S.hero?`<img class="stand" src="${esc(S.hero)}" alt="${esc(S.name)}">`:heroSvg}<div class="row">${S.heroChibi?`<img src="${esc(S.heroChibi)}" alt="">`:''}<div><p>${esc(S.sub)}</p>${S.about.map(t=>`<p class="muted">${esc(t)}</p>`).join('')}</div></div></div>
+  let h = `<div class="hero">${S.hero?`<img class="stand" src="${esc(S.hero)}" alt="${esc(S.name)}">`:heroSvg}<div class="row">${S.heroChibi?`<img src="${esc(S.heroChibi)}" alt="">`:''}<div><p>${esc(S.sub)}</p>${S.about.map(t=>`<p class="muted">${esc(t)}</p>`).join('')}</div></div></div>
+  <h2><span class="no mono">01</span>プロフィール</h2>
   <table class="chart">${S.chart.map(r=>`<tr><th class="mono">${esc(r[0])}</th><td>${esc(r[1])}</td></tr>`).join('')}</table>`;
   h += `<h2><span class="no mono">02</span>ご案内</h2>` + S.notes.map(n=>`<details><summary>${esc(n.title)}</summary><div class="in">${n.body.map(b=>`<p>${esc(b)}</p>`).join('')}</div></details>`).join('');
   h += `<h2><span class="no mono">03</span>配信のお約束</h2><details open><summary>みんなで気持ちよく過ごすために</summary><div class="in"><ol class="rules">${S.rules.map(r=>`<li>${esc(r)}</li>`).join('')}</ol></div></details>`;
@@ -375,7 +407,7 @@ const tabsEl=$('#tabs'), main=$('#main');
 tabsEl.innerHTML = tabs.map(t=>`<button class="tab" role="tab" data-id="${t.id}" aria-selected="false">${t.ja}<small class="mono">${t.en}</small></button>`).join('');
 function show(id){
   if(!P[id]) id='chart';
-  main.innerHTML = `<section class="panel on">${P[id]()}</section>`;
+  main.innerHTML = `<section class="panel on ${id==='chart'?'home':''}">${P[id]()}</section>`;
   tabsEl.querySelectorAll('.tab').forEach(b=>{const on=b.dataset.id===id;b.setAttribute('aria-selected',on);if(on)b.scrollIntoView({inline:'center',block:'nearest'})});
   if(id==='gal'){ drawGal('すべて'); $('#chips').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;$('#chips').querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-pressed',x===b));drawGal(b.dataset.c)}); }
   if(id==='fun') bindFun();

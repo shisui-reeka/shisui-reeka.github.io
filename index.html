@@ -263,6 +263,20 @@ body:not(.homeview) .tabs{top:calc(26px + env(safe-area-inset-top))}
 #syr{top:calc(26px + env(safe-area-inset-top))!important}
 .panel.home>.hero{--x:0}
 @media(min-width:900px){.panel.home>.hero{top:102px!important}}
+
+/* 設定資料: ノイズ */
+#lb::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;z-index:5;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .55 0 0 0 0 .5 0 0 0 0 .85 0 0 0 1.4 -.35'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>"),repeating-linear-gradient(0deg,rgba(143,119,194,.25) 0 1px,transparent 1px 4px)}
+#lb.glitch::after{animation:nz 1.3s steps(1) both}
+@keyframes nz{0%{opacity:.95;background-position:0 0,0 0}12%{opacity:.7;background-position:-60px 40px,0 0}24%{opacity:.9;background-position:30px -80px,0 2px}38%{opacity:.45;background-position:-120px 10px,0 0}52%{opacity:.7;background-position:70px 90px,0 2px}68%{opacity:.25}82%{opacity:.4;background-position:-30px -30px,0 0}100%{opacity:0}}
+#lb.glitch #lbsec{animation:gj 1.3s steps(1) both}
+@keyframes gj{0%{transform:translateX(-8px);clip-path:inset(10% 0 55% 0);filter:drop-shadow(4px 0 0 #ff63bd) drop-shadow(-4px 0 0 #8ca9ec)}
+ 10%{transform:translateX(10px);clip-path:inset(60% 0 8% 0)}
+ 20%{transform:translateX(-4px);clip-path:inset(0 0 0 0);filter:drop-shadow(-5px 0 0 #ff63bd) drop-shadow(5px 0 0 #8ca9ec)}
+ 32%{transform:translateX(6px);clip-path:inset(30% 0 40% 0)}
+ 44%{transform:none;clip-path:inset(0);filter:drop-shadow(3px 0 0 #ff63bd) drop-shadow(-3px 0 0 #8ca9ec)}
+ 58%{transform:translateX(-5px);clip-path:inset(70% 0 0 0)}
+ 72%{transform:translateX(3px);clip-path:inset(0);filter:drop-shadow(2px 0 0 #ff63bd) drop-shadow(-2px 0 0 #8ca9ec)}
+ 100%{transform:none;clip-path:inset(0);filter:none}}
 /* tile menu */
 .menu{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:0 0 6px}
 .tile{position:relative;text-align:left;border:1px solid var(--blue);background:#fff;font:inherit;color:var(--ink);padding:12px 12px 10px 14px;border-radius:4px;cursor:pointer;display:flex;flex-direction:column;gap:2px;min-height:78px;transition:.15s;overflow:hidden}
@@ -432,6 +446,7 @@ body::after{content:"";position:fixed;left:11px;top:0;bottom:0;width:1px;z-index
   body.homeview #sheetNo{display:none}
   body.homeview .hero{padding-top:14px}
   body.homeview header{display:flex;align-items:center;justify-content:space-between;gap:10px;text-align:left;padding:8px 0 0}
+  body.homeview header{position:relative;z-index:30}
   body.homeview header .read,body.homeview header .tag{display:none}
   body.homeview header .logo{height:74px;width:auto;max-width:60%;flex:none;margin:0;object-fit:contain;object-position:left center}
   body.homeview header h1{margin:0;font-size:22px}
@@ -491,14 +506,14 @@ body.enter .panel.home .hero .stand{animation:artin 1s cubic-bezier(.3,1.35,.5,1
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="t" id="lbt"></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1792941651";
+window.BUILD="1792941710";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1792941651"></script>
-<script src="core.js?v=1792941651"></script>
-<script src="data.js?v=1792941651"></script>
+<script src="icons.js?v=1792941710"></script>
+<script src="core.js?v=1792941710"></script>
+<script src="data.js?v=1792941710"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -537,7 +552,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')lb.classList.remove(
     lg.addEventListener('animationend',()=>lg.classList.remove('swap'),{once:true});
     const r=lg.getBoundingClientRect();window.burst&&window.burst(r.left+r.width/2,r.top+r.height/2,8)})})();
 /* secret: logo 5 taps */
-(function(){let n=0,t=null;const lg=$('#hLogo');(lg.hidden?$('#hName'):lg).addEventListener('click',()=>{n++;clearTimeout(t);t=setTimeout(()=>n=0,1500);if(n>=5){n=0;const s=$('#lbsec');$('#lbi').style.display='none';$('#lbt').textContent='';s.style.display='block';s.innerHTML='<h2 style="margin-top:0">設定資料</h2><p class="muted">'+esc(S.secretLead)+'</p><div class="secretgrid">'+S.secret.map(x=>'<div class="frame" style="cursor:default"><img style="width:100%;display:block;background:#fff" src="'+esc(x.img)+'" alt="'+esc(x.title)+'"><div class="cap">'+esc(x.title)+'</div></div>').join('')+'</div>';lb.classList.add('on')}})})();
+(function(){let n=0,t=null;const lg=$('#hLogo');(lg.hidden?$('#hName'):lg).addEventListener('click',()=>{n++;clearTimeout(t);t=setTimeout(()=>n=0,1500);if(n>=5){n=0;const s=$('#lbsec');$('#lbi').style.display='none';$('#lbt').textContent='';s.style.display='block';s.innerHTML='<h2 style="margin-top:0">設定資料</h2><p class="muted">'+esc(S.secretLead)+'</p><div class="secretgrid">'+S.secret.map(x=>'<div class="frame" style="cursor:default"><img style="width:100%;display:block;background:#fff" src="'+esc(x.img)+'" alt="'+esc(x.title)+'"><div class="cap">'+esc(x.title)+'</div></div>').join('')+'</div>';lb.classList.add('on');lb.classList.remove('glitch');void lb.offsetWidth;lb.classList.add('glitch');setTimeout(()=>lb.classList.remove('glitch'),1300)}})})();
 document.title = S.name + ' | 研究ノート';
 
 /* opening */

@@ -210,6 +210,54 @@ a.frame{cursor:pointer}
 .slot.stamped{animation:stp .55s cubic-bezier(.3,1.7,.5,1)}
 @keyframes stp{0%{transform:scale(2.2) rotate(-30deg);opacity:0}100%{transform:none;opacity:1}}
 .ei{display:inline-flex;vertical-align:-3px;color:var(--violet);margin:0 2px}
+
+/* ward ticker + bpm */
+.ward{display:flex;align-items:center;gap:8px;height:26px;margin:0 -16px;padding:0 10px;background:#fff;border-bottom:1px solid var(--blue);font:11px/1 ui-monospace,Menlo,Consolas,monospace;color:var(--violet);overflow:hidden;position:relative;z-index:5}
+.ward .wl{flex:none;background:var(--violet);color:#fff;padding:3px 7px;letter-spacing:.14em;font-size:10px}
+.ward .wt{flex:1;overflow:hidden;white-space:nowrap;min-width:0;-webkit-mask:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.ward .wt span{display:inline-block;padding-left:100%;animation:wtk 40s linear infinite;letter-spacing:.06em}
+@keyframes wtk{to{transform:translateX(-100%)}}
+.ward .bpm{flex:none;color:var(--pink);letter-spacing:.06em;display:flex;align-items:center;gap:4px}
+.ward .bpm b{font-weight:400;min-width:2.2em;text-align:right}
+.ward .bpm .hh{display:inline-block;font-style:normal;animation:hb var(--hb,.83s) ease-in-out infinite}
+@keyframes hb{0%,100%{transform:scale(1)}15%{transform:scale(1.3)}30%{transform:scale(1)}45%{transform:scale(1.18)}}
+.sheetno.call span:first-child{color:#fff;background:var(--pink);padding:1px 6px;animation:cl .35s steps(2) 4}
+@keyframes cl{50%{opacity:.25}}
+.sheetno.call b{color:#fff}
+.dcard{border:1.5px solid var(--blue);background:rgba(255,255,255,.7);position:relative;margin:10px 0;padding:0 0 10px;border-radius:6px;overflow:hidden}
+.dcard .dh{display:flex;justify-content:space-between;align-items:baseline;background:var(--blue);color:#fff;padding:6px 12px;font:12px/1.2 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.2em}
+.dcard .dh b{font-weight:400;font-size:15px;letter-spacing:.4em}
+.dcard .dn{display:flex;justify-content:space-between;padding:6px 12px 0;font:10px/1.2 ui-monospace,Menlo,Consolas,monospace;color:var(--violet);letter-spacing:.12em}
+.dcard .slots{display:grid;gap:8px;padding:10px 12px 4px}
+.dcard .slot{background:#fff;border-radius:50%}
+.dcard .slot.on{border:none;background:transparent}
+.dcard .slot.on svg{width:100%;height:auto;display:block}
+.dcard.full{border-color:var(--pink)}
+.prslot{display:flex;align-items:center;gap:8px;font:10px/1 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.2em;color:#fff;background:var(--violet);padding:6px 10px;border-radius:4px 4px 0 0;margin-top:10px}
+.prslot i{flex:1;height:5px;background:#2b2347;border-radius:3px;box-shadow:inset 0 1px 2px #000}
+#rx{margin-bottom:22px}
+.rx{margin-top:0}
+.rx::after{content:"";position:absolute;left:-1px;right:-1px;bottom:-9px;height:9px;background:linear-gradient(135deg,#fff 50%,transparent 50%) 0 0/14px 9px,linear-gradient(225deg,#fff 50%,transparent 50%) 0 0/14px 9px;background-repeat:repeat-x}
+.rx.print{animation:prt 1.7s steps(16) both}
+@keyframes prt{from{clip-path:inset(0 0 100% 0);transform:translateY(-30px)}to{clip-path:inset(0 0 -12px 0);transform:none}}
+.mon{background:#fff;border:1px solid var(--violet);padding:12px 14px;margin:0 0 10px;position:relative}
+.mon h3{margin:0 0 8px;font:12px/1.2 ui-monospace,Menlo,Consolas,monospace;color:var(--violet);letter-spacing:.2em}
+.mon .q{margin:8px 0 4px;font-size:13px}
+.mon .q small{color:var(--pink);font:10px ui-monospace,monospace;margin-right:6px}
+.mon .a{display:flex;gap:8px;flex-wrap:wrap}
+.mon .a button{border:1px solid var(--blue);background:#fff;color:var(--sub);font:inherit;font-size:12.5px;padding:5px 12px;border-radius:99px;cursor:pointer}
+.mon .a button[aria-pressed=true]{background:var(--pink);border-color:var(--pink);color:#fff}
+#lb{background:radial-gradient(ellipse at 50% 40%,#fff 0,#eaf0ff 70%)}
+#lb .lbl{position:absolute;top:calc(16px + env(safe-area-inset-top));left:14px;font:10px/1.2 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.2em;color:var(--violet);border:1px solid var(--violet);padding:3px 7px;background:#fff}
+#lb.on{animation:fl .7s steps(1) both}
+@keyframes fl{0%{opacity:0}8%{opacity:.9}14%{opacity:.2}22%{opacity:1}30%{opacity:.5}40%,100%{opacity:1}}
+.chip.tg{border-style:dashed;margin-left:auto}
+#gal.ptp{background:linear-gradient(115deg,#e6ecfa,#f6f8fd 40%,#dde5f7 60%,#eef2fc);border:1px solid var(--blue);border-radius:6px;padding:14px;gap:12px;grid-template-columns:repeat(3,1fr)}
+@media(min-width:900px){#gal.ptp{grid-template-columns:repeat(5,1fr)}}
+#gal.ptp .frame{border-radius:50%;aspect-ratio:1;padding:0;border:2px solid #fff;background:rgba(255,255,255,.4);box-shadow:inset 0 2px 8px rgba(140,169,236,.55),0 2px 4px rgba(70,80,130,.25);overflow:hidden;cursor:pointer;position:relative}
+#gal.ptp .frame .ph{aspect-ratio:1;height:100%;border:none;border-radius:50%;overflow:hidden}
+#gal.ptp .frame .ph img{width:100%;height:100%;object-fit:cover}
+#gal.ptp .frame .cap{display:none}
 /* tile menu */
 .menu{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:0 0 6px}
 .tile{position:relative;text-align:left;border:1px solid var(--blue);background:#fff;font:inherit;color:var(--ink);padding:12px 12px 10px 14px;border-radius:4px;cursor:pointer;display:flex;flex-direction:column;gap:2px;min-height:78px;transition:.15s;overflow:hidden}
@@ -405,6 +453,7 @@ body.enter .panel.home .hero .stand{animation:artin 1s cubic-bezier(.3,1.35,.5,1
 </div>
 
 <div class="wrap">
+  <div class="ward" id="ward"><span class="wl">院内放送</span><div class="wt"><span id="wtx"></span></div><span class="bpm" id="bpm"><i class="hh">♡</i><b>72</b>bpm</span></div>
   <header>
     <div class="stamp-top mono">RESEARCH NOTE · No.<span id="noDay"></span></div>
     <img class="logo" id="hLogo" alt="" hidden><h1 id="hName"></h1>
@@ -423,17 +472,17 @@ body.enter .panel.home .hero .stand{animation:artin 1s cubic-bezier(.3,1.35,.5,1
   <footer class="mono">© Shisui Re-ka · all works are protected<br><span style="opacity:.75">Icons: <a href="licenses/tabler-icons-LICENSE.txt" style="color:inherit">Tabler Icons</a> (MIT License)</span></footer>
 </div>
 
-<div id="lb" role="dialog" aria-label="拡大表示"><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="t" id="lbt"></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
+<div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="t" id="lbt"></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1792939923";
+window.BUILD="1792940372";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1792939923"></script>
-<script src="core.js?v=1792939923"></script>
-<script src="data.js?v=1792939923"></script>
+<script src="icons.js?v=1792940372"></script>
+<script src="core.js?v=1792940372"></script>
+<script src="data.js?v=1792940372"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -584,13 +633,13 @@ P.arc = () => {
 };
 
 P.gal = () => {
-  let h = `<h2><span class="no mono">ART</span>イラストギャラリー</h2><div class="chips" id="chips">${S.galleryCats.map((c,i)=>`<button class="chip" aria-pressed="${i===0}" data-c="${esc(c)}">${esc(c)}</button>`).join('')}</div><div class="grid" id="gal"></div>${(S.tagLinks||[]).map(t=>`<p style="margin-top:14px"><a class="btn" href="${esc(t.url)}" target="_blank" rel="noopener">${esc(t.label)} ›</a></p>`).join('')}<p class="muted" style="margin-top:14px">無断転載・AI学習利用は禁止です。</p>`;
+  let h = `<h2><span class="no mono">ART</span>イラストギャラリー</h2><div class="chips" id="chips">${S.galleryCats.map((c,i)=>`<button class="chip" aria-pressed="${i===0}" data-c="${esc(c)}">${esc(c)}</button>`).join('')}<button class="chip tg" id="ptpT" aria-pressed="false">シート表示</button></div><div class="grid" id="gal"></div>${(S.tagLinks||[]).map(t=>`<p style="margin-top:14px"><a class="btn" href="${esc(t.url)}" target="_blank" rel="noopener">${esc(t.label)} ›</a></p>`).join('')}<p class="muted" style="margin-top:14px">無断転載・AI学習利用は禁止です。</p>`;
   return h;
 };
 function drawGal(cat){
-  const g=$('#gal'); if(!g) return;
+  const g=$('#gal'); if(!g) return; window.galCat=cat; g.classList.toggle('ptp',!!window.galPtp);
   const items = S.gallery.filter(x=>cat==='すべて'||x.cat===cat);
-  g.innerHTML = items.map(x=>`<div class="frame" data-src="${esc(x.img)}" data-t="${esc(x.title)}"><div class="ph">${x.img?`<img loading="lazy" src="${esc(x.img)}" alt="${esc(x.title)}">`:IC.cross.replace('width="22" height="22"','width="34" height="34"')}</div><div class="cap">${esc(x.title)}<i>${esc(x.cat)}${x.by?' / '+esc(x.by):''}</i></div></div>`).join('') || `<div class="empty" style="grid-column:1/-1">この分類の作品はまだありません。</div>`;
+  g.innerHTML = items.map(x=>`<div class="frame" data-src="${esc(x.img)}" data-t="${esc(x.title)}" title="${esc(x.title)}"><div class="ph">${x.img?`<img loading="lazy" src="${esc(x.img)}" alt="${esc(x.title)}">`:IC.cross.replace('width="22" height="22"','width="34" height="34"')}</div><div class="cap">${esc(x.title)}<i>${esc(x.cat)}${x.by?' / '+esc(x.by):''}</i></div></div>`).join('') || `<div class="empty" style="grid-column:1/-1">この分類の作品はまだありません。</div>`;
   g.onclick=e=>{const f=e.target.closest('.frame');if(!f||!f.dataset.src)return;f.classList.remove('press');void f.offsetWidth;f.classList.add('press');const r=f.getBoundingClientRect();window.burst&&window.burst(r.left+r.width/2,r.top+r.height/2,8);setTimeout(()=>openLb(f.dataset.src,f.dataset.t),260)};
 }
 
@@ -612,8 +661,8 @@ P.shop = () => {
 
 P.fun = () => {
   const goal=S.stampGoal;
-  return `<h2><span class="no mono">01</span>今日の処方箋(おみくじ)</h2><p class="muted">1日1回、ひいてみてください。</p><div id="rx"></div><button class="btn" id="draw">処方をもらう</button>
-  <h2><span class="no mono">02</span>通院カード(スタンプ)</h2><p class="muted">1日1回、押せます。${goal}個たまったら満たんです。</p><div class="card" id="card"></div><button class="btn line" id="stamp">今日のスタンプ</button> <span class="muted" id="stmsg"></span>`;
+  return `<h2><span class="no mono">01</span>今日の処方箋(おみくじ)</h2><p class="muted">1日1回。まず問診票にこたえてください。</p><div class="prslot">処方箋発行口<i></i></div><div id="rx"></div><button class="btn" id="draw">問診票にこたえる</button>
+  <h2><span class="no mono">02</span>通院カード(スタンプ)</h2><p class="muted">1日1回、押せます。${goal}個たまったら満たんです。</p><div id="card"></div><button class="btn line" id="stamp">今日のスタンプ</button> <span class="muted" id="stmsg"></span>`;
 };
 let stampNew=false;
 function bindFun(){
@@ -622,18 +671,35 @@ function bindFun(){
   const showRx=f=>{ rx.innerHTML = f?`<div class="rx"><div class="sub mono">${esc(f.sub)}</div><div class="rank">${esc(f.rank)}</div><div class="msg">${esc(f.msg)}</div><img class="rxc" src="img/${RXC[f.rank]||'chibi8'}.webp" alt=""></div>`:''; };
   const saved=store.get('rx',null);
   if(saved&&saved.d===today()){ showRx(S.fortunes[saved.i]); draw.textContent='今日はもらいました'; draw.disabled=true; draw.style.opacity=.5; }
-  draw.addEventListener('click',()=>{
-    const i=Math.floor(Math.random()*S.fortunes.length); store.set('rx',{d:today(),i}); draw.disabled=true; draw.style.opacity=.5; draw.textContent='調合中…';
+  const QS=[['体調は?','元気','ちょっと疲れた'],['ねむりは?','ぐっすり','あまり眠れず'],['気分は?','上々','もやもや']];
+  const doDraw=score=>{
+    const n=S.fortunes.length, c=(3-score)/3*(n-1), i=Math.max(0,Math.min(n-1,Math.round(c+(Math.random()*2-1))));
+    store.set('rx',{d:today(),i}); draw.disabled=true; draw.style.opacity=.5; draw.textContent='調合中…';
     rx.innerHTML=`<svg class="capsule" viewBox="0 0 110 110"><g transform="rotate(-35 55 55)"><path class="hi" d="M55 36h-14a19 19 0 0 0 0 38h14z" fill="#ff63bd"/><path class="lo" d="M55 36h14a19 19 0 0 1 0 38h-14z" fill="#8ca9ec"/><path d="M55 36v38" stroke="#fff" stroke-width="2"/></g></svg>`;
     const cp=rx.firstChild; cp.classList.add('shake');
     setTimeout(()=>cp.classList.add('open'),950);
-    setTimeout(()=>{ showRx(S.fortunes[i]); const c=rx.firstChild; if(c){c.classList.add('pop');const r=c.getBoundingClientRect();window.burst&&window.burst(r.left+r.width/2,r.top+30,14)} draw.textContent='今日はもらいました'; },1500);
+    setTimeout(()=>{ showRx(S.fortunes[i]); const c=rx.firstChild; if(c){c.classList.add('print')} draw.textContent='今日はもらいました'; },1500);
+    setTimeout(()=>{ const c=rx.firstChild; if(c&&window.burst){const r=c.getBoundingClientRect();window.burst(r.left+r.width/2,r.top+r.height-10,14)} },3300);
+  };
+  let sc=null;
+  draw.addEventListener('click',()=>{
+    if(sc!==null){const v=sc;sc=null;doDraw(v);return}
+    if(rx.querySelector('.mon'))return;
+    const ans=[null,null,null];
+    rx.innerHTML=`<div class="mon"><h3>問診票 / QUESTIONNAIRE</h3>${QS.map((q,k)=>`<div class="q"><small>Q${k+1}</small>${q[0]}</div><div class="a" data-k="${k}"><button data-v="1">${q[1]}</button><button data-v="0">${q[2]}</button></div>`).join('')}</div>`;
+    draw.textContent='こたえてください'; draw.disabled=true; draw.style.opacity=.5;
+    rx.querySelector('.mon').addEventListener('click',e=>{
+      const bt=e.target.closest('button'); if(!bt)return;
+      const a=bt.parentNode; a.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===bt)); ans[+a.dataset.k]=+bt.dataset.v;
+      if(ans.every(v=>v!==null)){ sc=ans.reduce((x,y)=>x+y,0); draw.textContent='問診票を提出'; draw.disabled=false; draw.style.opacity=1; }
+    });
   });
   const goal=S.stampGoal, card=$('#card'), st=$('#stamp'), msg=$('#stmsg');
+  const BAND=(c)=>`<svg viewBox="0 0 60 60"><g transform="rotate(-38 30 30)"><rect x="4" y="19" width="52" height="22" rx="11" fill="${c}"/><rect x="20" y="19" width="20" height="22" fill="#fff" opacity=".78"/><g fill="#fff" opacity=".7"><circle cx="11" cy="27" r="1.3"/><circle cx="11" cy="33" r="1.3"/><circle cx="49" cy="27" r="1.3"/><circle cx="49" cy="33" r="1.3"/></g></g></svg>`;
   const render=()=>{
     const s=store.get('stamps',{n:0,d:''});
-    card.style.gridTemplateColumns=`repeat(${goal>5?5:goal},1fr)`;
-    card.innerHTML=Array.from({length:goal},(_,i)=>`<div class="slot ${i<s.n?'on':''}${stampNew&&i===s.n-1?' stamped':''}">${i<s.n?'✝':i+1}</div>`).join(''); stampNew=false;
+    const no=String(7001+(s.n||0)*13).slice(-4);
+    card.innerHTML=`<div class="dcard${s.n>=goal?' full':''}"><div class="dh"><b>診察券</b><span>SHISUI CLINIC</span></div><div class="dn"><span>No. ${no}</span><span>${s.n}/${goal}</span></div><div class="slots" style="grid-template-columns:repeat(${goal>5?5:goal},1fr)">`+Array.from({length:goal},(_,i)=>`<div class="slot ${i<s.n?'on':''}${stampNew&&i===s.n-1?' stamped':''}">${i<s.n?BAND(['#ff63bd','#8ca9ec','#8f77c2'][i%3]):i+1}</div>`).join('')+`</div></div>`; stampNew=false;
     if(s.d===today()){st.disabled=true;st.style.opacity=.5;msg.textContent='今日は押しました';}
     if(s.n>=goal){msg.textContent='満たんです。おつかれさま。';}
   };
@@ -658,6 +724,11 @@ function bindFun(){
     }
   }
   window.burst=burst;
+  (function(){const bx=document.getElementById('bpm'); if(!bx)return; const nb=bx.querySelector('b'), hh=bx.querySelector('.hh'); let v=72;
+    const set=()=>{nb.textContent=Math.round(v); hh.style.setProperty('--hb',(60/Math.max(50,v)).toFixed(2)+'s')};
+    document.addEventListener('pointerdown',()=>{v=Math.min(168,v+4+Math.random()*4);set()},{passive:true});
+    setInterval(()=>{ if(v>72){v=Math.max(72,v-2.2);set()} },400);
+  })();
   document.addEventListener('pointerdown',e=>{ if(e.pointerType==='mouse'&&e.button!==0)return; burst(e.clientX,e.clientY,5); },{passive:true});
 })();
 /* play: tap the character */
@@ -718,7 +789,7 @@ function show(id,byTab){
   if(!P[id]) id='chart';
   main.innerHTML = `<section class="panel on ${id==='chart'?'home':''}">${P[id]()}</section>`;
   tabsEl.querySelectorAll('.tab').forEach(b=>{const on=b.dataset.id===id;b.setAttribute('aria-selected',on);if(on&&!byTab)centerTab(b,true)});
-  if(id==='gal'){ drawGal('すべて'); $('#chips').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;$('#chips').querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-pressed',x===b));drawGal(b.dataset.c)}); }
+  if(id==='gal'){ window.galPtp=false; drawGal('すべて'); $('#chips').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;if(b.classList.contains('tg')){window.galPtp=!window.galPtp;b.setAttribute('aria-pressed',window.galPtp);b.textContent=window.galPtp?'カード表示':'シート表示';drawGal(window.galCat||'すべて');return}$('#chips').querySelectorAll('.chip:not(.tg)').forEach(x=>x.setAttribute('aria-pressed',x===b));drawGal(b.dataset.c)}); }
   if(id==='fun') bindFun();
   if(id==='chart'){ bindHero(); fitHero(); fitHero(); setTimeout(fitHero,350); const lg=document.getElementById('hLogo'); if(lg&&!lg.complete) lg.addEventListener('load',fitHero,{once:true}); }
   if(id==='chart') main.querySelectorAll('.tile').forEach(t=>t.addEventListener('click',()=>show(t.dataset.go)));
@@ -726,7 +797,9 @@ function show(id,byTab){
   if(id!=='chart') document.body.classList.remove('homeview');
   if(PEEK[id]) main.firstChild.insertAdjacentHTML('afterbegin',`<img class="peek" data-i="0" src="img/${PEEK[id]}.webp" alt="">`);
   main.querySelectorAll('.empty').forEach(e=>e.insertAdjacentHTML('afterbegin','<img class="mini" src="img/chibi9.webp" alt="">'));
-  {const ix=tabs.findIndex(t=>t.id===id),sn=document.getElementById('sheetNo');if(sn)sn.innerHTML='<span>SHEET <b>'+String(ix+1).padStart(2,'0')+'</b> / '+String(tabs.length).padStart(2,'0')+'</span><span>'+(tabs[ix]?tabs[ix].en:'')+'</span>'}
+  {const ix=tabs.findIndex(t=>t.id===id),sn=document.getElementById('sheetNo');if(sn){const nn=String(ix+1).padStart(2,'0'),en=(tabs[ix]?tabs[ix].en:''),std='<span>SHEET <b>'+nn+'</b> / '+String(tabs.length).padStart(2,'0')+'</span><span>'+en+'</span>';const tk=(window.__ck=(window.__ck||0)+1);
+ if(window.__sh&&id!=='chart'){sn.innerHTML='<span>▶ CALL No.<b>'+nn+'</b></span><span>'+en+'</span>';sn.classList.remove('call');void sn.offsetWidth;sn.classList.add('call');setTimeout(()=>{if(window.__ck===tk){sn.classList.remove('call');sn.innerHTML=std}},1500)}else{sn.classList.remove('call');sn.innerHTML=std}
+ window.__sh=1}}
   try{history.replaceState(null,'','#'+id)}catch(e){}
   keepTabsInPlace();
 }
@@ -739,6 +812,8 @@ tabsEl.addEventListener('click',e=>{
 });
 main.addEventListener('click',e=>{const pk=e.target.closest('.peek');if(!pk)return;const F=S.chibiFaces||[];let i=(+pk.dataset.i+1)%(F.length||1);pk.dataset.i=i;if(F.length)pk.src=F[i];pk.classList.remove('wig');void pk.offsetWidth;pk.classList.add('wig');const r=pk.getBoundingClientRect();window.burst&&window.burst(r.left+r.width/2,r.top+r.height/2,8)});
 document.querySelector('.walker').addEventListener('click',e=>{const im=e.target.closest('img');if(!im)return;im.classList.remove('hop');void im.offsetWidth;im.classList.add('hop');const r=im.getBoundingClientRect();window.burst&&window.burst(r.left+r.width/2,r.top,8);setTimeout(()=>im.classList.remove('hop'),500)});
+(function(){const c=S.commission,lab={open:'受付中',closed:'停止中',ask:'要相談'}[c.status]||c.status;
+  const el=document.getElementById('wtx'); if(el)el.textContent='ただいまの依頼受付:'+lab+(c.note?' / '+String(c.note).replace(/\s+/g,' '):'')+'　　　本日の処方箋は1日1回、通院カードのスタンプも1日1回です。お水を飲んで、ゆっくりお過ごしください。';})();
 show('chart');
 });
 </script>

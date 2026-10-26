@@ -614,7 +614,16 @@ html{word-break:normal;line-break:strict;overflow-wrap:break-word}
 .greetcard .bk{display:inline-block;max-width:100%}
 
 #op .opg2{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);padding:0 22px;text-align:center;z-index:5;pointer-events:none}
-#op .opg2 div{font-size:15px;line-height:2.4;letter-spacing:.12em;color:#e8ecfb;animation:wipe .8s var(--wz) both;text-shadow:0 0 12px rgba(13,16,34,.9)}
+#op .opg2 .hl{font-size:15px;line-height:2.4;letter-spacing:.12em;color:#dfe9ff;position:relative;text-shadow:-1px 0 rgba(255,99,189,.55),1px 0 rgba(140,169,236,.7),0 0 10px rgba(140,169,236,.85),0 0 22px rgba(143,119,194,.7);animation:holo 3.2s steps(1) infinite}
+#op .opg2 .hl:last-child{color:#e3d6ff;font-size:16px}
+#op .opg2 .ch{font-weight:400;visibility:hidden}
+#op .opg2 .ch.on{visibility:visible;animation:chin .28s ease-out both}
+#op .opg2 .cur{display:inline-block;width:.55em;height:1.05em;margin:0 0 -.2em .12em;background:linear-gradient(180deg,#8ca9ec,#ff63bd);box-shadow:0 0 10px #8ca9ec;animation:blk .5s steps(1) infinite;vertical-align:baseline}
+#op .opg2::after{content:"";position:absolute;left:0;right:0;top:-30px;bottom:-30px;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(140,169,236,.0) 0 2px,rgba(140,169,236,.1) 2px 3px);animation:scn 2.4s linear infinite}
+@keyframes chin{0%{opacity:0;filter:blur(5px);transform:translateY(-3px) skewX(-12deg)}55%{opacity:1;filter:blur(0);color:#ff63bd}100%{opacity:1;transform:none}}
+@keyframes blk{50%{opacity:0}}
+@keyframes holo{0%,100%{opacity:1;transform:none}41%{opacity:.82;transform:translateX(1px)}43%{opacity:1;transform:translateX(-1px)}44%{opacity:.9;transform:none}77%{opacity:.88}78%{opacity:1}}
+@keyframes scn{from{background-position:0 0}to{background-position:0 12px}}
 #op .opg2 div:last-child{color:#c9b8ff;font-size:16px}
 #op .opg2 .bk{display:inline-block;white-space:nowrap}
 #op .opg2.out{animation:opfo .45s forwards}
@@ -699,14 +708,14 @@ table.cred td{padding-top:6px;padding-bottom:6px}
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="lbnav"><button class="lbn" id="lbp" aria-label="前へ">‹</button><div class="t" id="lbt"></div><button class="lbn" id="lbn" aria-label="次へ">›</button></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1793025687";
+window.BUILD="1793026061";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1793025687"></script>
-<script src="core.js?v=1793025687"></script>
-<script src="data.js?v=1793025687"></script>
+<script src="icons.js?v=1793026061"></script>
+<script src="core.js?v=1793026061"></script>
+<script src="data.js?v=1793026061"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -784,10 +793,18 @@ document.title = S.name + ' | 研究ノート';
     if(!gl.length){run();return}
     op.classList.add('gr');
     const g=document.createElement('div');g.className='opg2';
-    g.innerHTML=gl.map((t,i)=>`<div style="animation-delay:${(.7+i*.8).toFixed(1)}s">${String(t).split(/(?<=[、。])/).filter(Boolean).map(x=>`<span class="bk">${esc(x)}</span>`).join('')}</div>`).join('');
+    g.innerHTML=gl.map(t=>`<div class="hl">${String(t).split(/(?<=[、。])/).filter(Boolean).map(x=>`<span class="bk">${[...x].map(c=>`<b class="ch">${esc(c)}</b>`).join('')}</span>`).join('')}</div>`).join('');
     op.appendChild(g);
     let ran=false;const go2=()=>{if(ran)return;ran=true;clearTimeout(t2);g.classList.add('out');setTimeout(()=>{g.remove();op.classList.remove('gr');run()},450)};
-    const t2=setTimeout(go2,4300);
+    let t2=null;
+    { const chs=[...g.querySelectorAll('.ch')],cur=document.createElement('i');cur.className='cur';let k=0;
+      const step=()=>{ if(ran)return; if(k>=chs.length){cur.remove();t2=setTimeout(go2,1300);return}
+        const c=chs[k++];c.classList.add('on');c.parentNode.insertBefore(cur,c.nextSibling);
+        const t=c.textContent;const d=/[、。]/.test(t)?330:(k===1?500:62+Math.random()*34);
+        const ln=c.closest('.hl');ln.classList.add('act');
+        const nx=chs[k];if(!nx||nx.closest('.hl')!==ln){ln.classList.add('done');}
+        t2=setTimeout(step,d)};
+      t2=setTimeout(step,600); }
     setTimeout(()=>op.addEventListener('click',go2,{once:true}),400);
   });
 })();

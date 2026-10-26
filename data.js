@@ -104,8 +104,14 @@ window.SITE = {
   /* ギャラリー — img は画像URL(素材が届いたら差し替え) */
   galleryCats: ["すべて", "立ち絵・三面図", "キービジュアル", "ちび・アイコン", "ロゴ", "グッズ", "制作実績"],
   gallery: [
-    { title: "立ち絵", cat: "立ち絵・三面図", by: "", img: "img/kv.webp" },
-    { title: "キービジュアル", cat: "キービジュアル", by: "", img: "img/kv0.webp" },
+    { title: "立ち絵 (上着あり)", cat: "立ち絵・三面図", by: "", img: "img/st_n1.webp" },
+    { title: "立ち絵 (上着なし)", cat: "立ち絵・三面図", by: "", img: "img/st_n2.webp" },
+    { title: "立ち絵 (私服・帽子あり)", cat: "立ち絵・三面図", by: "", img: "img/st_p1.webp" },
+    { title: "立ち絵 (私服・帽子なし)", cat: "立ち絵・三面図", by: "", img: "img/st_p2.webp" },
+    { title: "三面図", cat: "立ち絵・三面図", by: "", img: "img/sheet2.webp" },
+    { title: "キービジュアル", cat: "キービジュアル", by: "", img: "img/kvn.webp" },
+    { title: "キービジュアル (白背景用)", cat: "キービジュアル", by: "", img: "img/kvw.webp" },
+    { title: "キービジュアル (アップ)", cat: "キービジュアル", by: "", img: "img/kv0.webp" },
     { title: "キービジュアル (夜空)", cat: "キービジュアル", by: "", img: "img/kv10.webp" },
     { title: "Love me like a drug", cat: "キービジュアル", by: "", img: "img/loveme.webp" },
     { title: "ちび (にっこり)", cat: "ちび・アイコン", by: "", img: "img/chibi8.webp" },
@@ -137,7 +143,7 @@ window.SITE = {
   ],
   logo: "img/logo.webp?v=4",
   logoVariants: ["img/logo.webp?v=4", "img/logo2.webp?v=4", "img/logo1.webp?v=4"],
-  hero: "img/kv_c.webp",
+  hero: "img/kvn.webp",
   opStyle: "cool",   /* cool = かっこいいOP / cute = ふんわりOP */
   opBg: "img/kv10.webp",
   heroChibi: "img/chibi8.webp",

@@ -612,11 +612,15 @@ html{word-break:normal;line-break:strict;overflow-wrap:break-word}
 .greetcard .gl{margin:0;font-size:14.5px;line-height:2;letter-spacing:.08em;color:var(--ink,#2b2f4a)}
 .greetcard .gl:last-child{color:var(--violet);font-size:15.5px}
 .greetcard .bk{display:inline-block;max-width:100%}
-#op .opg{font-size:13.5px;line-height:2.1;color:#e8ecfb;text-align:left;margin:4px 4px 16px;letter-spacing:.1em;position:relative}
-#op .opg div{animation:wipe .7s var(--wz) both}
-#op .opg .bk{display:inline-block;white-space:nowrap}
-#op .opg div:last-child{color:#c9b8ff}
-#op.cool .btn{animation-delay:4.7s}
+
+#op .opg2{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);padding:0 22px;text-align:center;z-index:5;pointer-events:none}
+#op .opg2 div{font-size:15px;line-height:2.4;letter-spacing:.12em;color:#e8ecfb;animation:wipe .8s var(--wz) both;text-shadow:0 0 12px rgba(13,16,34,.9)}
+#op .opg2 div:last-child{color:#c9b8ff;font-size:16px}
+#op .opg2 .bk{display:inline-block;white-space:nowrap}
+#op .opg2.out{animation:opfo .45s forwards}
+@keyframes opfo{to{opacity:0}}
+#op.gr .t1,#op.gr .term,#op.gr .t3,#op.gr .lg,#op.gr .btn,#op.gr .art{animation:opfo .5s forwards!important;pointer-events:none}
+#op.gr .bg::after{background:linear-gradient(180deg,rgba(13,16,34,.6),rgba(13,16,34,.85))}
 .ot{white-space:nowrap}
 .greet{font-size:12.5px;line-height:1.9;color:var(--violet);margin:0 0 8px;letter-spacing:.06em}
 .greet .bk{display:inline-block;max-width:100%}
@@ -665,7 +669,7 @@ table.cred td{padding-top:6px;padding-bottom:6px}
 <div id="op" role="dialog" aria-label="オープニング">
   <div class="bg" id="opBg" hidden></div><div class="scan"></div><div class="sweep"></div><svg class="stars" id="ops" width="100%" height="100%"></svg>
   <img class="art" id="opArt" alt="" hidden><img class="lg" id="opLogo" alt="" hidden>
-  <div class="t1 mono">RESEARCH LOG : START</div><div class="term mono" id="opTerm"></div><div class="opg" id="opG"></div>
+  <div class="t1 mono">RESEARCH LOG : START</div><div class="term mono" id="opTerm"></div>
   <div class="t2" id="opName"></div>
   <div class="t3" id="opTag"></div>
   <button class="btn" id="opGo">処方開始</button>
@@ -695,14 +699,14 @@ table.cred td{padding-top:6px;padding-bottom:6px}
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="lbnav"><button class="lbn" id="lbp" aria-label="前へ">‹</button><div class="t" id="lbt"></div><button class="lbn" id="lbn" aria-label="次へ">›</button></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1793025376";
+window.BUILD="1793025687";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1793025376"></script>
-<script src="core.js?v=1793025376"></script>
-<script src="data.js?v=1793025376"></script>
+<script src="icons.js?v=1793025687"></script>
+<script src="core.js?v=1793025687"></script>
+<script src="data.js?v=1793025687"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -723,8 +727,7 @@ $('#opName').textContent = S.name;
 if(S.opStyle==='cool'){const o=$('#op');o.classList.add('cool');
   {const ic=[ico('pill'),ico('cross'),ico('drip'),ico('heartbeat')],cl=['#8ca9ec','#8f77c2','#ff63bd'];let h='';for(let i=0;i<11;i++){h+=`<span class="fl" style="left:${(4+i*9+(i%3)*2)%96}%;--d:${10+(i*7)%9}s;--w:-${(i*1.7).toFixed(1)}s;--s:${13+(i%4)*3}px;--c:${cl[i%3]};--r:${(i%2?1:-1)*(120+i*20)}deg">${ic[i%4].replace(/width="\d+" height="\d+"/,'')}</span>`}h+='<svg class="ecg" viewBox="0 0 400 46" preserveAspectRatio="none"><path class="g" d="M0 23H400"/><path d="M0 23H110l8-4 6 4h10l6-18 8 38 8-30 6 10h14H400"/></svg>';document.getElementById('ops').insertAdjacentHTML('afterend',h)}
   if(S.opBg){const b=$('#opBg');b.style.backgroundImage='url('+S.opBg+')';b.hidden=false}
-  const lines=['NAME   : '+S.en.toUpperCase(),'TYPE   : 頓服 (ヒト型おくすり)','STATUS : <b>ONLINE</b>'];const T=$('#opTerm');T.innerHTML=lines.map((l,i)=>`<div class="tl" style="animation-delay:${(1.5+i*.4).toFixed(1)}s">${l.replace(/ /g,'&nbsp;')}</div>`).join('');
-  { const G=$('#opG'),gl=S.greeting||[]; G.innerHTML=gl.map((t,i)=>`<div style="animation-delay:${(2.9+i*.65).toFixed(2)}s">${String(t).split(/(?<=[、。])/).filter(Boolean).map(x=>`<span class="bk">${esc(x)}</span>`).join('')}</div>`).join(''); }
+  const lines=['NAME   : '+S.en.toUpperCase(),'TYPE   : 頓服 (ヒト型おくすり)','STATUS : <b>ONLINE</b>','RX     : '+S.tagline];const T=$('#opTerm');T.innerHTML=lines.map((l,i)=>`<div class="tl" style="animation-delay:${(1.9+i*.4).toFixed(1)}s">${l.replace(/ /g,'&nbsp;')}</div>`).join('');
   $('#opTag').style.display='none'}
 else if(S.hero){const a=$('#opArt');a.src=S.hero;a.hidden=false}
 if(S.logo){const a=$('#opLogo');a.src=S.logo;a.hidden=false}
@@ -769,12 +772,23 @@ document.title = S.name + ' | 研究ノート';
     if(!document.querySelector('.panel.home'))show('chart');window.scrollTo(0,0);
     const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
     if(reduce){op.classList.add('gone');return}
+    const run=()=>{
     new Image().src='img/loveme.webp';
     const dg=document.createElement('div');dg.id='diag';
     dg.innerHTML='<div class="dgc"><div class="dgh mono"><span>RECEPTION</span><span>受付</span></div><div class="dgt">受付中<i>…</i></div><div class="dgm"><i></i></div><svg class="dge" viewBox="0 0 300 40" preserveAspectRatio="none"><path class="g" d="M0 22H300"/><path class="p" d="M0 22H70l8-4 6 4h12l6-16 8 32 8-16h14l8-5 6 5H300"/></svg><div class="dgb"><i></i></div><ul class="dgl mono"><li><span>体温</span><b>36.5℃</b><em>正常</em></li><li><span>脈拍</span><b>72 bpm</b><em>正常</em></li><li><span>睡眠</span><b>ぎりぎり</b><em>要観察</em></li><li class="last"><span>受付</span><b>診察券を確認</b><em>OK</em></li></ul><div class="dgs">受付完了</div></div>';
     document.body.appendChild(dg); op.classList.add('leave');
     let done=false; const fin=()=>{ if(done)return; done=true; document.body.classList.add('enter'); try{ if(!sessionStorage.getItem('gb')&&S.greeting&&S.greeting.length){ sessionStorage.setItem('gb','1'); const B=['本日の処方を/開始します。','眠れない地球人の/みなさま、/こんばんは。','宇宙生まれの/ヒト型おくすり、/偲睡れーかです。']; B.forEach((t,i)=>setTimeout(()=>{const st=main.querySelector('.hero .stand'); if(st&&window.__tb)window.__tb(st,t)},1500+i*2600)); } }catch(e){} dg.classList.add('out'); setTimeout(()=>{dg.remove();op.classList.add('gone')},650); setTimeout(()=>document.body.classList.remove('enter'),2300) };
     const tm=setTimeout(fin,3100); dg.addEventListener('click',()=>{clearTimeout(tm);fin()});
+    };
+    const gl=S.greeting||[];
+    if(!gl.length){run();return}
+    op.classList.add('gr');
+    const g=document.createElement('div');g.className='opg2';
+    g.innerHTML=gl.map((t,i)=>`<div style="animation-delay:${(.7+i*.8).toFixed(1)}s">${String(t).split(/(?<=[、。])/).filter(Boolean).map(x=>`<span class="bk">${esc(x)}</span>`).join('')}</div>`).join('');
+    op.appendChild(g);
+    let ran=false;const go2=()=>{if(ran)return;ran=true;clearTimeout(t2);g.classList.add('out');setTimeout(()=>{g.remove();op.classList.remove('gr');run()},450)};
+    const t2=setTimeout(go2,4300);
+    setTimeout(()=>op.addEventListener('click',go2,{once:true}),400);
   });
 })();
 

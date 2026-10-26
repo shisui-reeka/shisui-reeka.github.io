@@ -713,14 +713,14 @@ table.cred td{padding-top:6px;padding-bottom:6px}
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="lbnav"><button class="lbn" id="lbp" aria-label="前へ">‹</button><div class="t" id="lbt"></div><button class="lbn" id="lbn" aria-label="次へ">›</button></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1793033524";
+window.BUILD="1793035351";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1793033524"></script>
-<script src="core.js?v=1793033524"></script>
-<script src="data.js?v=1793033524"></script>
+<script src="icons.js?v=1793035351"></script>
+<script src="core.js?v=1793035351"></script>
+<script src="data.js?v=1793035351"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -904,7 +904,7 @@ P.arc = () => {
 };
 
 P.gal = () => {
-  let h = `<h2><span class="no mono">ART</span>イラストギャラリー</h2><div class="chips" id="chips">${S.galleryCats.map((c,i)=>`<button class="chip" aria-pressed="${i===0}" data-c="${esc(c)}">${esc(c)}</button>`).join('')}<button class="chip tg" id="ptpT" aria-pressed="false">シート表示</button></div><div class="grid" id="gal"></div>${(S.tagLinks||[]).map(t=>`<p style="margin-top:14px"><a class="btn" href="${esc(t.url)}" target="_blank" rel="noopener">${esc(t.label)} ›</a></p>`).join('')}<p class="muted" style="margin-top:14px">無断転載・AI学習利用は禁止です。</p>`;
+  let h = `<h2><span class="no mono">ART</span>イラストギャラリー</h2><div class="chips" id="chips">${S.galleryCats.map((c,i)=>`<button class="chip" aria-pressed="${i===0}" data-c="${esc(c)}">${esc(c)}</button>`).join('')}<button class="chip tg" id="ptpT" aria-pressed="false">丸で表示</button></div><div class="grid" id="gal"></div>${(S.tagLinks||[]).map(t=>`<p style="margin-top:14px"><a class="btn" href="${esc(t.url)}" target="_blank" rel="noopener">${esc(t.label)} ›</a></p>`).join('')}<p class="muted" style="margin-top:14px">無断転載・AI学習利用は禁止です。</p>`;
   return h;
 };
 function drawGal(cat){
@@ -1111,7 +1111,7 @@ function show(id,byTab){
   if(!P[id]) id='chart';
   main.innerHTML = `<section class="panel on ${id==='chart'?'home':''}">${P[id]()}</section>`;
   tabsEl.querySelectorAll('.tab').forEach(b=>{const on=b.dataset.id===id;b.setAttribute('aria-selected',on);if(on&&!byTab)centerTab(b,true)});
-  if(id==='gal'){ window.galPtp=false; drawGal('すべて'); $('#chips').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;if(b.classList.contains('tg')){window.galPtp=!window.galPtp;b.setAttribute('aria-pressed',window.galPtp);b.textContent=window.galPtp?'大きく表示':'シート表示';drawGal(window.galCat||'すべて');return}$('#chips').querySelectorAll('.chip:not(.tg)').forEach(x=>x.setAttribute('aria-pressed',x===b));drawGal(b.dataset.c)}); }
+  if(id==='gal'){ window.galPtp=false; drawGal('すべて'); $('#chips').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;if(b.classList.contains('tg')){window.galPtp=!window.galPtp;b.setAttribute('aria-pressed',window.galPtp);b.textContent=window.galPtp?'大きく表示':'丸で表示';drawGal(window.galCat||'すべて');return}$('#chips').querySelectorAll('.chip:not(.tg)').forEach(x=>x.setAttribute('aria-pressed',x===b));drawGal(b.dataset.c)}); }
   if(id==='fun') bindFun();
   if(id==='chart'){ bindHero(); fitHero(); fitHero(); setTimeout(fitHero,350); const lg=document.getElementById('hLogo'); if(lg&&!lg.complete) lg.addEventListener('load',fitHero,{once:true}); }
   if(id==='chart') main.querySelectorAll('.tile').forEach(t=>t.addEventListener('click',()=>show(t.dataset.go)));

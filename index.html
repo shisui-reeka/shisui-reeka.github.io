@@ -508,6 +508,8 @@ body.enter .panel.home .hero .stand{animation:artin 1s cubic-bezier(.3,1.35,.5,1
 }
 
 /* 診察室への移行 */
+#opSkip{position:fixed;right:max(14px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));z-index:110;padding:7px 14px;font-size:12px;letter-spacing:.2em;color:#f1f3ff;background:rgba(40,36,80,.45);border:1px solid rgba(140,169,236,.8);border-radius:999px;font-family:inherit;cursor:pointer;touch-action:manipulation}
+#op.gone ~ #opSkip,body.opdone #opSkip{display:none}
 #diag{position:fixed;inset:0;z-index:102;display:flex;align-items:center;justify-content:center;background:linear-gradient(rgba(140,169,236,.22) 1px,transparent 1px) 0 0/22px 22px,linear-gradient(90deg,rgba(140,169,236,.22) 1px,transparent 1px) 0 0/22px 22px,#eef1fa;animation:dgin .5s ease both;transition:opacity .65s ease}
 #diag.out{opacity:0;pointer-events:none}
 @keyframes dgin{from{opacity:0}to{opacity:1}}
@@ -683,6 +685,7 @@ table.cred td{padding-top:6px;padding-bottom:6px}
   <div class="t3" id="opTag"></div>
   <button class="btn" id="opGo">処方開始</button>
 </div>
+<button id="opSkip" type="button">SKIP ▶▶</button>
 
 <div class="wrap">
   <div class="ward" id="ward"><span class="wl">院内放送</span><div class="wt"><span id="wtx"></span></div><span class="bpm" id="bpm"><i class="hh">♡</i><b>72</b>bpm</span></div>
@@ -708,14 +711,14 @@ table.cred td{padding-top:6px;padding-bottom:6px}
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="lbnav"><button class="lbn" id="lbp" aria-label="前へ">‹</button><div class="t" id="lbt"></div><button class="lbn" id="lbn" aria-label="次へ">›</button></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1793027731";
+window.BUILD="1793028598";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1793027731"></script>
-<script src="core.js?v=1793027731"></script>
-<script src="data.js?v=1793027731"></script>
+<script src="icons.js?v=1793028598"></script>
+<script src="core.js?v=1793028598"></script>
+<script src="data.js?v=1793028598"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -775,6 +778,9 @@ document.title = S.name + ' | 研究ノート';
   const td=new Date().toDateString(); const seen = (()=>{try{return sessionStorage.getItem('op')}catch(e){return null}})();
   if(seen){op.classList.add('gone');}
   let leaving=false;
+  $('#opSkip').addEventListener('click',e=>{e.stopPropagation();window.__skip=true;try{sessionStorage.setItem('op','1')}catch(_){}
+    if(!document.querySelector('.panel.home'))show('chart');window.scrollTo(0,0);
+    document.body.classList.add('opdone');document.querySelectorAll('#diag,.opg2').forEach(n=>n.remove());op.classList.remove('gr');op.classList.add('gone')});
   $('#opGo').addEventListener('click',()=>{
     if(leaving)return;leaving=true;
     try{sessionStorage.setItem('op','1')}catch(e){}
@@ -782,11 +788,12 @@ document.title = S.name + ' | 研究ノート';
     const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
     if(reduce){op.classList.add('gone');return}
     const run=()=>{
+    if(window.__skip)return;
     new Image().src='img/loveme.webp';
     const dg=document.createElement('div');dg.id='diag';
     dg.innerHTML='<div class="dgc"><div class="dgh mono"><span>RECEPTION</span><span>受付</span></div><div class="dgt">受付中<i>…</i></div><div class="dgm"><i></i></div><svg class="dge" viewBox="0 0 300 40" preserveAspectRatio="none"><path class="g" d="M0 22H300"/><path class="p" d="M0 22H70l8-4 6 4h12l6-16 8 32 8-16h14l8-5 6 5H300"/></svg><div class="dgb"><i></i></div><ul class="dgl mono"><li><span>体温</span><b>36.5℃</b><em>正常</em></li><li><span>脈拍</span><b>72 bpm</b><em>正常</em></li><li><span>睡眠</span><b>ぎりぎり</b><em>要観察</em></li><li class="last"><span>受付</span><b>診察券を確認</b><em>OK</em></li></ul><div class="dgs">受付完了</div></div>';
     document.body.appendChild(dg); op.classList.add('leave');
-    let done=false; const fin=()=>{ if(done)return; done=true; document.body.classList.add('enter'); try{ if(!sessionStorage.getItem('gb')&&S.greeting&&S.greeting.length){ sessionStorage.setItem('gb','1'); const B=['本日の処方を/開始します。','眠れない地球人の/みなさま、/こんばんは。','宇宙生まれの/ヒト型おくすり、/偲睡れーかです。']; B.forEach((t,i)=>setTimeout(()=>{const st=main.querySelector('.hero .stand'); if(st&&window.__tb)window.__tb(st,t)},1500+i*2600)); } }catch(e){} dg.classList.add('out'); setTimeout(()=>{dg.remove();op.classList.add('gone')},650); setTimeout(()=>document.body.classList.remove('enter'),2300) };
+    let done=false; const fin=()=>{ if(done||window.__skip)return; done=true; document.body.classList.add('enter'); try{ if(!sessionStorage.getItem('gb')&&S.greeting&&S.greeting.length){ sessionStorage.setItem('gb','1'); const B=['本日の処方を/開始します。','眠れない地球人の/みなさま、/こんばんは。','宇宙生まれの/ヒト型おくすり、/偲睡れーかです。']; B.forEach((t,i)=>setTimeout(()=>{const st=main.querySelector('.hero .stand'); if(st&&window.__tb)window.__tb(st,t)},1500+i*2600)); } }catch(e){} dg.classList.add('out'); setTimeout(()=>{dg.remove();op.classList.add('gone')},650); setTimeout(()=>document.body.classList.remove('enter'),2300) };
     const tm=setTimeout(fin,2300); dg.addEventListener('click',()=>{clearTimeout(tm);fin()});
     };
     const gl=S.greeting||[];

@@ -140,6 +140,14 @@ const VIEWS={
      const a=fText('項目名',o,'k');const c=fText('内容',o,'v');
      [a[1],c[1]].forEach(inp=>inp.addEventListener('input',()=>{it[0]=o.k;it[1]=o.v}));
      app(card,a);app(card,c)},()=>['',''],'＋ 項目をふやす'));}},
+ credits:{t:'クレジット',s:'イラスト・配信画面などの担当者',i:'heart-handshake',r(b){
+   b.append(el('h2',{},'クレジット'));b.append(el('p',{class:'note'},'担当の方が変わったら、ここで書き換えられます。内容は「お名前 様 (@Xのid)」の形で書くと、Xへのリンクになります。複数いる場合は「 / 」で区切ってください(例: ねむた 様 (@nenemutaaaa_) / 雷雨れろ 様 (@Raiu_Relo))。'));
+   b.append(listEditor(C.credits,(it,card)=>{
+     const o={k:it[0],v:it[1]};
+     const a=fText('担当(例: 配信画面)',o,'k');const c=fText('お名前とXのid',o,'v');
+     [a[1],c[1]].forEach(inp=>inp.addEventListener('input',()=>{it[0]=o.k;it[1]=o.v}));
+     app(card,a);app(card,c)},()=>['',''],'＋ 担当をふやす'));
+   app(b,fText('下に出る注記',C,'creditsNote'));}},
  links:{t:'リンク',s:'SNS・支援・ほしい物',i:'link',r(b){
    b.append(el('h2',{},'リンク'));b.append(el('p',{class:'note'},'URLが空のものは「準備中」と表示されます。'));
    b.append(listEditor(C.links,(it,card)=>{app(card,fSelect('分類',it,'group',GROUPS));app(card,fText('名前',it,'label'));app(card,fText('ひとこと',it,'sub'));app(card,fText('URL',it,'url',{type:'url',ph:'https://'}))},()=>({group:'SNS',label:'',sub:'',url:''}),'＋ リンクをふやす'));}},

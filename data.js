@@ -19,8 +19,9 @@ window.SITE = {
     ["Fa Tag", "#Re画"],
     ["🔞Tag", "#れかさん見るな"]
   ],
+  greeting: ["本日の処方を開始します。","眠れない地球人のみなさま、こんばんは。","宇宙生まれのヒト型おくすり、偲睡れーかです。"],
   about: [
-    "YouTubeでは歌を投稿しています。配信はミラティブにて。",
+    "YouTube、ミラティブにて配信活動中",
     "まだ地球になじめなくて、心がブレやすいよ。やさしくしてね。"
   ],
   notes: [
@@ -67,7 +68,7 @@ window.SITE = {
     ["パパ(モデラー)", "河下ユング 様 (@kawasimo_yung)"],
     ["配信内BGM", "MeA 様 (@meahapimix1224) / Shogo 様 (@1st_shogo) / フリー素材"],
     ["配信画面", "ねむた 様 (@nenemutaaaa_) / 雷雨れろ 様 (@Raiu_Relo)"],
-    ["動画全般", "碧人 様 (@mazai0242)"]
+    ["動画全般", "碧人 様 (@ao_hito0242)"]
   ],
   creditsNote: "主要の方のみの記載になります",
 
@@ -80,7 +81,7 @@ window.SITE = {
     { group: "SNS", label: "Mirrativ", sub: "ほぼ毎日配信してるよ", url: "https://www.mirrativ.com/user/150109300" },
     { group: "SNS", label: "#Re画 (ファンアート)", sub: "Xのタグ検索で見る", url: "https://x.com/search?q=%23Re%E7%94%BB&f=live" },
     { group: "SNS", label: "#れーかのたまりば (総合)", sub: "Xのタグ検索で見る", url: "https://x.com/search?q=%23%E3%82%8C%E3%83%BC%E3%81%8B%E3%81%AE%E3%81%9F%E3%81%BE%E3%82%8A%E3%81%B0&f=live" },
-    { group: "SNS", label: "TikTok", sub: "ダンス・振り付け", url: "https://www.tiktok.com/@000_reka" },
+    { group: "SNS", label: "TikTok", sub: "ショート動画をアップしています", url: "https://www.tiktok.com/@000_reka" },
     { group: "SNS", label: "Discord", sub: "誰でも参加OK・承認制／お気軽にどうぞ", url: "https://discord.gg/4h3ECCtwTJ" },
     { group: "SHOP", label: "BOOTH", sub: "公式グッズはここから", url: "https://xreeekax.booth.pm/" },
     { group: "SHOP", label: "FANBOX", sub: "サブスクで応援・加入者募集中!", url: "https://xreeekax.fanbox.cc/" },
@@ -131,7 +132,8 @@ window.SITE = {
   ],
   secretLead: "設定資料です。見つけてくれてありがとう。",
   tagLinks: [
-    { label: "FA・過去実績を見る (#Re画)", url: "https://x.com/search?q=%23Re%E7%94%BB&f=live" }
+    { label: "FAを見る (#Re画)", url: "https://x.com/search?q=%23Re%E7%94%BB&f=live" },
+    { label: "過去実績を見る (#れーかの実績報告)", url: "https://x.com/search?q=%23%E3%82%8C%E3%83%BC%E3%81%8B%E3%81%AE%E5%AE%9F%E7%B8%BE%E5%A0%B1%E5%91%8A&f=live" }
   ],
   logo: "img/logo.webp?v=4",
   logoVariants: ["img/logo.webp?v=4", "img/logo2.webp?v=4", "img/logo1.webp?v=4"],

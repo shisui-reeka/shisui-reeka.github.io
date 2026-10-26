@@ -130,12 +130,9 @@ window.SITE = {
     { title: "枠・フレーム制作", cat: "制作実績", by: "", img: "img/w11.webp" }
   ],
   secret: [
-    { title: "三面図", img: "img/sheet.webp" },
-    { title: "立ち絵 (ニット帽なし)", img: "img/full27.webp" },
-    { title: "立ち絵 (上着なし)", img: "img/full33.webp" },
-    { title: "立ち絵 (私服)", img: "img/full26.webp" },
-    { title: "立ち絵 (衣装)", img: "img/full5.webp" }
+    /* 隠しページ(ロゴを5回タップ)に載せる画像。空のときは何も起きません */
   ],
+
   secretLead: "設定資料です。見つけてくれてありがとう。",
   tagLinks: [
     { label: "FAを見る (#Re画)", url: "https://x.com/search?q=%23Re%E7%94%BB&f=live" },

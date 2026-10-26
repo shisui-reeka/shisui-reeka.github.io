@@ -264,7 +264,7 @@ a.frame{cursor:pointer}
 #gal .frame .ph img{object-fit:contain}
 #gal.ptp .frame .ph{aspect-ratio:1;height:100%;border:none;border-radius:50%;overflow:hidden}
 #gal.ptp .frame .ph img{width:100%;height:100%;object-fit:cover}
-#gal.ptp .frame .ph img[style*="--fz"]{object-position:50% 0;transform-origin:var(--fo);transform:translateY(var(--fd)) scale(var(--fz))}
+#gal.ptp .frame .ph img[style*="--fz"]{object-position:var(--fx) 0;transform-origin:var(--fo);transform:translateY(var(--fd)) scale(var(--fz))}
 #gal.ptp .frame .cap{display:none}
 body{padding-top:calc(26px + env(safe-area-inset-top))}
 body:not(.homeview) .tabs{top:calc(26px + env(safe-area-inset-top))}
@@ -712,14 +712,14 @@ table.cred td{padding-top:6px;padding-bottom:6px}
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="lbnav"><button class="lbn" id="lbp" aria-label="前へ">‹</button><div class="t" id="lbt"></div><button class="lbn" id="lbn" aria-label="次へ">›</button></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1793028811";
+window.BUILD="1793030233";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1793028811"></script>
-<script src="core.js?v=1793028811"></script>
-<script src="data.js?v=1793028811"></script>
+<script src="icons.js?v=1793030233"></script>
+<script src="core.js?v=1793030233"></script>
+<script src="data.js?v=1793030233"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -909,7 +909,7 @@ P.gal = () => {
 function drawGal(cat){
   const g=$('#gal'); if(!g) return; window.galCat=cat; g.classList.toggle('ptp',!!window.galPtp);
   const items = S.gallery.filter(x=>cat==='すべて'||x.cat===cat);
-  g.innerHTML = items.map(x=>`<div class="frame" data-src="${esc(x.img)}" data-t="${esc(x.title)}" title="${esc(x.title)}"><div class="ph">${x.img?`<img loading="lazy" src="${esc(x.img)}" alt="${esc(x.title)}"${x.fp?` style="--fo:${x.fp[0]}% ${x.fp[1]}%;--fz:${x.fp[2]};--fd:${x.fp[3]}%"`:''}>`:IC.cross.replace('width="22" height="22"','width="34" height="34"')}</div><div class="cap">${esc(x.title)}<i>${esc(x.cat)}${x.by?' / '+esc(x.by):''}</i></div></div>`).join('') || `<div class="empty" style="grid-column:1/-1">この分類の作品はまだありません。</div>`;
+  g.innerHTML = items.map(x=>`<div class="frame" data-src="${esc(x.img)}" data-t="${esc(x.title)}" title="${esc(x.title)}"><div class="ph">${x.img?`<img loading="lazy" src="${esc(x.img)}" alt="${esc(x.title)}"${x.fp?` style="--fo:${x.fp[0]}% ${x.fp[1]}%;--fz:${x.fp[2]};--fd:${x.fp[3]}%;--fx:${x.fp[4]||50}%"`:''}>`:IC.cross.replace('width="22" height="22"','width="34" height="34"')}</div><div class="cap">${esc(x.title)}<i>${esc(x.cat)}${x.by?' / '+esc(x.by):''}</i></div></div>`).join('') || `<div class="empty" style="grid-column:1/-1">この分類の作品はまだありません。</div>`;
   const fitPh=im=>{if(!im.naturalWidth)return;const r=Math.min(1.1,Math.max(.7,im.naturalWidth/im.naturalHeight));im.style.aspectRatio=r};
   g.querySelectorAll('.ph img').forEach(im=>{if(im.complete)fitPh(im);else im.addEventListener('load',()=>fitPh(im),{once:true})});
   g.onclick=e=>{const f=e.target.closest('.frame');if(!f||!f.dataset.src)return;f.classList.remove('press');void f.offsetWidth;f.classList.add('press');const r=f.getBoundingClientRect();window.burst&&window.burst(r.left+r.width/2,r.top+r.height/2,8);setTimeout(()=>{const fr=[...g.querySelectorAll('.frame')].filter(z=>z.dataset.src);const list=fr.map(z=>({src:z.dataset.src,t:z.dataset.t}));openLb(f.dataset.src,f.dataset.t,list,fr.indexOf(f))},260)};

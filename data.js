@@ -104,11 +104,11 @@ window.SITE = {
   /* ギャラリー — img は画像URL(素材が届いたら差し替え) */
   galleryCats: ["すべて", "立ち絵・三面図", "キービジュアル", "ちび・アイコン", "ロゴ", "グッズ", "制作実績"],
   gallery: [
-    { title: "立ち絵 (上着あり)", cat: "立ち絵・三面図", by: "", img: "img/st_n1.webp" },
-    { title: "立ち絵 (上着なし)", cat: "立ち絵・三面図", by: "", img: "img/st_n2.webp" },
-    { title: "立ち絵 (私服・帽子あり)", cat: "立ち絵・三面図", by: "", img: "img/st_p1.webp" },
-    { title: "立ち絵 (私服・帽子なし)", cat: "立ち絵・三面図", by: "", img: "img/st_p2.webp" },
-    { title: "三面図", cat: "立ち絵・三面図", by: "", img: "img/sheet2.webp" },
+    { title: "立ち絵 (上着あり)", cat: "立ち絵・三面図", by: "", img: "img/st_n1.webp", fp: [49,22,1.8,27] },
+    { title: "立ち絵 (上着なし)", cat: "立ち絵・三面図", by: "", img: "img/st_n2.webp", fp: [49,22,1.8,27] },
+    { title: "立ち絵 (私服・帽子あり)", cat: "立ち絵・三面図", by: "", img: "img/st_p1.webp", fp: [50,24,1.8,26] },
+    { title: "立ち絵 (私服・帽子なし)", cat: "立ち絵・三面図", by: "", img: "img/st_p2.webp", fp: [50,24,1.8,26] },
+    { title: "三面図", cat: "立ち絵・三面図", by: "", img: "img/sheet2.webp", fp: [44,26,2.6,22] },
     { title: "キービジュアル", cat: "キービジュアル", by: "", img: "img/kvn.webp" },
     { title: "キービジュアル (白背景用)", cat: "キービジュアル", by: "", img: "img/kvw.webp" },
     { title: "キービジュアル (アップ)", cat: "キービジュアル", by: "", img: "img/kv0.webp" },

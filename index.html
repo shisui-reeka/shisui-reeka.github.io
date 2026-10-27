@@ -800,14 +800,14 @@ table.cred td{padding-top:6px;padding-bottom:6px}
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="lbnav"><button class="lbn" id="lbp" aria-label="前へ">‹</button><div class="t" id="lbt"></div><button class="lbn" id="lbn" aria-label="次へ">›</button></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1793086183";
+window.BUILD="1793086282";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1793086183"></script>
-<script src="core.js?v=1793086183"></script>
-<script src="data.js?v=1793086183"></script>
+<script src="icons.js?v=1793086282"></script>
+<script src="core.js?v=1793086282"></script>
+<script src="data.js?v=1793086282"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -900,19 +900,14 @@ function docHtml(txt,end){return '<div class="sd"><div class="ln mt"><span>FILE 
   let began=false;
   const begin=()=>{if(began)return;began=true;intro.style.transition='opacity .5s';intro.style.opacity='0';later(()=>intro.remove(),520);s.style.visibility='';
    const lines=[...s.querySelectorAll('.ln')];
-   let manual=false;['wheel','touchstart','pointerdown'].forEach(ev=>s.addEventListener(ev,()=>{manual=true},{passive:true,once:true}));
-   const cur=document.createElement('span');cur.className='tcur';
-   const body=lines.filter(l=>!l.classList.contains('sys')&&!l.classList.contains('end'));
-   let li=0;
-   const nextLine=()=>{if(li>=body.length){cur.remove();lines.filter(l=>l.classList.contains('sys')||l.classList.contains('end')).forEach((l,k)=>later(()=>l.classList.add('on'),k===0?300:2200));return}
-    const l=body[li++];l.classList.add('on');
-    const cs=[...l.querySelectorAll('i.c')];
-    if(!cs.length){later(nextLine,l.classList.contains('sp')?70:120);return}
-    if(!manual){const b=l.getBoundingClientRect(),r=s.getBoundingClientRect();if(b.bottom>r.bottom-70)s.scrollTo({top:s.scrollTop+(b.bottom-r.bottom)+110,behavior:'smooth'})}
-    let k=0;const st=()=>{if(k>=cs.length){cur.remove();later(nextLine,l.classList.contains('hd')?200:110);return}
-     const c=cs[k++];c.classList.add('t');c.after(cur);const ch=c.textContent;later(st,/[。、]/.test(ch)?150:(l.classList.contains('hd')?45:17+Math.random()*14))};st()};
-   later(nextLine,350);
-   window.__dkIO=null;
+   let q=0,qt=null;
+   const typeLine=l=>{l.classList.add('on');const cs=[...l.querySelectorAll('i.c')];if(!cs.length)return;
+    const cur=document.createElement('span');cur.className='tcur';let k=0;
+    const st=()=>{if(k>=cs.length){cur.remove();return}const c=cs[k++];c.classList.add('t');c.after(cur);const ch=c.textContent;later(st,/[。、]/.test(ch)?90:(l.classList.contains('hd')?28:11+Math.random()*9))};st()};
+   const io=new IntersectionObserver(es=>{es.forEach(e=>{const l=e.target;if(!e.isIntersecting||l.dataset.go)return;l.dataset.go=1;io.unobserve(l);
+     const late=l.dataset.late,d=late?2000:(q++)*95;clearTimeout(qt);qt=setTimeout(()=>{q=0},500);
+     later(()=>{if(l.classList.contains('sp')||late||l.classList.contains('end'))l.classList.add('on');else typeLine(l)},d)})},{root:s,threshold:.05});
+   window.__dkIO=io;lines.forEach(l=>io.observe(l));
    let p=0;const upd=()=>{const m=s.scrollHeight-s.clientHeight;p=m>0?Math.min(1,s.scrollTop/m):0;pulse.style.animationDuration=(2.4-p*.8).toFixed(2)+'s';lb.style.setProperty('--dp',p.toFixed(3));const dm=Math.round(p*3800);hud.querySelector('b').textContent=String(dm).padStart(4,'0')+'m';hud.querySelector('span').textContent='DEPTH · L'+String(1+Math.min(4,Math.floor(p*5))).padStart(2,'0');hud.querySelector('i').style.setProperty('--pg',Math.round(p*100)+'%')};s.onscroll=upd;upd();
    clearInterval(window.__dkT);window.__dkT=setInterval(()=>{if(!lb.classList.contains('on')){closeDk();return}
     const v=lines.filter(l=>l.classList.contains('on')&&l.textContent.trim()&&!l.classList.contains('sys'));if(!v.length)return;

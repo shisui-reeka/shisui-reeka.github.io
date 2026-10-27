@@ -242,7 +242,7 @@ const VIEWS={
 function growAll(){document.querySelectorAll('textarea.one').forEach(grow)}
 window.addEventListener('resize',growAll);
 function openView(id){current=id;$('#home').classList.add('hide');$('#view').classList.remove('hide');const b=$('#vbody');b.innerHTML='';VIEWS[id].r(b);window.scrollTo(0,0);setTimeout(growAll,50)}
-function goHome(){if(dirty&&!confirm('保存していない未保存の変更があります。メニューにもどりますか?(変更は消えません。保存は下のボタンから)'))return;$('#view').classList.add('hide');$('#home').classList.remove('hide');window.scrollTo(0,0)}
+function goHome(){if(dirty&&!confirm('保存していない変更があります。メニューにもどりますか?(変更は消えません。保存は下のボタンから)'))return;$('#view').classList.add('hide');$('#home').classList.remove('hide');window.scrollTo(0,0)}
 function buildMenu(){const m=$('#menu');m.innerHTML='';Object.keys(VIEWS).forEach(id=>{const v=VIEWS[id];m.append(el('button',{class:'tile',type:'button',onclick:()=>openView(id)},el('span',{class:'tno mono'},'No.'+String(Object.keys(VIEWS).indexOf(id)+1).padStart(2,'0')),el('span',{class:'tic',html:ico(v.i,28)}),el('b',{},v.t),el('small',{},v.s)))})}
 $('#back').addEventListener('click',goHome);
 

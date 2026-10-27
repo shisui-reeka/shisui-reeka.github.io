@@ -27,6 +27,7 @@ h2{font-size:17px;margin:4px 0 14px;padding-bottom:6px;border-bottom:1px dashed 
 label{display:block;font-size:12px;color:var(--violet);margin:12px 0 4px;letter-spacing:.1em}
 input[type=text],input[type=url],input[type=password],select,textarea{width:100%;font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--blue);border-radius:4px;background:#fff;color:var(--ink)}
 textarea{min-height:110px;resize:vertical}
+textarea.one{min-height:0;resize:none;overflow:hidden;line-height:1.5;word-break:break-all}
 .item{border:1px solid var(--line);background:rgba(255,255,255,.7);border-radius:6px;padding:4px 12px 12px;margin:12px 0;position:relative}
 .item .bar{display:flex;gap:6px;justify-content:flex-end;margin:8px 0 0}
 .mini{border:1px solid var(--blue);background:#fff;color:var(--violet);font:inherit;font-size:13px;padding:5px 12px;border-radius:4px;cursor:pointer}
@@ -91,7 +92,8 @@ function el(tag,attrs,...kids){const e=document.createElement(tag);for(const k i
 function mark(){dirty=true;$('#savebar').classList.add('on');$('#savemsg').textContent='変更があります'}
 
 /* ---- field helpers ---- */
-function fText(label,obj,key,opts){opts=opts||{};const i=el('input',{type:opts.type||'text',value:obj[key]==null?'':obj[key],placeholder:opts.ph||''});i.addEventListener('input',()=>{obj[key]=i.value;mark()});return [el('label',{},label),i]}
+function grow(t){t.style.height='auto';t.style.height=(t.scrollHeight+2)+'px'}
+function fText(label,obj,key,opts){opts=opts||{};const i=el('textarea',{rows:'1',class:'one',placeholder:opts.ph||'',spellcheck:'false'});i.value=obj[key]==null?'':obj[key];i.addEventListener('input',()=>{if(/[\r\n]/.test(i.value))i.value=i.value.replace(/[\r\n]+/g,' ');obj[key]=i.value;grow(i);mark()});i.addEventListener('keydown',e=>{if(e.key==='Enter')e.preventDefault()});setTimeout(()=>grow(i),0);setTimeout(()=>grow(i),300);return [el('label',{},label),i]}
 function fArea(label,obj,key,toStr,fromStr){const t=el('textarea');t.value=toStr?toStr(obj[key]):(obj[key]||'');t.addEventListener('input',()=>{obj[key]=fromStr?fromStr(t.value):t.value;mark()});return [el('label',{},label),t]}
 function fSelect(label,obj,key,opts){const s=el('select');opts.forEach(o=>{const v=Array.isArray(o)?o[0]:o,l=Array.isArray(o)?o[1]:o;const op=el('option',{value:v},l);if(obj[key]===v)op.selected=true;s.append(op)});s.addEventListener('change',()=>{obj[key]=s.value;mark()});return [el('label',{},label),s]}
 
@@ -183,7 +185,9 @@ const VIEWS={
    b.append(listEditor(C.fortunes,(it,card)=>{app(card,fText('ランク名(例: 特効薬)',it,'rank'));app(card,fText('運勢(例: 大吉)',it,'sub'));app(card,fArea('ひとこと',it,'msg'));app(card,fText('効き目(1〜5)',it,'stars'));app(card,fArea('用法',it,'use'));app(card,fArea('副作用',it,'side'));app(card,fText('ラッキーアイテム',it,'lucky'));app(card,fText('服用時間',it,'time'))},()=>({rank:'',sub:'',stars:3,msg:'',use:'',side:'',lucky:'',time:''}),'＋ ふやす'));}}
 };
 
-function openView(id){current=id;$('#home').classList.add('hide');$('#view').classList.remove('hide');const b=$('#vbody');b.innerHTML='';VIEWS[id].r(b);window.scrollTo(0,0)}
+function growAll(){document.querySelectorAll('textarea.one').forEach(grow)}
+window.addEventListener('resize',growAll);
+function openView(id){current=id;$('#home').classList.add('hide');$('#view').classList.remove('hide');const b=$('#vbody');b.innerHTML='';VIEWS[id].r(b);window.scrollTo(0,0);setTimeout(growAll,50)}
 function goHome(){if(dirty&&!confirm('保存していない変更があります。メニューにもどりますか?(変更は消えません。保存は下のボタンから)'))return;$('#view').classList.add('hide');$('#home').classList.remove('hide');window.scrollTo(0,0)}
 function buildMenu(){const m=$('#menu');m.innerHTML='';Object.keys(VIEWS).forEach(id=>{const v=VIEWS[id];m.append(el('button',{class:'tile',type:'button',onclick:()=>openView(id)},el('span',{class:'tic',html:ico(v.i,28)}),el('b',{},v.t),el('small',{},v.s)))})}
 $('#back').addEventListener('click',goHome);

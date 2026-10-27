@@ -173,6 +173,18 @@ pre.tpl{white-space:pre-wrap;background:#fff;border:1px solid var(--line);paddin
 a.frame{cursor:pointer}
 #lb{position:fixed;inset:0;z-index:90;background:rgba(238,241,250,.97);display:none;flex-direction:column;align-items:center;justify-content:center;padding:16px;gap:10px}
 #lb.on{display:flex}
+
+#lb .dkp{position:absolute;inset:0;pointer-events:none;z-index:4;background:radial-gradient(ellipse at 50% 50%,transparent 48%,rgba(255,99,189,.38) 100%);opacity:0;animation:thump 1.7s ease-in-out infinite}
+@keyframes thump{0%{opacity:0}9%{opacity:.95}17%{opacity:.15}28%{opacity:.7}45%,100%{opacity:0}}
+#lb.dk #lbsec.bo{opacity:0}
+#lb.dk .sd{animation:dksh 7s steps(1) infinite}
+@keyframes dksh{0%,93%,100%{transform:none}94%{transform:translate(1px,-1px)}95%{transform:translate(-2px,1px)}96%{transform:none}}
+#lb #dkIn{position:absolute;inset:0;z-index:7;background:#030208;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:14px;padding:0 9vw;font:14px/1.9 ui-monospace,Menlo,"Hiragino Kaku Gothic ProN",monospace;letter-spacing:.14em;color:#c9d3f5;text-shadow:0 0 10px rgba(140,169,236,.7)}
+#lb #dkIn .w{color:#ff63bd;text-shadow:0 0 12px rgba(255,99,189,.8)}
+#lb #dkIn .cu{display:inline-block;width:.55em;height:1.05em;margin-left:.2em;vertical-align:-.2em;background:#ff63bd;box-shadow:0 0 10px #ff63bd;animation:blk .5s steps(1) infinite}
+#lb #dkIn svg{width:100%;height:46px;margin-top:10px}
+#lb #dkIn svg path{fill:none;stroke:#ff63bd;stroke-width:1.6;stroke-dasharray:420 900;stroke-dashoffset:420;animation:ecg 2.2s linear infinite;filter:drop-shadow(0 0 4px #ff63bd)}
+#lbsec .sd .sys{color:#ff63bd;letter-spacing:.2em;text-align:center;margin-top:26px;font-size:12px;text-shadow:0 0 10px rgba(255,99,189,.8)}
 #lb.dk{background:#06050c}
 #lb.dk::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:4;background:repeating-linear-gradient(0deg,rgba(140,169,236,.05) 0 1px,transparent 1px 3px),radial-gradient(ellipse at 50% 45%,transparent 35%,rgba(0,0,0,.7));animation:dkf 5s steps(1) infinite}
 @keyframes dkf{0%,90%,100%{opacity:1}92%{opacity:.55}94%{opacity:1}96%{opacity:.7}}
@@ -733,14 +745,14 @@ table.cred td{padding-top:6px;padding-bottom:6px}
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="lbnav"><button class="lbn" id="lbp" aria-label="前へ">‹</button><div class="t" id="lbt"></div><button class="lbn" id="lbn" aria-label="次へ">›</button></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1793067912";
+window.BUILD="1793082136";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1793067912"></script>
-<script src="core.js?v=1793067912"></script>
-<script src="data.js?v=1793067912"></script>
+<script src="icons.js?v=1793082136"></script>
+<script src="core.js?v=1793082136"></script>
+<script src="data.js?v=1793082136"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -785,24 +797,40 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')lb.classList.remove(
     const r=lg.getBoundingClientRect();window.burst&&window.burst(r.left+r.width/2,r.top+r.height/2,8)})})();
 /* secret: logo 5 taps */
 (function(){let n=0,t=null;const lg=$('#hLogo');
-const closeDk=()=>{lb.classList.remove('dk');clearInterval(window.__dkT);if(window.__dkIO){window.__dkIO.disconnect();window.__dkIO=null}};
+const TO=[];const later=(f,ms)=>{const id=setTimeout(f,ms);TO.push(id);return id};
+const closeDk=()=>{lb.classList.remove('dk');clearInterval(window.__dkT);TO.splice(0).forEach(clearTimeout);if(window.__dkIO){window.__dkIO.disconnect();window.__dkIO=null}const a=lb.querySelector('.dkp');a&&a.remove();const b=lb.querySelector('#dkIn');b&&b.remove();const sc=$('#lbsec');sc.classList.remove('bo');sc.onscroll=null};
 window.__closeDk=closeDk;
-function docHtml(txt){return '<div class="sd">'+String(txt).split('\n').map((l,i,a)=>{
+function docHtml(txt,end){return '<div class="sd">'+String(txt).split('\n').map((l,i,a)=>{
  if(!l.trim())return '<div class="ln sp"></div>';
  const e=esc(l);
  if(/^―.*―$/.test(l.trim()))return '<div class="ln ti">'+e+'</div>';
  if(/^《.*》$/.test(l.trim()))return '<div class="ln nm">'+e+'</div>';
  if(l.trim().startsWith('■'))return '<div class="ln hd">'+e+'</div>';
  const hot=/処分：未実行|自分も救われている|回収判断|必要とされること|耳部形態変化/.test(l)?' hot':'';
- return '<div class="ln'+hot+'">'+e+'</div>'}).join('')+'<div class="ln end"></div></div>'}
+ return '<div class="ln'+hot+'">'+e+'</div>'}).join('')+'<div class="ln end"></div>'+(end||[]).map(x=>'<div class="ln sys" data-late="1">'+esc(x)+'</div>').join('')+'</div>'}
 (lg.hidden?$('#hName'):lg).addEventListener('click',()=>{n++;clearTimeout(t);t=setTimeout(()=>n=0,1500);if(n>=5){n=0;
  const hasDoc=!!(S.secretDoc&&S.secretDoc.trim()); if(!hasDoc&&!(S.secret&&S.secret.length))return;
+ closeDk();
  const s=$('#lbsec');$('#lbi').style.display='none';$('#lbt').textContent='';s.style.display='block';
- if(hasDoc){s.innerHTML=docHtml(S.secretDoc);lb.classList.add('dk');s.scrollTop=0;
-  const lines=[...s.querySelectorAll('.ln')];let q=0;
-  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&!e.target.classList.contains('on')){const d=(q++%14)*110;io.unobserve(e.target);setTimeout(()=>e.target.classList.add('on'),d)}});if(!es.length)q=0},{root:s,threshold:.1});
-  window.__dkIO=io;lines.forEach(l=>io.observe(l));
-  clearInterval(window.__dkT);window.__dkT=setInterval(()=>{if(!lb.classList.contains('on')){closeDk();return}const v=lines.filter(l=>l.classList.contains('on')&&l.textContent.trim());if(!v.length)return;const l=v[Math.floor(Math.random()*v.length)];l.classList.remove('gl');void l.offsetWidth;l.classList.add('gl')},2400)}
+ if(hasDoc){s.innerHTML=docHtml(S.secretDoc,S.secretEnd);lb.classList.add('dk');s.scrollTop=0;s.style.visibility='hidden';
+  const pulse=document.createElement('div');pulse.className='dkp';lb.appendChild(pulse);
+  const intro=document.createElement('div');intro.id='dkIn';
+  intro.innerHTML='<div id="dkA"></div><div id="dkB"></div><svg viewBox="0 0 300 46" preserveAspectRatio="none"><path d="M0 24H70l8-4 6 4h12l6-18 8 36 8-18h14l8-5 6 5H300"/></svg>';
+  lb.appendChild(intro);
+  const type=(el,txt,cls,done)=>{let k=0;const w=document.createElement('span');if(cls)w.className=cls;el.appendChild(w);const cu=document.createElement('i');cu.className='cu';el.appendChild(cu);const st=()=>{if(k>=txt.length){cu.remove();done&&later(done,380);return}w.textContent+=txt[k++];later(st,/[。、]/.test(txt[k-1])?260:55)};st()};
+  let began=false;
+  const begin=()=>{if(began)return;began=true;intro.style.transition='opacity .5s';intro.style.opacity='0';later(()=>intro.remove(),520);s.style.visibility='';
+   const lines=[...s.querySelectorAll('.ln')];let q=0;
+   const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&!e.target.classList.contains('on')){const late=e.target.dataset.late;const d=late?2200:(q++%14)*110;io.unobserve(e.target);later(()=>e.target.classList.add('on'),d)}});if(!es.length)q=0},{root:s,threshold:.1});
+   window.__dkIO=io;lines.forEach(l=>io.observe(l));
+   let p=0;const upd=()=>{const m=s.scrollHeight-s.clientHeight;p=m>0?Math.min(1,s.scrollTop/m):0;pulse.style.animationDuration=(1.7-p*.9).toFixed(2)+'s'};s.onscroll=upd;upd();
+   clearInterval(window.__dkT);window.__dkT=setInterval(()=>{if(!lb.classList.contains('on')){closeDk();return}
+    const v=lines.filter(l=>l.classList.contains('on')&&l.textContent.trim()&&!l.classList.contains('sys'));if(!v.length)return;
+    if(Math.random()<.45+p*.4){const l=v[Math.floor(Math.random()*v.length)];l.classList.remove('gl');void l.offsetWidth;l.classList.add('gl')}
+    if(Math.random()<.3+p*.45){const l=v[Math.floor(Math.random()*v.length)];const o=l.textContent;if(o.length>3){const a=o.split('');for(let c=0;c<2+Math.floor(p*3);c++){a[Math.floor(Math.random()*a.length)]='▓'}l.textContent=a.join('');setTimeout(()=>{l.textContent=o},170)}}
+    if(Math.random()<.05+p*.12){s.classList.add('bo');setTimeout(()=>s.classList.remove('bo'),90+Math.random()*120)}},900)};
+  intro.addEventListener('click',begin);
+  type($('#dkA'),'閲覧を検知しました。','',()=>type($('#dkB'),'記録を開きます……','w',()=>later(begin,500)))}
  else{lb.classList.remove('dk');s.innerHTML='<h2 style="margin-top:0">研究資料</h2>'+(S.secretLead?'<p class="muted">'+esc(S.secretLead)+'</p>':'')+'<div class="secretgrid">'+S.secret.map(x=>'<div class="frame" style="cursor:default"><img style="width:100%;display:block;background:#fff" src="'+esc(x.img)+'" alt="'+esc(x.title)+'"><div class="cap">'+esc(x.title)+'</div></div>').join('')+'</div>'}
  lb.classList.add('nonav');lb.classList.add('on');lb.classList.remove('glitch');void lb.offsetWidth;lb.classList.add('glitch');setTimeout(()=>lb.classList.remove('glitch'),1300)}})})();
 document.title = S.name + ' | 研究ノート';

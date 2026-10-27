@@ -801,14 +801,14 @@ table.cred td{padding-top:6px;padding-bottom:6px}
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="lbnav"><button class="lbn" id="lbp" aria-label="前へ">‹</button><div class="t" id="lbt"></div><button class="lbn" id="lbn" aria-label="次へ">›</button></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1793122442";
+window.BUILD="1793140977";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1793122442"></script>
-<script src="core.js?v=1793122442"></script>
-<script src="data.js?v=1793122442"></script>
+<script src="icons.js?v=1793140977"></script>
+<script src="core.js?v=1793140977"></script>
+<script src="data.js?v=1793140977"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -874,7 +874,7 @@ function docHtml(txt,end){return '<div class="sd"><div class="ln mt"><span>FILE 
    
    const G='0';
    [...$('#lbsec').querySelectorAll('.ln.on')].forEach(l=>{if(l.classList.contains('sp')||l.dataset.sc)return;const b=l.getBoundingClientRect();const d=Math.abs((b.top+b.bottom)/2-y);if(d>130)return;
-    const pw=1-d/130,o=l.innerHTML,jp=l.textContent,en=l.dataset.en||jp,H=l.offsetHeight,fs0=parseFloat(getComputedStyle(l).fontSize);l.dataset.sc=1;l.classList.add('tz');l.style.height=H+'px';l.style.overflow='hidden';
+    const cl=l.cloneNode(true);cl.querySelectorAll('.kw').forEach(k=>{if(k.dataset.o)k.textContent=k.dataset.o;delete k.dataset.sc});const pw=1-d/130,o=cl.innerHTML,jp=cl.textContent,en=l.dataset.en||jp,H=l.offsetHeight,fs0=parseFloat(getComputedStyle(l).fontSize);l.dataset.sc=1;l.classList.add('tz');l.style.height=H+'px';l.style.overflow='hidden';
     const FR=[['e',.45,70],['e',.12,150],['j',0,120],['e',.08,170],['j',0,130],['e',.3,90],['j',0,0]];
     let f=0;const tk=()=>{const [ty,rate,ms]=FR[f++];
      if(ty==='j'){l.innerHTML=o;l.style.fontSize='';l.style.letterSpacing='';if(f>=FR.length){l.style.height='';l.style.overflow='';delete l.dataset.sc;l.classList.remove('tz');return}}
@@ -916,7 +916,7 @@ function docHtml(txt,end){return '<div class="sd"><div class="ln mt"><span>FILE 
    let p=0;const upd=()=>{const m=s.scrollHeight-s.clientHeight;p=m>0?Math.min(1,s.scrollTop/m):0;pulse.style.animationDuration=(2.4-p*.8).toFixed(2)+'s';lb.style.setProperty('--dp',p.toFixed(3));const dm=Math.round(p*3800);hud.querySelector('b').textContent=String(dm).padStart(4,'0')+'m';hud.querySelector('span').textContent='DEPTH · L'+String(1+Math.min(4,Math.floor(p*5))).padStart(2,'0');hud.querySelector('i').style.setProperty('--pg',Math.round(p*100)+'%')};s.onscroll=upd;upd();
    clearInterval(window.__dkT);window.__dkT=setInterval(()=>{if(!lb.classList.contains('on')){closeDk();return}
     const v=lines.filter(l=>l.classList.contains('on')&&l.textContent.trim()&&!l.classList.contains('sys'));if(!v.length)return;
-        {const ks=[...s.querySelectorAll('.ln.on .kw')];const nn=1+Math.floor(p*2+Math.random()*1.5);for(let z=0;z<nn&&ks.length;z++){const k=ks[Math.floor(Math.random()*ks.length)];if(k.dataset.sc)continue;const o=k.textContent,G='0';k.dataset.sc=1;let f=0;const tk=()=>{if(f++>=3){k.textContent=o;delete k.dataset.sc;return}k.textContent=[...o].map(c=>Math.random()<.5?G[Math.floor(Math.random()*G.length)]:c).join('');setTimeout(tk,70)};tk()}}
+        {const ks=[...s.querySelectorAll('.ln.on .kw')];const nn=1+Math.floor(p*2+Math.random()*1.5);for(let z=0;z<nn&&ks.length;z++){const k=ks[Math.floor(Math.random()*ks.length)];if(k.dataset.sc)continue;const o=k.dataset.o||k.textContent,G='0';k.dataset.o=o;k.dataset.sc=1;let f=0;const tk=()=>{if(f++>=3){k.textContent=o;delete k.dataset.sc;return}k.textContent=[...o].map(c=>Math.random()<.5?G[Math.floor(Math.random()*G.length)]:c).join('');setTimeout(tk,70)};tk()}}
     },1000)};
   
   type($('#dkA'),'閲覧を検知しました。','',()=>type($('#dkB'),'深層データへ接続します……','w',()=>later(begin,500)))}

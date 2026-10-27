@@ -174,10 +174,10 @@ a.frame{cursor:pointer}
 #lb{position:fixed;inset:0;z-index:90;background:rgba(238,241,250,.97);display:none;flex-direction:column;align-items:center;justify-content:center;padding:16px;gap:10px}
 #lb.on{display:flex}
 
-#lb .dkp{position:absolute;inset:0;pointer-events:none;z-index:4;background:radial-gradient(ellipse at 50% 50%,transparent 48%,rgba(255,99,189,.38) 100%);opacity:0;animation:thump 1.7s ease-in-out infinite}
-@keyframes thump{0%{opacity:0}9%{opacity:.95}17%{opacity:.15}28%{opacity:.7}45%,100%{opacity:0}}
+#lb .dkp{position:absolute;inset:0;pointer-events:none;z-index:4;background:radial-gradient(ellipse at 50% 50%,transparent 48%,rgba(255,99,189,.26) 100%);opacity:0;animation:thump 2.4s ease-in-out infinite}
+@keyframes thump{0%{opacity:0}12%{opacity:.5}24%{opacity:.12}34%{opacity:.35}55%,100%{opacity:0}}
 #lb.dk #lbsec.bo{opacity:0}
-#lb.dk .sd{animation:dksh 7s steps(1) infinite}
+
 @keyframes dksh{0%,93%,100%{transform:none}94%{transform:translate(1px,-1px)}95%{transform:translate(-2px,1px)}96%{transform:none}}
 #lb #dkIn{position:absolute;inset:0;z-index:7;background:#030208;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:14px;padding:0 9vw;font:14px/1.9 ui-monospace,Menlo,"Hiragino Kaku Gothic ProN",monospace;letter-spacing:.14em;color:#c9d3f5;text-shadow:0 0 10px rgba(140,169,236,.7)}
 #lb #dkIn .w{color:#ff63bd;text-shadow:0 0 12px rgba(255,99,189,.8)}
@@ -186,7 +186,9 @@ a.frame{cursor:pointer}
 #lb #dkIn svg path{fill:none;stroke:#ff63bd;stroke-width:1.6;stroke-dasharray:420 900;stroke-dashoffset:420;animation:ecg 2.2s linear infinite;filter:drop-shadow(0 0 4px #ff63bd)}
 #lbsec .sd .sys{color:#ff63bd;letter-spacing:.2em;text-align:center;margin-top:26px;font-size:12px;text-shadow:0 0 10px rgba(255,99,189,.8)}
 #lb.dk{background:#06050c}
-#lb.dk::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:4;background:repeating-linear-gradient(0deg,rgba(140,169,236,.05) 0 1px,transparent 1px 3px),radial-gradient(ellipse at 50% 45%,transparent 35%,rgba(0,0,0,.7));animation:dkf 5s steps(1) infinite}
+#lb.dk.glitch::after{animation:none}
+#lb.dk.glitch #lbsec{animation:none}
+#lb.dk::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:4;background:repeating-linear-gradient(0deg,rgba(140,169,236,.05) 0 1px,transparent 1px 3px),radial-gradient(ellipse at 50% 45%,transparent 35%,rgba(0,0,0,.7))}
 @keyframes dkf{0%,90%,100%{opacity:1}92%{opacity:.55}94%{opacity:1}96%{opacity:.7}}
 #lb.dk .lbl{background:#0b0a14;color:#ff63bd;border-color:#ff63bd}
 #lb.dk .x{background:#0b0a14;color:#8ca9ec;border-color:#8f77c2}
@@ -198,10 +200,10 @@ a.frame{cursor:pointer}
 #lbsec .sd .ti{color:#ff63bd;text-align:center;letter-spacing:.35em;font-size:12.5px;text-shadow:0 0 10px rgba(255,99,189,.7)}
 #lbsec .sd .nm{color:#dfe9ff;text-align:center;letter-spacing:.12em;font-size:15px;margin-bottom:10px;text-shadow:-1px 0 rgba(255,99,189,.6),1px 0 rgba(140,169,236,.7),0 0 12px rgba(140,169,236,.7)}
 #lbsec .sd .hd{color:#8f77c2;letter-spacing:.2em;margin-top:18px;border-bottom:1px dashed rgba(143,119,194,.45);padding-bottom:2px;text-shadow:0 0 8px rgba(143,119,194,.6)}
-#lbsec .sd .hot{color:#ff63bd;text-shadow:0 0 8px rgba(255,99,189,.65);animation:hotf 3.4s steps(1) infinite}
-@keyframes hotf{0%,86%,100%{opacity:1}88%{opacity:.35}90%{opacity:1}93%{opacity:.5}}
-#lbsec .sd .gl{animation:slg .22s steps(1)}
-@keyframes slg{0%{transform:translateX(-5px);text-shadow:3px 0 #ff63bd,-3px 0 #8ca9ec;clip-path:inset(0 0 45% 0)}50%{transform:translateX(4px);clip-path:inset(40% 0 0 0)}100%{transform:none}}
+#lbsec .sd .hot{color:#ff63bd;text-shadow:0 0 8px rgba(255,99,189,.65);animation:hotf 5s ease-in-out infinite}
+@keyframes hotf{0%,100%{opacity:1}50%{opacity:.72}}
+#lbsec .sd .gl{animation:slg .3s steps(1)}
+@keyframes slg{0%{transform:translateX(-2px);text-shadow:2px 0 rgba(255,99,189,.6),-2px 0 rgba(140,169,236,.6)}50%{transform:translateX(2px)}100%{transform:none}}
 #lbsec .sd .end::after{content:"";display:inline-block;width:.6em;height:1.1em;margin-left:.3em;vertical-align:-.2em;background:#ff63bd;box-shadow:0 0 10px #ff63bd;animation:blk .8s steps(1) infinite}
 
 #lbsec{margin-top:calc(54px + env(safe-area-inset-top))!important;max-height:calc(100vh - 54px - env(safe-area-inset-top) - 100px - env(safe-area-inset-bottom))!important;max-height:calc(100dvh - 54px - env(safe-area-inset-top) - 100px - env(safe-area-inset-bottom))!important}
@@ -745,14 +747,14 @@ table.cred td{padding-top:6px;padding-bottom:6px}
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="lbnav"><button class="lbn" id="lbp" aria-label="前へ">‹</button><div class="t" id="lbt"></div><button class="lbn" id="lbn" aria-label="次へ">›</button></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1793082136";
+window.BUILD="1793083057";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1793082136"></script>
-<script src="core.js?v=1793082136"></script>
-<script src="data.js?v=1793082136"></script>
+<script src="icons.js?v=1793083057"></script>
+<script src="core.js?v=1793083057"></script>
+<script src="data.js?v=1793083057"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -823,12 +825,12 @@ function docHtml(txt,end){return '<div class="sd">'+String(txt).split('\n').map(
    const lines=[...s.querySelectorAll('.ln')];let q=0;
    const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&!e.target.classList.contains('on')){const late=e.target.dataset.late;const d=late?2200:(q++%14)*110;io.unobserve(e.target);later(()=>e.target.classList.add('on'),d)}});if(!es.length)q=0},{root:s,threshold:.1});
    window.__dkIO=io;lines.forEach(l=>io.observe(l));
-   let p=0;const upd=()=>{const m=s.scrollHeight-s.clientHeight;p=m>0?Math.min(1,s.scrollTop/m):0;pulse.style.animationDuration=(1.7-p*.9).toFixed(2)+'s'};s.onscroll=upd;upd();
+   let p=0;const upd=()=>{const m=s.scrollHeight-s.clientHeight;p=m>0?Math.min(1,s.scrollTop/m):0;pulse.style.animationDuration=(2.4-p*.8).toFixed(2)+'s'};s.onscroll=upd;upd();
    clearInterval(window.__dkT);window.__dkT=setInterval(()=>{if(!lb.classList.contains('on')){closeDk();return}
     const v=lines.filter(l=>l.classList.contains('on')&&l.textContent.trim()&&!l.classList.contains('sys'));if(!v.length)return;
-    if(Math.random()<.45+p*.4){const l=v[Math.floor(Math.random()*v.length)];l.classList.remove('gl');void l.offsetWidth;l.classList.add('gl')}
-    if(Math.random()<.3+p*.45){const l=v[Math.floor(Math.random()*v.length)];const o=l.textContent;if(o.length>3){const a=o.split('');for(let c=0;c<2+Math.floor(p*3);c++){a[Math.floor(Math.random()*a.length)]='▓'}l.textContent=a.join('');setTimeout(()=>{l.textContent=o},170)}}
-    if(Math.random()<.05+p*.12){s.classList.add('bo');setTimeout(()=>s.classList.remove('bo'),90+Math.random()*120)}},900)};
+    if(Math.random()<.15+p*.15){const l=v[Math.floor(Math.random()*v.length)];l.classList.remove('gl');void l.offsetWidth;l.classList.add('gl')}
+    if(Math.random()<.12+p*.2){const l=v[Math.floor(Math.random()*v.length)];const o=l.textContent;if(o.length>3){const a=o.split('');for(let c=0;c<2+Math.floor(p*3);c++){a[Math.floor(Math.random()*a.length)]='▓'}l.textContent=a.join('');setTimeout(()=>{l.textContent=o},170)}}
+    },1400)};
   intro.addEventListener('click',begin);
   type($('#dkA'),'閲覧を検知しました。','',()=>type($('#dkB'),'記録を開きます……','w',()=>later(begin,500)))}
  else{lb.classList.remove('dk');s.innerHTML='<h2 style="margin-top:0">研究資料</h2>'+(S.secretLead?'<p class="muted">'+esc(S.secretLead)+'</p>':'')+'<div class="secretgrid">'+S.secret.map(x=>'<div class="frame" style="cursor:default"><img style="width:100%;display:block;background:#fff" src="'+esc(x.img)+'" alt="'+esc(x.title)+'"><div class="cap">'+esc(x.title)+'</div></div>').join('')+'</div>'}

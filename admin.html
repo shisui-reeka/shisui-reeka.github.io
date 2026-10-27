@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
-<title>HP更新ページ | 偲睡れーか</title>
+<title>HP更新カルテ | 偲睡れーか</title>
 <link rel="icon" href="icon-admin-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icon-admin-180.png?v=1">
 <meta name="apple-mobile-web-app-title" content="れーか管理">
@@ -14,7 +14,26 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{margin:0;color:var(--ink);background-color:var(--paper);background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px),linear-gradient(var(--line2) 1px,transparent 1px),linear-gradient(90deg,var(--line2) 1px,transparent 1px);background-size:80px 80px,80px 80px,16px 16px,16px 16px;font-family:"Hiragino Sans","Yu Gothic",YuGothic,Meiryo,sans-serif;line-height:1.7;letter-spacing:.03em;min-height:100vh;-webkit-text-size-adjust:100%}
 .mono{font-family:ui-monospace,Menlo,Consolas,monospace;letter-spacing:.08em}
-.wrap{max-width:760px;margin:0 auto;padding:calc(18px + env(safe-area-inset-top)) 16px calc(110px + env(safe-area-inset-bottom))}
+.wrap{padding-left:max(16px,calc((100vw - 760px)/2))}
+body::before{content:"";position:fixed;left:0;top:0;bottom:0;width:8px;z-index:-1;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(143,119,194,.55) 0 1px,transparent 1px 8px) left/5px 100% no-repeat,repeating-linear-gradient(0deg,rgba(143,119,194,.75) 0 1px,transparent 1px 40px) left/8px 100% no-repeat}
+body::after{content:"";position:fixed;left:11px;top:0;bottom:0;width:1px;z-index:-1;pointer-events:none;background:rgba(255,99,189,.38)}
+.ward{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;gap:8px;height:calc(26px + env(safe-area-inset-top));padding:env(safe-area-inset-top) 10px 0;background:#fff;border-bottom:1px solid var(--blue);font:11px/1 ui-monospace,Menlo,Consolas,monospace;color:var(--violet);overflow:hidden;z-index:80}
+.ward .wl{flex:none;background:var(--violet);color:#fff;padding:3px 7px;letter-spacing:.14em;font-size:10px}
+.ward .wt{flex:1;overflow:hidden;white-space:nowrap;min-width:0}
+.ward .wt span{display:inline-block;white-space:nowrap;letter-spacing:.06em;animation:wtk 28s linear infinite}
+.ward .wt i{font-style:normal;padding-right:3em}
+@keyframes wtk{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ward .bpm{flex:none;color:var(--pink);letter-spacing:.06em}
+.ward .bpm i{display:inline-block;font-style:normal;margin-right:3px;animation:hb .83s ease-in-out infinite}
+@keyframes hb{0%,100%{transform:scale(1)}15%{transform:scale(1.3)}30%{transform:scale(1)}45%{transform:scale(1.18)}}
+.stamp{display:inline-block;font-size:11px;color:var(--violet);border:1px solid var(--violet);padding:1px 10px;border-radius:2px;transform:rotate(-2deg)}
+.tile::after{content:"";position:absolute;top:6px;right:6px;width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.5}
+.tile{border-top:4px solid var(--violet)}
+.tile:nth-child(3n+2){border-top-color:var(--pink)}
+.tile:nth-child(3n){border-top-color:var(--blue)}
+.tile .tno{position:absolute;top:8px;right:18px;font-size:10px;color:var(--blue);letter-spacing:.14em}
+h2::before{content:"CHART";display:inline-block;background:var(--violet);color:#fff;font:10px/1.6 ui-monospace,Menlo,Consolas,monospace;padding:0 7px;margin-right:8px;letter-spacing:.14em;vertical-align:3px}
+.wrap{max-width:760px;margin:0 auto;padding:calc(40px + env(safe-area-inset-top)) 16px calc(110px + env(safe-area-inset-bottom))}
 h1{font-size:24px;margin:6px 0 2px;letter-spacing:.12em}
 .lead{color:var(--sub);font-size:14px;margin:0 0 18px}
 .sheet{background:var(--card);border:1px solid var(--blue);box-shadow:3px 3px 0 var(--line);padding:16px}
@@ -25,7 +44,7 @@ h1{font-size:24px;margin:6px 0 2px;letter-spacing:.12em}
 .tile .tic{color:var(--violet);margin-bottom:6px}
 .tile b{font-size:18px;font-weight:500;letter-spacing:.1em}
 .tile small{font-size:13px;color:var(--sub);line-height:1.45}
-.back{position:sticky;top:0;z-index:10;display:block;width:calc(100% + 32px);margin:0 -16px 8px;border:0;border-bottom:1px solid var(--blue);background:rgba(238,241,250,.97);color:var(--lab);font:inherit;font-size:16px;font-weight:700;text-align:left;padding:12px 16px;cursor:pointer}
+.back{position:sticky;top:calc(26px + env(safe-area-inset-top));z-index:10;display:block;width:calc(100% + 32px);margin:0 -16px 8px;border:0;border-bottom:1px solid var(--blue);background:rgba(238,241,250,.97);color:var(--lab);font:inherit;font-size:16px;font-weight:700;text-align:left;padding:12px 16px;cursor:pointer}
 h2{font-size:20px;margin:4px 0 14px;padding-bottom:8px;border-bottom:2px solid var(--violet);color:var(--ink)}
 label{display:block;font-size:14px;font-weight:700;color:var(--lab);margin:16px 0 6px;letter-spacing:.04em}
 input[type=text],input[type=url],input[type=password],select,textarea{width:100%;font:inherit;font-size:16px;padding:12px 14px;border:1.5px solid #b5c4ef;border-radius:8px;background:#fff;color:var(--ink)}
@@ -45,7 +64,7 @@ textarea.one{min-height:0;resize:none;overflow:hidden;line-height:1.5;word-break
 .ib{padding:0 14px 14px;border-top:1px dashed var(--line)}
 .item .bar{display:flex;gap:8px;justify-content:flex-end;margin:16px 0 0}
 .mini{border:1px solid var(--blue);background:#fff;color:var(--lab);font:inherit;font-size:15px;min-width:48px;min-height:42px;padding:6px 14px;border-radius:8px;cursor:pointer}
-.mini.del{color:#c2185b;border-color:#e6a1bf}
+.mini.del{color:#ff63bd;border-color:#ff63bd}
 .btn{display:inline-block;border:1px solid var(--violet);background:var(--violet);color:#fff;font:inherit;font-size:15px;padding:11px 24px;border-radius:4px;cursor:pointer}
 .btn.line{background:transparent;color:var(--violet)}
 .btn:disabled{opacity:.5}
@@ -56,15 +75,16 @@ textarea.one{min-height:0;resize:none;overflow:hidden;line-height:1.5;word-break
 .savebar span{font-size:12px;color:var(--sub)}
 #toast{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top));transform:translateX(-50%) translateY(-80px);background:#fff;border:1.5px solid var(--violet);border-radius:8px;padding:10px 18px;font-size:14px;z-index:50;transition:.3s;max-width:92%;text-align:center}
 #toast.on{transform:translateX(-50%) translateY(0)}
-#toast.err{border-color:#c2185b;color:#c2185b}
+#toast.err{border-color:#ff63bd;color:#ff63bd}
 .note{font-size:14px;color:#555b7a;margin:8px 0 12px;background:#eef1fa;border-radius:6px;padding:8px 12px}
 .hide{display:none!important}
 </style>
 </head>
 <body>
+<div class="ward"><span class="wl">管理室</span><div class="wt"><span><i>♡ 更新カルテ 記入中　保存すると1〜2分でサイトに反映されます　</i><i>♡ 更新カルテ 記入中　保存すると1〜2分でサイトに反映されます　</i></span></div><span class="bpm mono"><i>♡</i>72bpm</span></div>
 <div class="wrap">
-  <div class="mono" style="font-size:11px;color:var(--violet)">SHISUI RE-KA / UPDATE</div>
-  <h1>HP更新ページ</h1>
+  <div class="stamp mono">MEDICAL CHART · UPDATE</div>
+  <h1>HP更新カルテ</h1>
   <p class="lead" id="lead">ここから内容を更新できます</p>
 
   <div id="login" class="sheet hide">
@@ -85,7 +105,7 @@ textarea.one{min-height:0;resize:none;overflow:hidden;line-height:1.5;word-break
     <div class="sheet" id="vbody"></div>
   </div>
 </div>
-<div class="savebar" id="savebar"><span id="savemsg">変更があります</span><button class="btn" id="save">保存して公開する</button></div>
+<div class="savebar" id="savebar"><span id="savemsg">未保存の変更があります</span><button class="btn" id="save">保存して公開する</button></div>
 <div id="toast"></div>
 
 <script src="icons.js?v=5"></script>
@@ -103,7 +123,7 @@ const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},se
 
 function toast(t,err){const e=$('#toast');e.textContent=t;e.className='on'+(err?' err':'');clearTimeout(toast.t);toast.t=setTimeout(()=>e.className='',err?5000:3200)}
 function el(tag,attrs,...kids){const e=document.createElement(tag);for(const k in (attrs||{})){if(k==='class')e.className=attrs[k];else if(k.startsWith('on'))e.addEventListener(k.slice(2),attrs[k]);else if(k==='html')e.innerHTML=attrs[k];else e.setAttribute(k,attrs[k])}kids.flat().forEach(c=>c!=null&&e.append(c.nodeType?c:document.createTextNode(c)));return e}
-function mark(){dirty=true;$('#savebar').classList.add('on');$('#savemsg').textContent='変更があります'}
+function mark(){dirty=true;$('#savebar').classList.add('on');$('#savemsg').textContent='未保存の未保存の変更があります'}
 
 /* ---- field helpers ---- */
 function grow(t){t.style.height='auto';t.style.height=(t.scrollHeight+2)+'px'}
@@ -222,8 +242,8 @@ const VIEWS={
 function growAll(){document.querySelectorAll('textarea.one').forEach(grow)}
 window.addEventListener('resize',growAll);
 function openView(id){current=id;$('#home').classList.add('hide');$('#view').classList.remove('hide');const b=$('#vbody');b.innerHTML='';VIEWS[id].r(b);window.scrollTo(0,0);setTimeout(growAll,50)}
-function goHome(){if(dirty&&!confirm('保存していない変更があります。メニューにもどりますか?(変更は消えません。保存は下のボタンから)'))return;$('#view').classList.add('hide');$('#home').classList.remove('hide');window.scrollTo(0,0)}
-function buildMenu(){const m=$('#menu');m.innerHTML='';Object.keys(VIEWS).forEach(id=>{const v=VIEWS[id];m.append(el('button',{class:'tile',type:'button',onclick:()=>openView(id)},el('span',{class:'tic',html:ico(v.i,28)}),el('b',{},v.t),el('small',{},v.s)))})}
+function goHome(){if(dirty&&!confirm('保存していない未保存の変更があります。メニューにもどりますか?(変更は消えません。保存は下のボタンから)'))return;$('#view').classList.add('hide');$('#home').classList.remove('hide');window.scrollTo(0,0)}
+function buildMenu(){const m=$('#menu');m.innerHTML='';Object.keys(VIEWS).forEach(id=>{const v=VIEWS[id];m.append(el('button',{class:'tile',type:'button',onclick:()=>openView(id)},el('span',{class:'tno mono'},'No.'+String(Object.keys(VIEWS).indexOf(id)+1).padStart(2,'0')),el('span',{class:'tic',html:ico(v.i,28)}),el('b',{},v.t),el('small',{},v.s)))})}
 $('#back').addEventListener('click',goHome);
 
 /* ---- save ---- */

@@ -801,14 +801,14 @@ table.cred td{padding-top:6px;padding-bottom:6px}
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="lbnav"><button class="lbn" id="lbp" aria-label="前へ">‹</button><div class="t" id="lbt"></div><button class="lbn" id="lbn" aria-label="次へ">›</button></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1793086997";
+window.BUILD="1793087060";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1793086997"></script>
-<script src="core.js?v=1793086997"></script>
-<script src="data.js?v=1793086997"></script>
+<script src="icons.js?v=1793087060"></script>
+<script src="core.js?v=1793087060"></script>
+<script src="data.js?v=1793087060"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -875,9 +875,11 @@ function docHtml(txt,end){return '<div class="sd"><div class="ln mt"><span>FILE 
    const G='0';
    [...$('#lbsec').querySelectorAll('.ln.on')].forEach(l=>{if(l.classList.contains('sp')||l.dataset.sc)return;const b=l.getBoundingClientRect();const d=Math.abs((b.top+b.bottom)/2-y);if(d>130)return;
     const pw=1-d/130,o=l.innerHTML,jp=l.textContent,en=l.dataset.en||jp,H=l.offsetHeight,fs0=parseFloat(getComputedStyle(l).fontSize);l.dataset.sc=1;l.classList.add('tz');l.style.height=H+'px';l.style.overflow='hidden';
-    let f=0;const tk=()=>{if(f++>=6){l.innerHTML=o;l.style.height='';l.style.overflow='';l.style.fontSize='';l.style.letterSpacing='';delete l.dataset.sc;l.classList.remove('tz');return}
-     const rate=f<=2?.45:(f>=6?.3:.08);
-     l.textContent=[...en].map(c=>c===' '?c:(Math.random()<rate?G[Math.floor(Math.random()*G.length)]:c)).join('');l.style.letterSpacing='0';let fz=fs0;l.style.fontSize=fz+'px';while(l.scrollHeight>H+1&&fz>8.5){fz-=.5;l.style.fontSize=fz+'px'}setTimeout(tk,f<=2?70:110)};tk()})};
+    const FR=[['e',.45,70],['e',.12,150],['j',0,120],['e',.08,170],['j',0,130],['e',.3,90],['j',0,0]];
+    let f=0;const tk=()=>{const [ty,rate,ms]=FR[f++];
+     if(ty==='j'){l.innerHTML=o;l.style.fontSize='';l.style.letterSpacing='';if(f>=FR.length){l.style.height='';l.style.overflow='';delete l.dataset.sc;l.classList.remove('tz');return}}
+     else{l.textContent=[...en].map(c=>c===' '?c:(Math.random()<rate?G[Math.floor(Math.random()*G.length)]:c)).join('');l.style.letterSpacing='0';let fz=fs0;l.style.fontSize=fz+'px';while(l.scrollHeight>H+1&&fz>8.5){fz-=.5;l.style.fontSize=fz+'px'}}
+     setTimeout(tk,ms)};tk()})};
   lb.addEventListener('pointerdown',tapNoise);
 (lg.hidden?$('#hName'):lg).addEventListener('click',()=>{n++;clearTimeout(t);t=setTimeout(()=>n=0,1500);if(n>=5){n=0;
  const hasDoc=!!(S.secretDoc&&S.secretDoc.trim()); if(!hasDoc&&!(S.secret&&S.secret.length))return;

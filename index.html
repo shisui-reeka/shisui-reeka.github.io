@@ -801,14 +801,14 @@ table.cred td{padding-top:6px;padding-bottom:6px}
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="lbnav"><button class="lbn" id="lbp" aria-label="前へ">‹</button><div class="t" id="lbt"></div><button class="lbn" id="lbn" aria-label="次へ">›</button></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1793086421";
+window.BUILD="1793086564";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1793086421"></script>
-<script src="core.js?v=1793086421"></script>
-<script src="data.js?v=1793086421"></script>
+<script src="icons.js?v=1793086564"></script>
+<script src="core.js?v=1793086564"></script>
+<script src="data.js?v=1793086564"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -862,20 +862,22 @@ const wc=h=>h.replace(/(<[^>]+>)|([^<]+)/g,(m,t,x)=>t?t:[...x].map(c=>'<i class=
 function docHtml(txt,end){return '<div class="sd"><div class="ln mt"><span>FILE No.RK-001<br>ACCESS : <b>RESTRICTED</b></span><span class="stp">TOP SECRET</span></div>'+String(txt).split('\n').map((l,i,a)=>{
  if(!l.trim())return '<div class="ln sp"></div>';
  const e=wc(hl(esc(l)));
- if(/^―.*―$/.test(l.trim()))return '<div class="ln ti">'+e+'</div>';
- if(/^《.*》$/.test(l.trim()))return '<div class="ln nm">'+e+'</div>';
- if(l.trim().startsWith('■'))return '<div class="ln hd">'+e+'</div>';
+ const en=((S.secretEn||{})[l.trim()])||'';const ea=en?' data-en="'+esc(en)+'"':'';
+ if(/^―.*―$/.test(l.trim()))return '<div class="ln ti"'+ea+'>'+e+'</div>';
+ if(/^《.*》$/.test(l.trim()))return '<div class="ln nm"'+ea+'>'+e+'</div>';
+ if(l.trim().startsWith('■'))return '<div class="ln hd"'+ea+'>'+e+'</div>';
  const hot=/処分：未実行|自分も救われている|回収判断|必要とされること|耳部形態変化/.test(l)?' hot':'';
- return '<div class="ln'+hot+'">'+e+'</div>'}).join('')+'<div class="ln end"></div>'+(end||[]).map(x=>'<div class="ln sys" data-late="1">'+esc(x)+'</div>').join('')+'</div>'}
+ return '<div class="ln'+hot+'"'+ea+'>'+e+'</div>'}).join('')+'<div class="ln end"></div>'+(end||[]).map(x=>'<div class="ln sys" data-late="1">'+esc(x)+'</div>').join('')+'</div>'}
 
   const tapNoise=ev=>{if(!lb.classList.contains('dk')||ev.target.closest('#lbx,#dkIn'))return;
    const x=ev.clientX,y=ev.clientY,r=lb.getBoundingClientRect();
    
    const G='░▒▓█#%/\\¦◇▚▞';
    [...$('#lbsec').querySelectorAll('.ln.on')].forEach(l=>{if(l.classList.contains('sp')||l.dataset.sc)return;const b=l.getBoundingClientRect();const d=Math.abs((b.top+b.bottom)/2-y);if(d>130)return;
-    const pw=1-d/130,o=l.innerHTML,tx=l.textContent;if(tx.length<2)return;l.dataset.sc=1;l.classList.add('tz');
-    let f=0;const tk=()=>{if(f++>=5){l.innerHTML=o;delete l.dataset.sc;l.classList.remove('tz');return}
-     l.textContent=[...tx].map(c=>c===' '?c:(Math.random()<.18+pw*.55*(1-f/6)?G[Math.floor(Math.random()*G.length)]:c)).join('');setTimeout(tk,60)};tk()})};
+    const pw=1-d/130,o=l.innerHTML,jp=l.textContent,en=l.dataset.en||jp;l.dataset.sc=1;l.classList.add('tz');
+    let f=0;const tk=()=>{if(f++>=6){l.innerHTML=o;delete l.dataset.sc;l.classList.remove('tz');return}
+     const rate=f<=2?.45:(f>=6?.3:.08);
+     l.textContent=[...en].map(c=>c===' '?c:(Math.random()<rate?G[Math.floor(Math.random()*G.length)]:c)).join('');setTimeout(tk,f<=2?70:110)};tk()})};
   lb.addEventListener('pointerdown',tapNoise);
 (lg.hidden?$('#hName'):lg).addEventListener('click',()=>{n++;clearTimeout(t);t=setTimeout(()=>n=0,1500);if(n>=5){n=0;
  const hasDoc=!!(S.secretDoc&&S.secretDoc.trim()); if(!hasDoc&&!(S.secret&&S.secret.length))return;

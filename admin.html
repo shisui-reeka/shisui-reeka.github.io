@@ -54,15 +54,15 @@ textarea{min-height:110px;resize:vertical}
 
   <div id="login" class="sheet hide">
     <h2>はじめに(1回だけ)</h2>
-    <p class="note">更新用の鍵(トークン)を貼ってください。この端末に保存されるので、次からは入力しなくて大丈夫です。</p>
-    <label>更新用の鍵</label>
+    <p class="note">ヒロさんから届いた「更新用リンク」を、もう一度タップして開いてください。自動でログインされます。<br>※ リンクが無い場合は、下の欄に更新用のコードを貼ってください。</p>
+    <label>更新用のコード</label>
     <input type="password" id="tok" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="github_pat_...">
     <p style="margin-top:14px"><button class="btn" id="tokGo">はじめる</button></p>
   </div>
 
   <div id="home" class="hide">
     <div class="menu" id="menu"></div>
-    <p class="note" style="margin-top:18px">保存すると、1〜2分でサイトに反映されます。<br><a href="./" style="color:var(--violet)">サイトを見る ›</a> ／ <a href="#" id="logout" style="color:var(--sub)">この端末の鍵を消す</a></p>
+    <p class="note" style="margin-top:18px">保存すると、1〜2分でサイトに反映されます。<br><a href="./" style="color:var(--violet)">サイトを見る ›</a> ／ <a href="#" id="logout" style="color:var(--sub)">この端末のログインを解除</a></p>
   </div>
 
   <div id="view" class="hide">
@@ -180,10 +180,7 @@ const VIEWS={
    app(b,fText('タップしすぎた時のセリフ',C,'talkOver'));}},
  fortunes:{t:'おみくじ',s:'今日の処方箋の文言',i:'pill',r(b){
    b.append(el('h2',{},'今日の処方箋(おみくじ)'));b.append(el('p',{class:'note'},'上から良い順に並べてください(問診票の答えで出やすさが変わります)。'));
-   b.append(listEditor(C.fortunes,(it,card)=>{app(card,fText('ランク名(例: 特効薬)',it,'rank'));app(card,fText('運勢(例: 大吉)',it,'sub'));app(card,fArea('ひとこと',it,'msg'));app(card,fText('効き目(1〜5)',it,'stars'));app(card,fArea('用法',it,'use'));app(card,fArea('副作用',it,'side'));app(card,fText('ラッキーアイテム',it,'lucky'));app(card,fText('服用時間',it,'time'))},()=>({rank:'',sub:'',stars:3,msg:'',use:'',side:'',lucky:'',time:''}),'＋ ふやす'));}},
- goods:{t:'ショップ',s:'グッズ・販売ページ',i:'shopping-bag',r(b){
-   b.append(el('h2',{},'ショップ・グッズ'));
-   b.append(listEditor(C.goods,(it,card)=>{card.append(fImage('画像',it,'img'));app(card,fText('名前',it,'title'));app(card,fText('ひとこと',it,'note'));app(card,fText('販売ページのURL',it,'url',{type:'url',ph:'https://'}))},()=>({title:'',note:'',url:'',img:''}),'＋ 商品をふやす'));}}
+   b.append(listEditor(C.fortunes,(it,card)=>{app(card,fText('ランク名(例: 特効薬)',it,'rank'));app(card,fText('運勢(例: 大吉)',it,'sub'));app(card,fArea('ひとこと',it,'msg'));app(card,fText('効き目(1〜5)',it,'stars'));app(card,fArea('用法',it,'use'));app(card,fArea('副作用',it,'side'));app(card,fText('ラッキーアイテム',it,'lucky'));app(card,fText('服用時間',it,'time'))},()=>({rank:'',sub:'',stars:3,msg:'',use:'',side:'',lucky:'',time:''}),'＋ ふやす'));}}
 };
 
 function openView(id){current=id;$('#home').classList.add('hide');$('#view').classList.remove('hide');const b=$('#vbody');b.innerHTML='';VIEWS[id].r(b);window.scrollTo(0,0)}
@@ -210,11 +207,11 @@ async function start(){
   C.commission=C.commission||{};C.commission.prices=C.commission.prices||[];
   buildMenu();$('#login').classList.add('hide');$('#home').classList.remove('hide')}
 async function tryToken(t){token=t;const r=await fetch(API,{headers:{Authorization:'Bearer '+t,Accept:'application/vnd.github+json'}});
-  if(!r.ok)throw new Error('鍵が正しくないようです ('+r.status+')');const j=await r.json();if(!(j.permissions&&j.permissions.push))throw new Error('この鍵には、書きこみの権限がありません');return true}
+  if(!r.ok)throw new Error('更新用のコードが正しくないようです ('+r.status+')');const j=await r.json();if(!(j.permissions&&j.permissions.push))throw new Error('このコードには、書きこみの権限がありません');return true}
 $('#tokGo').addEventListener('click',async()=>{const t=$('#tok').value.trim();if(!t)return;const b=$('#tokGo');b.disabled=true;
   try{await tryToken(t);store.set('rk_tok',t);await start()}catch(e){toast(e.message||'失敗しました',true)}b.disabled=false});
-$('#logout').addEventListener('click',e=>{e.preventDefault();if(confirm('この端末の鍵を消します。よろしいですか?')){store.del('rk_tok');location.reload()}});
-(async()=>{const t=store.get('rk_tok');if(t){try{await tryToken(t);await start();return}catch(e){toast('もう一度、鍵を入れてください',true)}}$('#login').classList.remove('hide')})();
+$('#logout').addEventListener('click',e=>{e.preventDefault();if(confirm('この端末のログインを解除します。よろしいですか?')){store.del('rk_tok');location.reload()}});
+(async()=>{let h=(location.hash||'').match(/[#&]t=([^&]+)/);if(h){store.set('rk_tok',decodeURIComponent(h[1]));try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}}const t=store.get('rk_tok');if(t){try{await tryToken(t);await start();return}catch(e){toast('もう一度、リンクを開いてください',true)}}$('#login').classList.remove('hide')})();
 })();
 </script>
 </body>

@@ -223,6 +223,13 @@ a.frame{cursor:pointer}
 #lb .dkh{position:absolute;left:min(166px,calc(50% - 20px));top:calc(12px + env(safe-area-inset-top));z-index:6;pointer-events:none;font:9px/1.4 ui-monospace,Menlo,monospace;letter-spacing:.14em;color:rgba(140,169,236,.8)}
 #lb .dkh b{display:block;font-size:14px;font-weight:400;color:#ff63bd;text-shadow:0 0 8px rgba(255,99,189,.7);letter-spacing:.06em}
 #lb .dkh i{display:block;width:72px;height:2px;margin-top:3px;background:linear-gradient(90deg,rgba(255,99,189,.9) 0 var(--pg,0%),rgba(140,169,236,.2) var(--pg,0%) 100%)}
+
+#lb .tp{position:absolute;z-index:5;pointer-events:none;width:150px;height:150px;margin:-75px 0 0 -75px;border-radius:50%;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='150' height='150'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' seed='3'/><feColorMatrix values='0 0 0 0 .8 0 0 0 0 .75 0 0 0 0 1 0 0 0 1.4 -.15'/></filter><rect width='150' height='150' filter='url(%23n)'/></svg>");-webkit-mask:radial-gradient(circle,#000 0,transparent 70%);mask:radial-gradient(circle,#000 0,transparent 70%);mix-blend-mode:screen;animation:tpn .7s ease-out forwards}
+#lb .tp::before,#lb .tp::after{content:"";position:absolute;inset:25%;border-radius:50%;border:1.5px solid #ff63bd;box-shadow:0 0 10px #ff63bd;animation:tpr .7s ease-out forwards}
+#lb .tp::after{border-color:#8ca9ec;box-shadow:0 0 10px #8ca9ec;animation-delay:.08s;transform:translateX(3px)}
+@keyframes tpn{0%{transform:scale(.4);opacity:.95}100%{transform:scale(1.5);opacity:0}}
+@keyframes tpr{0%{transform:scale(.2);opacity:.9}100%{transform:scale(1.9);opacity:0}}
+#lbsec .sd .tz{animation:slg .35s steps(1)}
 #lb.dk{background:#06050c}
 #lb.dk.glitch::after{animation:none}
 #lb.dk.glitch #lbsec{animation:none}
@@ -785,14 +792,14 @@ table.cred td{padding-top:6px;padding-bottom:6px}
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="lbnav"><button class="lbn" id="lbp" aria-label="前へ">‹</button><div class="t" id="lbt"></div><button class="lbn" id="lbn" aria-label="次へ">›</button></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1793085052";
+window.BUILD="1793085296";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1793085052"></script>
-<script src="core.js?v=1793085052"></script>
-<script src="data.js?v=1793085052"></script>
+<script src="icons.js?v=1793085296"></script>
+<script src="core.js?v=1793085296"></script>
+<script src="data.js?v=1793085296"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -840,7 +847,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')lb.classList.remove(
 const TO=[];const later=(f,ms)=>{const id=setTimeout(f,ms);TO.push(id);return id};
 const closeDk=()=>{lb.classList.remove('dk');clearInterval(window.__dkT);TO.splice(0).forEach(clearTimeout);if(window.__dkIO){window.__dkIO.disconnect();window.__dkIO=null}const a=lb.querySelector('.dkp');a&&a.remove();const g=lb.querySelector('.dkbg');g&&g.remove();const hd=lb.querySelector('.dkh');hd&&hd.remove();lb.style.removeProperty('--dp');const b=lb.querySelector('#dkIn');b&&b.remove();const sc=$('#lbsec');sc.classList.remove('bo');sc.onscroll=null};
 window.__closeDk=closeDk;
-const KWR=/(想定外の安定効果|自分も救われている|耳部形態変化|回収判断は現在保留中|必要とされること|情緒同調率|過剰接触|存在安定|超過|未実行|依存)/g;
+const KWR=/(想定外の安定効果|自分も救われている|耳部形態変化|回収判断は現在保留中|必要とされること|情緒同調率|過剰接触|存在安定|微弱鎮静波|過飽和感情|断続的かつ継続的|存在波|言語反応|音声核|情緒安定度|接触密度|個体差あり|除去|超過|未実行|依存)/g;
 const hl=h=>h.replace(KWR,m=>'<span class="kw">'+m+'</span>');
 function docHtml(txt,end){return '<div class="sd"><div class="ln mt"><span>FILE No.RK-001<br>ACCESS : <b>RESTRICTED</b></span><span class="stp">極秘<small>CONFIDENTIAL</small></span></div>'+String(txt).split('\n').map((l,i,a)=>{
  if(!l.trim())return '<div class="ln sp"></div>';
@@ -850,6 +857,16 @@ function docHtml(txt,end){return '<div class="sd"><div class="ln mt"><span>FILE 
  if(l.trim().startsWith('■'))return '<div class="ln hd">'+e+'</div>';
  const hot=/処分：未実行|自分も救われている|回収判断|必要とされること|耳部形態変化/.test(l)?' hot':'';
  return '<div class="ln'+hot+'">'+e+'</div>'}).join('')+'<div class="ln end"></div>'+(end||[]).map(x=>'<div class="ln sys" data-late="1">'+esc(x)+'</div>').join('')+'</div>'}
+
+  const tapNoise=ev=>{if(!lb.classList.contains('dk')||ev.target.closest('#lbx,#dkIn'))return;
+   const x=ev.clientX,y=ev.clientY,r=lb.getBoundingClientRect();
+   const e=document.createElement('div');e.className='tp';e.style.left=(x-r.left)+'px';e.style.top=(y-r.top)+'px';lb.appendChild(e);setTimeout(()=>e.remove(),760);
+   const G='░▒▓█#%/\\¦◇▚▞';
+   [...$('#lbsec').querySelectorAll('.ln.on')].forEach(l=>{if(l.classList.contains('sp')||l.dataset.sc)return;const b=l.getBoundingClientRect();const d=Math.abs((b.top+b.bottom)/2-y);if(d>130)return;
+    const pw=1-d/130,o=l.innerHTML,tx=l.textContent;if(tx.length<2)return;l.dataset.sc=1;l.classList.add('tz');
+    let f=0;const tk=()=>{if(f++>=5){l.innerHTML=o;delete l.dataset.sc;l.classList.remove('tz');return}
+     l.textContent=[...tx].map(c=>c===' '?c:(Math.random()<.18+pw*.55*(1-f/6)?G[Math.floor(Math.random()*G.length)]:c)).join('');setTimeout(tk,60)};tk()})};
+  lb.addEventListener('pointerdown',tapNoise);
 (lg.hidden?$('#hName'):lg).addEventListener('click',()=>{n++;clearTimeout(t);t=setTimeout(()=>n=0,1500);if(n>=5){n=0;
  const hasDoc=!!(S.secretDoc&&S.secretDoc.trim()); if(!hasDoc&&!(S.secret&&S.secret.length))return;
  closeDk();
@@ -869,9 +886,7 @@ function docHtml(txt,end){return '<div class="sd"><div class="ln mt"><span>FILE 
    let p=0;const upd=()=>{const m=s.scrollHeight-s.clientHeight;p=m>0?Math.min(1,s.scrollTop/m):0;pulse.style.animationDuration=(2.4-p*.8).toFixed(2)+'s';lb.style.setProperty('--dp',p.toFixed(3));const dm=Math.round(p*3800);hud.querySelector('b').textContent=String(dm).padStart(4,'0')+'m';hud.querySelector('span').textContent='DEPTH · L'+String(1+Math.min(4,Math.floor(p*5))).padStart(2,'0');hud.querySelector('i').style.setProperty('--pg',Math.round(p*100)+'%')};s.onscroll=upd;upd();
    clearInterval(window.__dkT);window.__dkT=setInterval(()=>{if(!lb.classList.contains('on')){closeDk();return}
     const v=lines.filter(l=>l.classList.contains('on')&&l.textContent.trim()&&!l.classList.contains('sys'));if(!v.length)return;
-    if(Math.random()<.15+p*.15){const l=v[Math.floor(Math.random()*v.length)];l.classList.remove('gl');void l.offsetWidth;l.classList.add('gl')}
-    if(Math.random()<.12+p*.2){const l=v[Math.floor(Math.random()*v.length)];const o=l.innerHTML,tx=l.textContent;if(tx.length>3&&true){const a=tx.split('');for(let c=0;c<2+Math.floor(p*3);c++){a[Math.floor(Math.random()*a.length)]='▓'}l.textContent=a.join('');setTimeout(()=>{l.innerHTML=o},170)}}
-    {const ks=[...s.querySelectorAll('.ln.on .kw')];const nn=1+Math.floor(p*2+Math.random()*1.5);for(let z=0;z<nn&&ks.length;z++){const k=ks[Math.floor(Math.random()*ks.length)];if(k.dataset.sc)continue;const o=k.textContent,G='░▒▓█#%/\\¦◇';k.dataset.sc=1;let f=0;const tk=()=>{if(f++>=3){k.textContent=o;delete k.dataset.sc;return}k.textContent=[...o].map(c=>Math.random()<.5?G[Math.floor(Math.random()*G.length)]:c).join('');setTimeout(tk,70)};tk()}}
+        {const ks=[...s.querySelectorAll('.ln.on .kw')];const nn=1+Math.floor(p*2+Math.random()*1.5);for(let z=0;z<nn&&ks.length;z++){const k=ks[Math.floor(Math.random()*ks.length)];if(k.dataset.sc)continue;const o=k.textContent,G='░▒▓█#%/\\¦◇';k.dataset.sc=1;let f=0;const tk=()=>{if(f++>=3){k.textContent=o;delete k.dataset.sc;return}k.textContent=[...o].map(c=>Math.random()<.5?G[Math.floor(Math.random()*G.length)]:c).join('');setTimeout(tk,70)};tk()}}
     },1000)};
   intro.addEventListener('click',begin);
   type($('#dkA'),'閲覧を検知しました。','',()=>type($('#dkB'),'深層データへ接続します……','w',()=>later(begin,500)))}

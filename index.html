@@ -213,6 +213,16 @@ a.frame{cursor:pointer}
 #lbsec .sd .rd{position:relative;cursor:pointer;color:transparent;background:#0c0a16;border-radius:2px;box-shadow:0 0 0 1px rgba(255,99,189,.55),0 0 10px rgba(255,99,189,.3);text-shadow:none;user-select:none;-webkit-user-select:none;transition:background .35s,color .35s}
 #lbsec .sd .rd.open{background:rgba(255,99,189,.12);color:#ff63bd;box-shadow:none;border-bottom:1px solid rgba(255,99,189,.8);text-shadow:1.5px 0 rgba(140,169,236,.8),-1.5px 0 rgba(255,99,189,.45),0 0 10px rgba(255,99,189,.7);animation:decl .7s steps(1) both}
 @keyframes decl{0%{transform:translateX(-3px);clip-path:inset(0 0 55% 0)}30%{transform:translateX(3px);clip-path:inset(45% 0 0 0)}60%{transform:translateX(-1px);clip-path:none}100%{transform:none}}
+
+#lb .dkbg .gn{position:absolute;inset:-20%;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .55 0 0 0 0 .65 0 0 0 0 1 0 0 0 .9 0'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>");opacity:calc(.05 + var(--dp,0)*.2);animation:gnm 3.2s steps(5) infinite}
+@keyframes gnm{0%{transform:translate(0,0)}20%{transform:translate(-30px,12px)}40%{transform:translate(18px,-26px)}60%{transform:translate(-12px,-8px)}80%{transform:translate(26px,20px)}100%{transform:translate(0,0)}}
+#lb .dkbg .rn{position:absolute;top:0;bottom:0;width:14px;overflow:hidden;font:9px/1.25 ui-monospace,Menlo,monospace;color:rgba(140,169,236,.5);word-break:break-all;opacity:calc(.14 + var(--dp,0)*.3);-webkit-mask:linear-gradient(180deg,transparent,#000 25%,#000 75%,transparent);mask:linear-gradient(180deg,transparent,#000 25%,#000 75%,transparent)}
+#lb .dkbg .rn span{display:block;animation:rnd var(--t,26s) linear infinite}
+@keyframes rnd{from{transform:translateY(0)}to{transform:translateY(-50%)}}
+#lb .dkbg::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,transparent 20%,rgba(2,1,8,.95) 130%);opacity:calc(var(--dp,0)*.9)}
+#lb .dkh{position:absolute;left:min(166px,calc(50% - 20px));top:calc(12px + env(safe-area-inset-top));z-index:6;pointer-events:none;font:9px/1.4 ui-monospace,Menlo,monospace;letter-spacing:.14em;color:rgba(140,169,236,.8)}
+#lb .dkh b{display:block;font-size:14px;font-weight:400;color:#ff63bd;text-shadow:0 0 8px rgba(255,99,189,.7);letter-spacing:.06em}
+#lb .dkh i{display:block;width:72px;height:2px;margin-top:3px;background:linear-gradient(90deg,rgba(255,99,189,.9) 0 var(--pg,0%),rgba(140,169,236,.2) var(--pg,0%) 100%)}
 #lb.dk{background:#06050c}
 #lb.dk.glitch::after{animation:none}
 #lb.dk.glitch #lbsec{animation:none}
@@ -775,14 +785,14 @@ table.cred td{padding-top:6px;padding-bottom:6px}
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="lbnav"><button class="lbn" id="lbp" aria-label="前へ">‹</button><div class="t" id="lbt"></div><button class="lbn" id="lbn" aria-label="次へ">›</button></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1793084256";
+window.BUILD="1793085052";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1793084256"></script>
-<script src="core.js?v=1793084256"></script>
-<script src="data.js?v=1793084256"></script>
+<script src="icons.js?v=1793085052"></script>
+<script src="core.js?v=1793085052"></script>
+<script src="data.js?v=1793085052"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -828,10 +838,10 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')lb.classList.remove(
 /* secret: logo 5 taps */
 (function(){let n=0,t=null;const lg=$('#hLogo');
 const TO=[];const later=(f,ms)=>{const id=setTimeout(f,ms);TO.push(id);return id};
-const closeDk=()=>{lb.classList.remove('dk');clearInterval(window.__dkT);TO.splice(0).forEach(clearTimeout);if(window.__dkIO){window.__dkIO.disconnect();window.__dkIO=null}const a=lb.querySelector('.dkp');a&&a.remove();const g=lb.querySelector('.dkbg');g&&g.remove();const b=lb.querySelector('#dkIn');b&&b.remove();const sc=$('#lbsec');sc.classList.remove('bo');sc.onscroll=null;sc.onclick=null};
+const closeDk=()=>{lb.classList.remove('dk');clearInterval(window.__dkT);TO.splice(0).forEach(clearTimeout);if(window.__dkIO){window.__dkIO.disconnect();window.__dkIO=null}const a=lb.querySelector('.dkp');a&&a.remove();const g=lb.querySelector('.dkbg');g&&g.remove();const hd=lb.querySelector('.dkh');hd&&hd.remove();lb.style.removeProperty('--dp');const b=lb.querySelector('#dkIn');b&&b.remove();const sc=$('#lbsec');sc.classList.remove('bo');sc.onscroll=null};
 window.__closeDk=closeDk;
-const KWR=/(想定外の安定効果|自分も救われている|耳部形態変化)|(回収判断は現在保留中|必要とされること|情緒同調率|過剰接触|存在安定|超過|未実行|依存)/g;
-const hl=h=>h.replace(KWR,(m,a,b)=>a?'<span class="rd">'+m+'</span>':'<span class="kw">'+m+'</span>');
+const KWR=/(想定外の安定効果|自分も救われている|耳部形態変化|回収判断は現在保留中|必要とされること|情緒同調率|過剰接触|存在安定|超過|未実行|依存)/g;
+const hl=h=>h.replace(KWR,m=>'<span class="kw">'+m+'</span>');
 function docHtml(txt,end){return '<div class="sd"><div class="ln mt"><span>FILE No.RK-001<br>ACCESS : <b>RESTRICTED</b></span><span class="stp">極秘<small>CONFIDENTIAL</small></span></div>'+String(txt).split('\n').map((l,i,a)=>{
  if(!l.trim())return '<div class="ln sp"></div>';
  const e=hl(esc(l));
@@ -845,7 +855,8 @@ function docHtml(txt,end){return '<div class="sd"><div class="ln mt"><span>FILE 
  closeDk();
  const s=$('#lbsec');$('#lbi').style.display='none';$('#lbt').textContent='';s.style.display='block';
  if(hasDoc){s.innerHTML=docHtml(S.secretDoc,S.secretEnd);lb.classList.add('dk');s.scrollTop=0;s.style.visibility='hidden';
-  const bg=document.createElement('div');bg.className='dkbg';bg.innerHTML='<div class="st"></div><div class="gr"></div><div class="plus"></div><div class="dr"></div>'+[['cross',60,8,74,0],['pill',46,78,60,3],['cross',34,70,16,6],['drip',40,10,48,9]].map(a=>'<div class="ic" style="width:'+a[1]+'px;height:'+a[1]+'px;left:'+a[2]+'%;top:'+a[3]+'%;animation-delay:-'+a[4]+'s">'+(IC[a[0]]||'')+'</div>').join('')+'<svg class="ec" viewBox="0 0 300 60" preserveAspectRatio="none"><path class="g" d="M0 34H300"/><path d="M0 34H70l8-5 6 5h12l6-22 8 44 8-22h14l8-6 6 6H300"/></svg>';lb.appendChild(bg);const pulse=document.createElement('div');pulse.className='dkp';lb.appendChild(pulse);
+  const bg=document.createElement('div');bg.className='dkbg';bg.innerHTML='<div class="gn"></div><div class="st"></div><div class="gr"></div><div class="plus"></div><div class="dr"></div>'+[['cross',60,8,74,0],['pill',46,78,60,3],['cross',34,70,16,6],['drip',40,10,48,9]].map(a=>'<div class="ic" style="width:'+a[1]+'px;height:'+a[1]+'px;left:'+a[2]+'%;top:'+a[3]+'%;animation-delay:-'+a[4]+'s">'+(IC[a[0]]||'')+'</div>').join('')+'<svg class="ec" viewBox="0 0 300 60" preserveAspectRatio="none"><path class="g" d="M0 34H300"/><path d="M0 34H70l8-5 6 5h12l6-22 8 44 8-22h14l8-6 6 6H300"/></svg>';lb.appendChild(bg);{const hx=()=>{let r='';for(let i=0;i<60;i++)r+=Math.floor(Math.random()*256).toString(16).padStart(2,'0')+(Math.random()<.2?'<br>':'');return r};[3,9,17,28,44,58,70,83,92,97].forEach((x,i)=>{const c=document.createElement('div');c.className='rn';c.style.left=x+'%';const h=hx();c.innerHTML='<span style="--t:'+(22+i*3)+'s">'+h+'<br>'+h+'</span>';bg.appendChild(c)})}
+  const hud=document.createElement('div');hud.className='dkh';hud.innerHTML='<span>DEPTH · L01</span><b>0000m</b><i></i>';lb.appendChild(hud);const pulse=document.createElement('div');pulse.className='dkp';lb.appendChild(pulse);
   const intro=document.createElement('div');intro.id='dkIn';
   intro.innerHTML='<div id="dkA"></div><div id="dkB"></div><svg viewBox="0 0 300 46" preserveAspectRatio="none"><path d="M0 24H70l8-4 6 4h12l6-18 8 36 8-18h14l8-5 6 5H300"/></svg>';
   lb.appendChild(intro);
@@ -853,17 +864,17 @@ function docHtml(txt,end){return '<div class="sd"><div class="ln mt"><span>FILE 
   let began=false;
   const begin=()=>{if(began)return;began=true;intro.style.transition='opacity .5s';intro.style.opacity='0';later(()=>intro.remove(),520);s.style.visibility='';
    const lines=[...s.querySelectorAll('.ln')];let q=0;
-   const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&!e.target.classList.contains('on')){const late=e.target.dataset.late;const d=late?2200:(q++%14)*110;io.unobserve(e.target);later(()=>{e.target.classList.add('on');e.target.querySelectorAll('.rd').forEach((x,i)=>later(()=>x.classList.add('open'),2000+i*900))},d)}});if(!es.length)q=0},{root:s,threshold:.1});
-   s.onclick=ev=>{const r=ev.target.closest&&ev.target.closest('.rd');if(r)r.classList.toggle('open')};window.__dkIO=io;lines.forEach(l=>io.observe(l));
-   let p=0;const upd=()=>{const m=s.scrollHeight-s.clientHeight;p=m>0?Math.min(1,s.scrollTop/m):0;pulse.style.animationDuration=(2.4-p*.8).toFixed(2)+'s'};s.onscroll=upd;upd();
+   const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&!e.target.classList.contains('on')){const late=e.target.dataset.late;const d=late?2200:(q++%14)*110;io.unobserve(e.target);later(()=>e.target.classList.add('on'),d)}});if(!es.length)q=0},{root:s,threshold:.1});
+   window.__dkIO=io;lines.forEach(l=>io.observe(l));
+   let p=0;const upd=()=>{const m=s.scrollHeight-s.clientHeight;p=m>0?Math.min(1,s.scrollTop/m):0;pulse.style.animationDuration=(2.4-p*.8).toFixed(2)+'s';lb.style.setProperty('--dp',p.toFixed(3));const dm=Math.round(p*3800);hud.querySelector('b').textContent=String(dm).padStart(4,'0')+'m';hud.querySelector('span').textContent='DEPTH · L'+String(1+Math.min(4,Math.floor(p*5))).padStart(2,'0');hud.querySelector('i').style.setProperty('--pg',Math.round(p*100)+'%')};s.onscroll=upd;upd();
    clearInterval(window.__dkT);window.__dkT=setInterval(()=>{if(!lb.classList.contains('on')){closeDk();return}
     const v=lines.filter(l=>l.classList.contains('on')&&l.textContent.trim()&&!l.classList.contains('sys'));if(!v.length)return;
     if(Math.random()<.15+p*.15){const l=v[Math.floor(Math.random()*v.length)];l.classList.remove('gl');void l.offsetWidth;l.classList.add('gl')}
-    if(Math.random()<.12+p*.2){const l=v[Math.floor(Math.random()*v.length)];const o=l.innerHTML,tx=l.textContent;if(tx.length>3&&!l.querySelector('.rd')){const a=tx.split('');for(let c=0;c<2+Math.floor(p*3);c++){a[Math.floor(Math.random()*a.length)]='▓'}l.textContent=a.join('');setTimeout(()=>{l.innerHTML=o},170)}}
-    if(Math.random()<.7){const ks=[...s.querySelectorAll('.ln.on .kw')];if(ks.length){const k=ks[Math.floor(Math.random()*ks.length)],o=k.textContent,G='░▒▓█#%';k.textContent=[...o].map(c=>Math.random()<.6?G[Math.floor(Math.random()*G.length)]:c).join('');setTimeout(()=>{k.textContent=o},230)}}
-    },1400)};
+    if(Math.random()<.12+p*.2){const l=v[Math.floor(Math.random()*v.length)];const o=l.innerHTML,tx=l.textContent;if(tx.length>3&&true){const a=tx.split('');for(let c=0;c<2+Math.floor(p*3);c++){a[Math.floor(Math.random()*a.length)]='▓'}l.textContent=a.join('');setTimeout(()=>{l.innerHTML=o},170)}}
+    {const ks=[...s.querySelectorAll('.ln.on .kw')];const nn=1+Math.floor(p*2+Math.random()*1.5);for(let z=0;z<nn&&ks.length;z++){const k=ks[Math.floor(Math.random()*ks.length)];if(k.dataset.sc)continue;const o=k.textContent,G='░▒▓█#%/\\¦◇';k.dataset.sc=1;let f=0;const tk=()=>{if(f++>=3){k.textContent=o;delete k.dataset.sc;return}k.textContent=[...o].map(c=>Math.random()<.5?G[Math.floor(Math.random()*G.length)]:c).join('');setTimeout(tk,70)};tk()}}
+    },1000)};
   intro.addEventListener('click',begin);
-  type($('#dkA'),'閲覧を検知しました。','',()=>type($('#dkB'),'記録を開きます……','w',()=>later(begin,500)))}
+  type($('#dkA'),'閲覧を検知しました。','',()=>type($('#dkB'),'深層データへ接続します……','w',()=>later(begin,500)))}
  else{lb.classList.remove('dk');s.innerHTML='<h2 style="margin-top:0">研究資料</h2>'+(S.secretLead?'<p class="muted">'+esc(S.secretLead)+'</p>':'')+'<div class="secretgrid">'+S.secret.map(x=>'<div class="frame" style="cursor:default"><img style="width:100%;display:block;background:#fff" src="'+esc(x.img)+'" alt="'+esc(x.title)+'"><div class="cap">'+esc(x.title)+'</div></div>').join('')+'</div>'}
  lb.classList.add('nonav');lb.classList.add('on');lb.classList.remove('glitch');void lb.offsetWidth;lb.classList.add('glitch');setTimeout(()=>lb.classList.remove('glitch'),1300)}})})();
 document.title = S.name + ' | 研究ノート';

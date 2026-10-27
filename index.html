@@ -800,14 +800,14 @@ table.cred td{padding-top:6px;padding-bottom:6px}
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="lbnav"><button class="lbn" id="lbp" aria-label="前へ">‹</button><div class="t" id="lbt"></div><button class="lbn" id="lbn" aria-label="次へ">›</button></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1793086168";
+window.BUILD="1793086183";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1793086168"></script>
-<script src="core.js?v=1793086168"></script>
-<script src="data.js?v=1793086168"></script>
+<script src="icons.js?v=1793086183"></script>
+<script src="core.js?v=1793086183"></script>
+<script src="data.js?v=1793086183"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -918,7 +918,7 @@ function docHtml(txt,end){return '<div class="sd"><div class="ln mt"><span>FILE 
     const v=lines.filter(l=>l.classList.contains('on')&&l.textContent.trim()&&!l.classList.contains('sys'));if(!v.length)return;
         {const ks=[...s.querySelectorAll('.ln.on .kw')];const nn=1+Math.floor(p*2+Math.random()*1.5);for(let z=0;z<nn&&ks.length;z++){const k=ks[Math.floor(Math.random()*ks.length)];if(k.dataset.sc)continue;const o=k.textContent,G='░▒▓█#%/\\¦◇';k.dataset.sc=1;let f=0;const tk=()=>{if(f++>=3){k.textContent=o;delete k.dataset.sc;return}k.textContent=[...o].map(c=>Math.random()<.5?G[Math.floor(Math.random()*G.length)]:c).join('');setTimeout(tk,70)};tk()}}
     },1000)};
-  intro.addEventListener('click',begin);
+  
   type($('#dkA'),'閲覧を検知しました。','',()=>type($('#dkB'),'深層データへ接続します……','w',()=>later(begin,500)))}
  else{lb.classList.remove('dk');s.innerHTML='<h2 style="margin-top:0">研究資料</h2>'+(S.secretLead?'<p class="muted">'+esc(S.secretLead)+'</p>':'')+'<div class="secretgrid">'+S.secret.map(x=>'<div class="frame" style="cursor:default"><img style="width:100%;display:block;background:#fff" src="'+esc(x.img)+'" alt="'+esc(x.title)+'"><div class="cap">'+esc(x.title)+'</div></div>').join('')+'</div>'}
  lb.classList.add('nonav');lb.classList.add('on');lb.classList.remove('glitch');void lb.offsetWidth;lb.classList.add('glitch');setTimeout(()=>lb.classList.remove('glitch'),1300)}})})();

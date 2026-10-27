@@ -90,6 +90,7 @@ textarea.one{min-height:0;resize:none;overflow:hidden;line-height:1.5;word-break
   <div id="login" class="sheet hide">
     <h2>合言葉を入れてください</h2>
     <p class="note" id="loginNote">教えてもらった「合言葉」を入力してください。この端末では1回だけで、次からは入力しなくて大丈夫です。</p>
+    <div id="lnkBox" class="hide"><label>更新用リンク(届いたもの)</label><input type="text" id="lnk" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="https://shisui-reeka.github.io/admin.html#e=…"></div>
     <label>合言葉</label>
     <input type="password" id="tok" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="合言葉">
     <p style="margin-top:14px"><button class="btn" id="tokGo">はじめる</button></p>
@@ -108,13 +109,13 @@ textarea.one{min-height:0;resize:none;overflow:hidden;line-height:1.5;word-break
 <div class="savebar" id="savebar"><span id="savemsg">未保存の変更があります</span><button class="btn" id="save">保存して公開する</button></div>
 <div id="toast"></div>
 
-<script>window.ADMIN_V="1793121683";
+<script>window.ADMIN_V="1793121891";
 /* 古い画面が残らないよう、最新かどうか確認して必要なら読み込み直す */
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){if(j&&j.v&&window.ADMIN_V!=='0'&&j.v!==window.ADMIN_V){location.replace(location.pathname+'?r='+j.v+location.hash)}}).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1793121683"></script>
-<script src="core.js?v=1793121683"></script>
-<script src="data.js?v=1793121683"></script>
+<script src="icons.js?v=1793121891"></script>
+<script src="core.js?v=1793121891"></script>
+<script src="data.js?v=1793121891"></script>
 <script>
 window.ICONS.drip='<path d="M7 4h10v7a5 5 0 0 1-10 0z"/><path d="M7 8h10"/><path d="M10 1h4"/><path d="M12 1v3"/><path d="M12 16v2"/><path d="M12 19.5c-1 1.2-1.6 2-1.6 2.6a1.6 1.6 0 0 0 3.2 0c0-.6-.6-1.4-1.6-2.6z"/>';
 (function(){
@@ -280,7 +281,7 @@ async function decryptBlob(blob,pass){const raw=b64u.dec(blob);const salt=raw.sl
 window.__decryptBlob=decryptBlob;
 let encBlob='';
 $('#tokGo').addEventListener('click',async()=>{const pw=$('#tok').value.trim();if(!pw)return;const b=$('#tokGo');b.disabled=true;b.textContent='確認中…';
-  try{if(!encBlob)throw new Error('届いたリンクから開き直してください');let t;try{t=await decryptBlob(encBlob,pw)}catch(e){throw new Error('合言葉がちがうようです')}
+  try{if(!encBlob){const mm=($('#lnk').value||'').match(/[#&]e=([A-Za-z0-9_-]+)/);if(mm)encBlob=mm[1]}if(!encBlob)throw new Error('更新用リンクを貼ってください');let t;try{t=await decryptBlob(encBlob,pw)}catch(e){throw new Error('合言葉がちがうようです')}
     await tryToken(t);store.set('rk_tok',t);store.set('rk_enc',encBlob);await start()}catch(e){toast(e.message||'失敗しました',true)}b.disabled=false;b.textContent='はじめる'});
 $('#logout').addEventListener('click',e=>{e.preventDefault();if(confirm('この端末のログインを解除します。よろしいですか?')){store.del('rk_tok');location.reload()}});
 (async()=>{const m=(location.hash||'').match(/[#&]e=([A-Za-z0-9_-]+)/);
@@ -288,7 +289,8 @@ $('#logout').addEventListener('click',e=>{e.preventDefault();if(confirm('この�
   if(m&&store.get('rk_enc')!==encBlob){store.del('rk_tok')}
   const t=store.get('rk_tok');
   if(t){try{await tryToken(t);await start();return}catch(e){toast('もう一度、合言葉を入れてください',true)}}
-  if(!encBlob)$('#loginNote').textContent='届いた「更新用リンク」から開いてください(リンクがないと入れません)。';
+  if(!encBlob)$('#lnkBox').classList.remove('hide');
+  if(!encBlob)$('#loginNote').textContent='届いた「更新用リンク」を下の欄に貼ってから、合言葉を入れてください(この端末で1回だけ)。';
   $('#login').classList.remove('hide')})();
 })();
 </script>

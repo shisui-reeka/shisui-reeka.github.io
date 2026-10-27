@@ -182,8 +182,12 @@ a.frame{cursor:pointer}
 #lb #dkIn{position:absolute;inset:0;z-index:7;background:#030208;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:14px;padding:0 9vw;font:14px/1.9 ui-monospace,Menlo,"Hiragino Kaku Gothic ProN",monospace;letter-spacing:.14em;color:#c9d3f5;text-shadow:0 0 10px rgba(140,169,236,.7)}
 #lb #dkIn .w{color:#ff63bd;text-shadow:0 0 12px rgba(255,99,189,.8)}
 #lb #dkIn .cu{display:inline-block;width:.55em;height:1.05em;margin-left:.2em;vertical-align:-.2em;background:#ff63bd;box-shadow:0 0 10px #ff63bd;animation:blk .5s steps(1) infinite}
-#lb #dkIn svg{width:100%;height:46px;margin-top:10px}
-#lb #dkIn svg path{fill:none;stroke:#ff63bd;stroke-width:1.6;stroke-dasharray:420 900;stroke-dashoffset:420;animation:ecg 2.2s linear infinite;filter:drop-shadow(0 0 4px #ff63bd)}
+#lb #dkIn svg{width:100%;height:62px;margin-top:10px}
+#lb #dkIn svg path{fill:none;stroke:#ff63bd;stroke-width:1.4;stroke-linejoin:round;filter:drop-shadow(0 0 4px #ff63bd)}
+#lb #dkIn svg path.g2{stroke:rgba(140,169,236,.25);stroke-width:1;filter:none}
+#lb #dkIn svg path.sg{stroke-dasharray:620 380;animation:sgm 1.6s linear infinite}
+#lb #dkIn svg path.sg.b{stroke:#8ca9ec;stroke-width:.9;opacity:.7;filter:drop-shadow(0 0 3px #8ca9ec);animation-duration:2.3s;animation-direction:reverse}
+@keyframes sgm{from{stroke-dashoffset:0}to{stroke-dashoffset:-1000}}
 #lbsec .sd .sys{color:#ff63bd;letter-spacing:.2em;text-align:center;margin-top:26px;font-size:12px;text-shadow:0 0 10px rgba(255,99,189,.8)}
 
 #lb .dkbg{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden;background:radial-gradient(ellipse 70% 45% at 20% 18%,rgba(143,119,194,.22),transparent 70%),radial-gradient(ellipse 60% 40% at 85% 70%,rgba(255,99,189,.12),transparent 70%),radial-gradient(ellipse 80% 50% at 50% 100%,rgba(140,169,236,.14),transparent 70%)}
@@ -792,14 +796,14 @@ table.cred td{padding-top:6px;padding-bottom:6px}
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="lbnav"><button class="lbn" id="lbp" aria-label="前へ">‹</button><div class="t" id="lbt"></div><button class="lbn" id="lbn" aria-label="次へ">›</button></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1793085767";
+window.BUILD="1793085810";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1793085767"></script>
-<script src="core.js?v=1793085767"></script>
-<script src="data.js?v=1793085767"></script>
+<script src="icons.js?v=1793085810"></script>
+<script src="core.js?v=1793085810"></script>
+<script src="data.js?v=1793085810"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -875,8 +879,17 @@ function docHtml(txt,end){return '<div class="sd"><div class="ln mt"><span>FILE 
   const bg=document.createElement('div');bg.className='dkbg';bg.innerHTML='<div class="gn"></div><div class="st"></div><div class="gr"></div><div class="plus"></div><div class="dr"></div>'+[['cross',60,8,74,0],['pill',46,78,60,3],['cross',34,70,16,6],['drip',40,10,48,9]].map(a=>'<div class="ic" style="width:'+a[1]+'px;height:'+a[1]+'px;left:'+a[2]+'%;top:'+a[3]+'%;animation-delay:-'+a[4]+'s">'+(IC[a[0]]||'')+'</div>').join('')+'<svg class="ec" viewBox="0 0 300 60" preserveAspectRatio="none"><path class="g" d="M0 34H300"/><path d="M0 34H70l8-5 6 5h12l6-22 8 44 8-22h14l8-6 6 6H300"/></svg>';lb.appendChild(bg);{const hx=()=>{let r='';for(let i=0;i<60;i++)r+=Math.floor(Math.random()*256).toString(16).padStart(2,'0')+(Math.random()<.2?'<br>':'');return r};[3,9,17,28,44,58,70,83,92,97].forEach((x,i)=>{const c=document.createElement('div');c.className='rn';c.style.left=x+'%';const h=hx();c.innerHTML='<span style="--t:'+(22+i*3)+'s">'+h+'<br>'+h+'</span>';bg.appendChild(c)})}
   const hud=document.createElement('div');hud.className='dkh';hud.innerHTML='<span>DEPTH · L01</span><b>0000m</b><i></i>';lb.appendChild(hud);const pulse=document.createElement('div');pulse.className='dkp';lb.appendChild(pulse);
   const intro=document.createElement('div');intro.id='dkIn';
-  intro.innerHTML='<div id="dkA"></div><div id="dkB"></div><svg viewBox="0 0 300 46" preserveAspectRatio="none"><path d="M0 24H70l8-4 6 4h12l6-18 8 36 8-18h14l8-5 6 5H300"/></svg>';
+  intro.innerHTML='<div id="dkA"></div><div id="dkB"></div><svg viewBox="0 0 300 46" preserveAspectRatio="none"><path class="g2" d="M0 23H300"/><path class="sg" id="dkS1" pathLength="1000"/><path class="sg b" id="dkS2" pathLength="1000"/></svg>';
   lb.appendChild(intro);
+  const wav=amp=>{let d='M0 23',x=0,mode=0,left=0;while(x<300){if(left<=0){const r=Math.random();mode=r<.22?0:r<.5?1:r<.72?2:r<.88?3:4;left=6+Math.floor(Math.random()*26)}const st=mode===1?1.4:mode===2?2.2:3;x+=st;left-=st;let y=23;
+    if(mode===0)y=23+(Math.random()-.5)*2;
+    else if(mode===1)y=23+(Math.random()-.5)*amp*.9;
+    else if(mode===2)y=23+(Math.random()<.5?-1:1)*(3+Math.random()*amp*.6);
+    else if(mode===3)y=23+((Math.floor(x/3)%2)?-1:1)*(4+Math.random()*7);
+    else y=23+(Math.random()<.5?-1:1)*(10+Math.random()*13);
+    d+='L'+Math.min(x,300).toFixed(1)+' '+Math.max(2,Math.min(44,y)).toFixed(1)}return d};
+  const sgA=()=>{const a=$('#dkS1'),b=$('#dkS2');if(!a||!b){clearInterval(sgT);return}a.setAttribute('d',wav(24));b.setAttribute('d',wav(16))};
+  sgA();const sgT=setInterval(sgA,260);TO.push(sgT);
   const type=(el,txt,cls,done)=>{let k=0;const w=document.createElement('span');if(cls)w.className=cls;el.appendChild(w);const cu=document.createElement('i');cu.className='cu';el.appendChild(cu);const st=()=>{if(k>=txt.length){cu.remove();done&&later(done,380);return}w.textContent+=txt[k++];later(st,/[。、]/.test(txt[k-1])?260:55)};st()};
   let began=false;
   const begin=()=>{if(began)return;began=true;intro.style.transition='opacity .5s';intro.style.opacity='0';later(()=>intro.remove(),520);s.style.visibility='';

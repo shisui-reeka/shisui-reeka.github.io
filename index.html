@@ -185,6 +185,23 @@ a.frame{cursor:pointer}
 #lb #dkIn svg{width:100%;height:46px;margin-top:10px}
 #lb #dkIn svg path{fill:none;stroke:#ff63bd;stroke-width:1.6;stroke-dasharray:420 900;stroke-dashoffset:420;animation:ecg 2.2s linear infinite;filter:drop-shadow(0 0 4px #ff63bd)}
 #lbsec .sd .sys{color:#ff63bd;letter-spacing:.2em;text-align:center;margin-top:26px;font-size:12px;text-shadow:0 0 10px rgba(255,99,189,.8)}
+
+#lb .dkbg{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden;background:radial-gradient(ellipse 70% 45% at 20% 18%,rgba(143,119,194,.22),transparent 70%),radial-gradient(ellipse 60% 40% at 85% 70%,rgba(255,99,189,.12),transparent 70%),radial-gradient(ellipse 80% 50% at 50% 100%,rgba(140,169,236,.14),transparent 70%)}
+#lb .dkbg .gr{position:absolute;inset:0;background:linear-gradient(rgba(140,169,236,.06) 1px,transparent 1px) 0 0/30px 30px,linear-gradient(90deg,rgba(140,169,236,.06) 1px,transparent 1px) 0 0/30px 30px;-webkit-mask:linear-gradient(180deg,transparent,#000 40%,#000 80%,transparent);mask:linear-gradient(180deg,transparent,#000 40%,#000 80%,transparent)}
+#lb .dkbg .st{position:absolute;inset:-50% 0 0 0;height:200%;background-image:radial-gradient(1.2px 1.2px at 12% 18%,#dfe9ff,transparent),radial-gradient(1px 1px at 38% 62%,#c9d3f5,transparent),radial-gradient(1.5px 1.5px at 66% 30%,#fff,transparent),radial-gradient(1px 1px at 82% 78%,#8ca9ec,transparent),radial-gradient(1px 1px at 24% 88%,#dfe9ff,transparent),radial-gradient(1.2px 1.2px at 91% 12%,#ff9ad5,transparent),radial-gradient(1px 1px at 52% 44%,#c9d3f5,transparent);background-size:210px 190px;opacity:.7;animation:stdr 90s linear infinite}
+@keyframes stdr{to{transform:translateY(25%)}}
+#lb .dkbg .ic{position:absolute;color:#8ca9ec;opacity:.13;animation:flt 14s ease-in-out infinite}
+#lb .dkbg .ic svg{width:100%;height:100%}
+@keyframes flt{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-18px) rotate(12deg)}}
+#lb .dkbg .plus{position:absolute;right:-30px;top:16%;width:200px;height:200px;opacity:.05;background:linear-gradient(#ff63bd,#ff63bd) 50% 0/56px 100% no-repeat,linear-gradient(#ff63bd,#ff63bd) 0 50%/100% 56px no-repeat}
+#lb .dkbg .ec{position:absolute;left:0;right:0;bottom:2%;width:100%;height:50px;opacity:.3}
+#lb .dkbg .ec path{fill:none;stroke:#ff63bd;stroke-width:1.2;stroke-dasharray:260 1000;stroke-dashoffset:260;animation:ecg 5s linear infinite;filter:drop-shadow(0 0 3px #ff63bd)}
+#lb .dkbg .ec path.g{stroke:rgba(140,169,236,.25);stroke-dasharray:none;stroke-dashoffset:0;animation:none;filter:none}
+#lb .dkbg .dr{position:absolute;left:11%;top:0;width:1px;height:34%;background:linear-gradient(180deg,transparent,rgba(140,169,236,.35));}
+#lb .dkbg .dr::after{content:"";position:absolute;left:-2px;top:100%;width:5px;height:7px;border-radius:50%;background:#8ca9ec;opacity:.7;animation:drp 6s ease-in infinite}
+@keyframes drp{0%{transform:translateY(0);opacity:0}15%{opacity:.8}100%{transform:translateY(55vh);opacity:0}}
+#lb.dk #lbsec{position:relative;z-index:3}
+#lb.dk .lbl,#lb.dk .x{z-index:6}
 #lb.dk{background:#06050c}
 #lb.dk.glitch::after{animation:none}
 #lb.dk.glitch #lbsec{animation:none}
@@ -747,14 +764,14 @@ table.cred td{padding-top:6px;padding-bottom:6px}
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="lbnav"><button class="lbn" id="lbp" aria-label="前へ">‹</button><div class="t" id="lbt"></div><button class="lbn" id="lbn" aria-label="次へ">›</button></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1793083057";
+window.BUILD="1793083096";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1793083057"></script>
-<script src="core.js?v=1793083057"></script>
-<script src="data.js?v=1793083057"></script>
+<script src="icons.js?v=1793083096"></script>
+<script src="core.js?v=1793083096"></script>
+<script src="data.js?v=1793083096"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -800,7 +817,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')lb.classList.remove(
 /* secret: logo 5 taps */
 (function(){let n=0,t=null;const lg=$('#hLogo');
 const TO=[];const later=(f,ms)=>{const id=setTimeout(f,ms);TO.push(id);return id};
-const closeDk=()=>{lb.classList.remove('dk');clearInterval(window.__dkT);TO.splice(0).forEach(clearTimeout);if(window.__dkIO){window.__dkIO.disconnect();window.__dkIO=null}const a=lb.querySelector('.dkp');a&&a.remove();const b=lb.querySelector('#dkIn');b&&b.remove();const sc=$('#lbsec');sc.classList.remove('bo');sc.onscroll=null};
+const closeDk=()=>{lb.classList.remove('dk');clearInterval(window.__dkT);TO.splice(0).forEach(clearTimeout);if(window.__dkIO){window.__dkIO.disconnect();window.__dkIO=null}const a=lb.querySelector('.dkp');a&&a.remove();const g=lb.querySelector('.dkbg');g&&g.remove();const b=lb.querySelector('#dkIn');b&&b.remove();const sc=$('#lbsec');sc.classList.remove('bo');sc.onscroll=null};
 window.__closeDk=closeDk;
 function docHtml(txt,end){return '<div class="sd">'+String(txt).split('\n').map((l,i,a)=>{
  if(!l.trim())return '<div class="ln sp"></div>';
@@ -815,7 +832,7 @@ function docHtml(txt,end){return '<div class="sd">'+String(txt).split('\n').map(
  closeDk();
  const s=$('#lbsec');$('#lbi').style.display='none';$('#lbt').textContent='';s.style.display='block';
  if(hasDoc){s.innerHTML=docHtml(S.secretDoc,S.secretEnd);lb.classList.add('dk');s.scrollTop=0;s.style.visibility='hidden';
-  const pulse=document.createElement('div');pulse.className='dkp';lb.appendChild(pulse);
+  const bg=document.createElement('div');bg.className='dkbg';bg.innerHTML='<div class="st"></div><div class="gr"></div><div class="plus"></div><div class="dr"></div>'+[['cross',60,8,74,0],['pill',46,78,60,3],['cross',34,70,16,6],['drip',40,10,48,9]].map(a=>'<div class="ic" style="width:'+a[1]+'px;height:'+a[1]+'px;left:'+a[2]+'%;top:'+a[3]+'%;animation-delay:-'+a[4]+'s">'+(IC[a[0]]||'')+'</div>').join('')+'<svg class="ec" viewBox="0 0 300 60" preserveAspectRatio="none"><path class="g" d="M0 34H300"/><path d="M0 34H70l8-5 6 5h12l6-22 8 44 8-22h14l8-6 6 6H300"/></svg>';lb.appendChild(bg);const pulse=document.createElement('div');pulse.className='dkp';lb.appendChild(pulse);
   const intro=document.createElement('div');intro.id='dkIn';
   intro.innerHTML='<div id="dkA"></div><div id="dkB"></div><svg viewBox="0 0 300 46" preserveAspectRatio="none"><path d="M0 24H70l8-4 6 4h12l6-18 8 36 8-18h14l8-5 6 5H300"/></svg>';
   lb.appendChild(intro);

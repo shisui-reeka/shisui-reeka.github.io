@@ -792,14 +792,14 @@ table.cred td{padding-top:6px;padding-bottom:6px}
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="lbnav"><button class="lbn" id="lbp" aria-label="前へ">‹</button><div class="t" id="lbt"></div><button class="lbn" id="lbn" aria-label="次へ">›</button></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1793085465";
+window.BUILD="1793085618";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1793085465"></script>
-<script src="core.js?v=1793085465"></script>
-<script src="data.js?v=1793085465"></script>
+<script src="icons.js?v=1793085618"></script>
+<script src="core.js?v=1793085618"></script>
+<script src="data.js?v=1793085618"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -847,7 +847,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')lb.classList.remove(
 const TO=[];const later=(f,ms)=>{const id=setTimeout(f,ms);TO.push(id);return id};
 const closeDk=()=>{lb.classList.remove('dk');clearInterval(window.__dkT);TO.splice(0).forEach(clearTimeout);if(window.__dkIO){window.__dkIO.disconnect();window.__dkIO=null}const a=lb.querySelector('.dkp');a&&a.remove();const g=lb.querySelector('.dkbg');g&&g.remove();const hd=lb.querySelector('.dkh');hd&&hd.remove();lb.style.removeProperty('--dp');const b=lb.querySelector('#dkIn');b&&b.remove();const sc=$('#lbsec');sc.classList.remove('bo');sc.onscroll=null};
 window.__closeDk=closeDk;
-const KWR=/(想定外の安定効果|自分も救われている|耳部形態変化|回収判断は現在保留中|必要とされること|情緒同調率|過剰接触|存在安定|微弱鎮静波|過飽和感情|断続的かつ継続的|存在波|言語反応|音声核|情緒安定度|接触密度|個体差あり|除去|超過|未実行|依存)/g;
+const KWR=/(想定外の安定効果|自分も救われている|耳部形態変化|回収判断は現在保留中|必要とされること|情緒同調率|過剰接触|存在安定|微弱鎮静波|過飽和感情|断続的かつ継続的|存在波|言語反応|音声核|情緒安定度|接触密度|個体差あり|除去|緩和|超過|未実行|依存)/g;
 const hl=h=>h.replace(KWR,m=>'<span class="kw">'+m+'</span>');
 function docHtml(txt,end){return '<div class="sd"><div class="ln mt"><span>FILE No.RK-001<br>ACCESS : <b>RESTRICTED</b></span><span class="stp">極秘<small>CONFIDENTIAL</small></span></div>'+String(txt).split('\n').map((l,i,a)=>{
  if(!l.trim())return '<div class="ln sp"></div>';

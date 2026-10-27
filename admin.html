@@ -231,7 +231,8 @@ $('#save').addEventListener('click',async()=>{const b=$('#save');b.disabled=true
 window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue=''}});
 
 /* ---- boot ---- */
-async function start(){
+function keepHash(){try{if(token)history.replaceState(null,'',location.pathname+location.search+'#t='+encodeURIComponent(token))}catch(e){}}
+async function start(){keepHash();
   await window.loadContent();
   C={};window.EDITABLE.forEach(k=>C[k]=JSON.parse(JSON.stringify(S[k]===undefined?(k==='sub'?'':[]):S[k])));
   C.commission=C.commission||{};C.commission.prices=C.commission.prices||[];
@@ -241,7 +242,7 @@ async function tryToken(t){token=t;const r=await fetch(API,{headers:{Authorizati
 $('#tokGo').addEventListener('click',async()=>{const t=$('#tok').value.trim();if(!t)return;const b=$('#tokGo');b.disabled=true;
   try{await tryToken(t);store.set('rk_tok',t);await start()}catch(e){toast(e.message||'失敗しました',true)}b.disabled=false});
 $('#logout').addEventListener('click',e=>{e.preventDefault();if(confirm('この端末のログインを解除します。よろしいですか?')){store.del('rk_tok');location.reload()}});
-(async()=>{let h=(location.hash||'').match(/[#&]t=([^&]+)/);if(h){store.set('rk_tok',decodeURIComponent(h[1]));try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}}const t=store.get('rk_tok');if(t){try{await tryToken(t);await start();return}catch(e){toast('もう一度、リンクを開いてください',true)}}$('#login').classList.remove('hide')})();
+(async()=>{let h=(location.hash||'').match(/[#&]t=([^&]+)/);if(h){store.set('rk_tok',decodeURIComponent(h[1]));try{}catch(e){}}const t=store.get('rk_tok');if(t){try{await tryToken(t);await start();return}catch(e){toast('もう一度、リンクを開いてください',true)}}$('#login').classList.remove('hide')})();
 })();
 </script>
 </body>

@@ -208,7 +208,7 @@ a.frame{cursor:pointer}
 #lbsec .sd .mt b{font-weight:400;color:rgba(255,99,189,.85)}
 #lbsec .sd .stp{flex:none;transform:rotate(7deg);border:2px solid rgba(255,99,189,.85);color:#ff63bd;padding:3px 10px 2px;text-align:center;font-size:17px;letter-spacing:.3em;text-indent:.3em;line-height:1.3;text-shadow:0 0 10px rgba(255,99,189,.7),1.5px 0 rgba(140,169,236,.6);box-shadow:0 0 12px rgba(255,99,189,.35),inset 0 0 8px rgba(255,99,189,.25);border-radius:3px;-webkit-mask:radial-gradient(circle at 20% 30%,transparent 1px,#000 2px);mask:none}
 #lbsec .sd .stp small{display:block;font-size:8px;letter-spacing:.25em;text-indent:.25em;opacity:.85}
-#lbsec .sd .kw{color:#ff63bd;padding:0 2px;border-bottom:1px solid rgba(255,99,189,.7);background:rgba(255,99,189,.10);text-shadow:1.5px 0 rgba(140,169,236,.8),-1.5px 0 rgba(255,99,189,.45),0 0 10px rgba(255,99,189,.7);animation:kwj 5s ease-in-out infinite}
+#lbsec .sd .kw{color:#ff63bd;padding:0 2px;background:rgba(255,99,189,.10);text-shadow:1.5px 0 rgba(140,169,236,.8),-1.5px 0 rgba(255,99,189,.45),0 0 10px rgba(255,99,189,.7);animation:kwj 5s ease-in-out infinite}
 @keyframes kwj{0%,100%{transform:none}46%{transform:none}50%{transform:translateX(1.5px)}54%{transform:translateX(-1px)}58%{transform:none}}
 #lbsec .sd .rd{position:relative;cursor:pointer;color:transparent;background:#0c0a16;border-radius:2px;box-shadow:0 0 0 1px rgba(255,99,189,.55),0 0 10px rgba(255,99,189,.3);text-shadow:none;user-select:none;-webkit-user-select:none;transition:background .35s,color .35s}
 #lbsec .sd .rd.open{background:rgba(255,99,189,.12);color:#ff63bd;box-shadow:none;border-bottom:1px solid rgba(255,99,189,.8);text-shadow:1.5px 0 rgba(140,169,236,.8),-1.5px 0 rgba(255,99,189,.45),0 0 10px rgba(255,99,189,.7);animation:decl .7s steps(1) both}
@@ -792,14 +792,14 @@ table.cred td{padding-top:6px;padding-bottom:6px}
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="lbnav"><button class="lbn" id="lbp" aria-label="前へ">‹</button><div class="t" id="lbt"></div><button class="lbn" id="lbn" aria-label="次へ">›</button></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1793085296";
+window.BUILD="1793085307";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1793085296"></script>
-<script src="core.js?v=1793085296"></script>
-<script src="data.js?v=1793085296"></script>
+<script src="icons.js?v=1793085307"></script>
+<script src="core.js?v=1793085307"></script>
+<script src="data.js?v=1793085307"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;

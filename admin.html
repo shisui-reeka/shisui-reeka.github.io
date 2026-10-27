@@ -7,43 +7,46 @@
 <title>HP更新ページ | 偲睡れーか</title>
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <style>
-:root{--blue:#8ca9ec;--violet:#8f77c2;--pink:#ff63bd;--paper:#eef1fa;--ink:#2b2f45;--sub:#6b7190;--line:rgba(140,169,236,.38);--line2:rgba(140,169,236,.18);--card:#f8f9fe}
+:root{--blue:#8ca9ec;--violet:#8f77c2;--pink:#ff63bd;--paper:#eef1fa;--ink:#2b2f45;--sub:#6b7190;--line:rgba(140,169,236,.38);--line2:rgba(140,169,236,.18);--card:#f8f9fe;--lab:#4a3f7a}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{margin:0;color:var(--ink);background-color:var(--paper);background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px),linear-gradient(var(--line2) 1px,transparent 1px),linear-gradient(90deg,var(--line2) 1px,transparent 1px);background-size:80px 80px,80px 80px,16px 16px,16px 16px;font-family:"Hiragino Sans","Yu Gothic",YuGothic,Meiryo,sans-serif;line-height:1.7;letter-spacing:.03em;min-height:100vh;-webkit-text-size-adjust:100%}
 .mono{font-family:ui-monospace,Menlo,Consolas,monospace;letter-spacing:.08em}
 .wrap{max-width:760px;margin:0 auto;padding:calc(18px + env(safe-area-inset-top)) 16px calc(110px + env(safe-area-inset-bottom))}
-h1{font-size:20px;margin:6px 0 2px;letter-spacing:.12em}
-.lead{color:var(--sub);font-size:13px;margin:0 0 16px}
+h1{font-size:24px;margin:6px 0 2px;letter-spacing:.12em}
+.lead{color:var(--sub);font-size:14px;margin:0 0 18px}
 .sheet{background:var(--card);border:1px solid var(--blue);box-shadow:3px 3px 0 var(--line);padding:16px}
 .menu{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
 @media(min-width:640px){.menu{grid-template-columns:repeat(3,1fr)}}
 .tile{position:relative;text-align:left;border:1px solid var(--blue);background:#fff;font:inherit;color:var(--ink);padding:16px 14px 14px;border-radius:6px;cursor:pointer;min-height:112px;display:flex;flex-direction:column;gap:2px}
 .tile:active{transform:scale(.97);border-color:var(--pink)}
 .tile .tic{color:var(--violet);margin-bottom:6px}
-.tile b{font-size:17px;font-weight:500;letter-spacing:.1em}
-.tile small{font-size:11.5px;color:var(--sub);line-height:1.4}
-.back{border:0;background:none;color:var(--violet);font:inherit;font-size:14px;padding:6px 0;cursor:pointer}
-h2{font-size:17px;margin:4px 0 14px;padding-bottom:6px;border-bottom:1px dashed var(--violet)}
-label{display:block;font-size:12px;color:var(--violet);margin:12px 0 4px;letter-spacing:.1em}
-input[type=text],input[type=url],input[type=password],select,textarea{width:100%;font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--blue);border-radius:4px;background:#fff;color:var(--ink)}
-textarea{min-height:110px;resize:vertical}
+.tile b{font-size:18px;font-weight:500;letter-spacing:.1em}
+.tile small{font-size:13px;color:var(--sub);line-height:1.45}
+.back{position:sticky;top:0;z-index:10;display:block;width:calc(100% + 32px);margin:0 -16px 8px;border:0;border-bottom:1px solid var(--blue);background:rgba(238,241,250,.97);color:var(--lab);font:inherit;font-size:16px;font-weight:700;text-align:left;padding:12px 16px;cursor:pointer}
+h2{font-size:20px;margin:4px 0 14px;padding-bottom:8px;border-bottom:2px solid var(--violet);color:var(--ink)}
+label{display:block;font-size:14px;font-weight:700;color:var(--lab);margin:16px 0 6px;letter-spacing:.04em}
+input[type=text],input[type=url],input[type=password],select,textarea{width:100%;font:inherit;font-size:16px;padding:12px 14px;border:1.5px solid #b5c4ef;border-radius:8px;background:#fff;color:var(--ink)}
+select{-webkit-appearance:none;appearance:none;padding-right:40px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1 1l6 6 6-6' fill='none' stroke='%238f77c2' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 14px center}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--violet);box-shadow:0 0 0 3px rgba(143,119,194,.22)}
+textarea{min-height:130px;resize:vertical;line-height:1.7}
 textarea.one{min-height:0;resize:none;overflow:hidden;line-height:1.5;word-break:break-all}
-.item{border:1px solid var(--line);background:rgba(255,255,255,.7);border-radius:6px;padding:4px 12px 12px;margin:12px 0;position:relative}
+.item{border:1px solid var(--line);border-left:5px solid var(--violet);background:#fff;border-radius:8px;padding:2px 14px 14px;margin:18px 0;position:relative;box-shadow:2px 2px 0 var(--line2)}
+.item .no{display:inline-block;margin:10px 0 0;font-size:12px;font-weight:700;color:#fff;background:var(--violet);padding:1px 10px;border-radius:10px;letter-spacing:.08em}
 .item .bar{display:flex;gap:6px;justify-content:flex-end;margin:8px 0 0}
-.mini{border:1px solid var(--blue);background:#fff;color:var(--violet);font:inherit;font-size:13px;padding:5px 12px;border-radius:4px;cursor:pointer}
+.mini{border:1px solid var(--blue);background:#fff;color:var(--lab);font:inherit;font-size:15px;min-width:48px;min-height:42px;padding:6px 14px;border-radius:8px;cursor:pointer}
 .mini.del{color:#c2185b;border-color:#e6a1bf}
 .btn{display:inline-block;border:1px solid var(--violet);background:var(--violet);color:#fff;font:inherit;font-size:15px;padding:11px 24px;border-radius:4px;cursor:pointer}
 .btn.line{background:transparent;color:var(--violet)}
 .btn:disabled{opacity:.5}
-.add{width:100%;margin-top:6px;border:1.5px dashed var(--violet);background:rgba(255,255,255,.6);color:var(--violet);padding:12px;font:inherit;border-radius:6px;cursor:pointer}
-.thumb{width:120px;height:120px;border:1px solid var(--blue);background:#fff;object-fit:contain;display:block;margin:4px 0 6px}
+.add{width:100%;margin-top:10px;border:2px dashed var(--violet);background:rgba(255,255,255,.8);color:var(--lab);font-weight:700;font-size:16px;padding:16px;font:inherit;border-radius:6px;cursor:pointer}
+.thumb{width:160px;height:160px;border:1px solid var(--blue);background:#fff;object-fit:contain;display:block;margin:4px 0 6px}
 .savebar{position:fixed;left:0;right:0;bottom:0;background:rgba(238,241,250,.96);border-top:1px solid var(--blue);padding:10px 16px calc(10px + env(safe-area-inset-bottom));display:none;gap:10px;align-items:center;justify-content:center;z-index:20}
 .savebar.on{display:flex}
 .savebar span{font-size:12px;color:var(--sub)}
 #toast{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top));transform:translateX(-50%) translateY(-80px);background:#fff;border:1.5px solid var(--violet);border-radius:8px;padding:10px 18px;font-size:14px;z-index:50;transition:.3s;max-width:92%;text-align:center}
 #toast.on{transform:translateX(-50%) translateY(0)}
 #toast.err{border-color:#c2185b;color:#c2185b}
-.note{font-size:12px;color:var(--sub);margin:6px 0}
+.note{font-size:14px;color:#555b7a;margin:8px 0 12px;background:#eef1fa;border-radius:6px;padding:8px 12px}
 .hide{display:none!important}
 </style>
 </head>
@@ -119,6 +122,7 @@ function listEditor(arr,fields,make,addLabel,render){
   const box=el('div');
   const redraw=()=>{box.innerHTML='';arr.forEach((it,i)=>{
     const card=el('div',{class:'item'});
+    card.append(el('span',{class:'no'},'No.'+(i+1)));
     fields(it,card,i);
     card.append(el('div',{class:'bar'},
       el('button',{class:'mini',type:'button',onclick:()=>{if(i>0){[arr[i-1],arr[i]]=[arr[i],arr[i-1]];mark();redraw()}}},'↑'),

@@ -136,7 +136,7 @@ window.SITE = {
     { title: "研究資料 3/3", img: "img/sec3.webp" }
   ],
 
-  secretLead: "研究資料です。見つけてくれてありがとう。",
+  secretLead: "",
   tagLinks: [
     { label: "FAを見る (#Re画)", url: "https://x.com/search?q=%23Re%E7%94%BB&f=live" },
     { label: "過去実績を見る (#れーかの実績報告)", url: "https://x.com/search?q=%23%E3%82%8C%E3%83%BC%E3%81%8B%E3%81%AE%E5%AE%9F%E7%B8%BE%E5%A0%B1%E5%91%8A&f=live" }

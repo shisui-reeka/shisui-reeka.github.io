@@ -30,9 +30,17 @@ select{-webkit-appearance:none;appearance:none;padding-right:40px;background:#ff
 input:focus,textarea:focus,select:focus{outline:none;border-color:var(--violet);box-shadow:0 0 0 3px rgba(143,119,194,.22)}
 textarea{min-height:130px;resize:vertical;line-height:1.7}
 textarea.one{min-height:0;resize:none;overflow:hidden;line-height:1.5;word-break:break-all}
-.item{border:1px solid var(--line);border-left:5px solid var(--violet);background:#fff;border-radius:8px;padding:2px 14px 14px;margin:18px 0;position:relative;box-shadow:2px 2px 0 var(--line2)}
-.item .no{display:inline-block;margin:10px 0 0;font-size:12px;font-weight:700;color:#fff;background:var(--violet);padding:1px 10px;border-radius:10px;letter-spacing:.08em}
-.item .bar{display:flex;gap:6px;justify-content:flex-end;margin:8px 0 0}
+.item{border:1px solid var(--line);border-left:5px solid var(--violet);background:#fff;border-radius:8px;margin:10px 0;position:relative;box-shadow:2px 2px 0 var(--line2);overflow:hidden}
+.item.open{border-left-color:var(--pink)}
+.ih{display:flex;align-items:center;gap:10px;width:100%;border:0;background:none;font:inherit;color:var(--ink);text-align:left;padding:14px 12px;min-height:56px;cursor:pointer}
+.ih .no{flex:none;font-size:12px;font-weight:700;color:#fff;background:var(--violet);padding:1px 10px;border-radius:10px;letter-spacing:.06em}
+.item.open .ih .no{background:var(--pink)}
+.ih .tt{flex:1;min-width:0;font-size:16px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ih .tt.empty{color:var(--sub)}
+.ih .cv{flex:none;font-size:24px;line-height:1;color:var(--violet);transition:transform .2s}
+.item.open .cv{transform:rotate(90deg)}
+.ib{padding:0 14px 14px;border-top:1px dashed var(--line)}
+.item .bar{display:flex;gap:8px;justify-content:flex-end;margin:16px 0 0}
 .mini{border:1px solid var(--blue);background:#fff;color:var(--lab);font:inherit;font-size:15px;min-width:48px;min-height:42px;padding:6px 14px;border-radius:8px;cursor:pointer}
 .mini.del{color:#c2185b;border-color:#e6a1bf}
 .btn{display:inline-block;border:1px solid var(--violet);background:var(--violet);color:#fff;font:inherit;font-size:15px;padding:11px 24px;border-radius:4px;cursor:pointer}
@@ -118,18 +126,29 @@ function fImage(label,obj,key){
   wrap.append(el('label',{},label),th,b,f);return wrap}
 
 /* ---- generic list editor ---- */
+function sumOf(it){
+  if(Array.isArray(it))return [it[0],it[1]].filter(Boolean).join(' / ');
+  if(typeof it==='string')return it;
+  const ks=['title','label','rank','item','u','url','by','sub','msg','kind'];
+  const parts=[];for(const k of ks){if(it[k]&&typeof it[k]==='string'){parts.push(it[k]);break}}
+  return parts.join(' / ')}
 function listEditor(arr,fields,make,addLabel,render){
   const box=el('div');
-  const redraw=()=>{box.innerHTML='';arr.forEach((it,i)=>{
+  const redraw=(openIdx)=>{box.innerHTML='';arr.forEach((it,i)=>{
     const card=el('div',{class:'item'});
-    card.append(el('span',{class:'no'},'No.'+(i+1)));
-    fields(it,card,i);
-    card.append(el('div',{class:'bar'},
-      el('button',{class:'mini',type:'button',onclick:()=>{if(i>0){[arr[i-1],arr[i]]=[arr[i],arr[i-1]];mark();redraw()}}},'↑'),
-      el('button',{class:'mini',type:'button',onclick:()=>{if(i<arr.length-1){[arr[i+1],arr[i]]=[arr[i],arr[i+1]];mark();redraw()}}},'↓'),
+    const tt=el('span',{class:'tt'});const setT=()=>{const t=sumOf(it);tt.textContent=t||'(まだ空です)';tt.classList.toggle('empty',!t)};setT();
+    const head=el('button',{class:'ih',type:'button'},el('span',{class:'no'},'No.'+(i+1)),tt,el('span',{class:'cv'},'›'));
+    const body=el('div',{class:'ib'+(openIdx===i?'':' hide')});
+    if(openIdx===i)card.classList.add('open');
+    head.addEventListener('click',()=>{const o=body.classList.toggle('hide');card.classList.toggle('open',!o);if(!o)setTimeout(growAll,0)});
+    fields(it,body,i);
+    body.addEventListener('input',()=>setT());body.addEventListener('change',()=>setT());
+    body.append(el('div',{class:'bar'},
+      el('button',{class:'mini',type:'button',onclick:()=>{if(i>0){[arr[i-1],arr[i]]=[arr[i],arr[i-1]];mark();redraw(i-1)}}},'↑ 上へ'),
+      el('button',{class:'mini',type:'button',onclick:()=>{if(i<arr.length-1){[arr[i+1],arr[i]]=[arr[i],arr[i+1]];mark();redraw(i+1)}}},'↓ 下へ'),
       el('button',{class:'mini del',type:'button',onclick:()=>{if(confirm('これを消しますか?')){arr.splice(i,1);mark();redraw()}}},'消す')));
-    box.append(card)});
-    box.append(el('button',{class:'add',type:'button',onclick:()=>{arr.push(make());mark();redraw();const cs=box.querySelectorAll('.item');cs.length&&cs[cs.length-1].scrollIntoView({block:'center'})}},addLabel||'＋ ついか'))};
+    card.append(head,body);box.append(card)});
+    box.append(el('button',{class:'add',type:'button',onclick:()=>{arr.push(make());mark();redraw(arr.length-1);setTimeout(growAll,0);const cs=box.querySelectorAll('.item');cs.length&&cs[cs.length-1].scrollIntoView({block:'start'})}},addLabel||'＋ ついか'))};
   redraw();return box}
 const app=(parent,x)=>[].concat(x).forEach(n=>n&&parent.append(n));
 

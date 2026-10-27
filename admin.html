@@ -202,6 +202,14 @@ const VIEWS={
    app(b,fText('料金表の説明文',c,'pricesNote'));
    b.append(el('label',{},'料金(ここに書くとサイトにも表の形で出ます)'));
    b.append(listEditor(c.prices,(it,card)=>{app(card,fText('内容(例: アイコン)',it,'item'));app(card,fText('金額(例: 3,000円〜)',it,'price'));app(card,fText('メモ',it,'note'))},()=>({item:'',price:'',note:''}),'＋ 料金をふやす'));}},
+ photo:{t:'写真',s:'トップの立ち絵・ミニキャラ',i:'photo',r(b){
+   b.append(el('h2',{},'写真(立ち絵・ミニキャラ)'));
+   b.append(el('p',{class:'note'},'「画像をえらぶ」を押すと、スマホの写真から選べます。選んだあと、下の「保存して公開する」を押すとサイトが変わります。'));
+   const f1=fImage('トップの立ち絵(大きく出る絵)',C,'hero'),f2=fImage('ミニキャラ(名前の横の小さい絵)',C,'heroChibi');
+   b.append(f1,f2);}},
+ goods:{t:'ショップ',s:'グッズ・販売ページ',i:'shopping-bag',r(b){
+   b.append(el('h2',{},'ショップ・グッズ'));b.append(el('p',{class:'note'},'ここに追加した商品が、サイトのショップに並びます。BOOTHやFANBOXそのもののリンクは「リンク」から直せます。'));
+   b.append(listEditor(C.goods,(it,card)=>{card.append(fImage('画像',it,'img'));app(card,fText('名前',it,'title'));app(card,fText('ひとこと',it,'note'));app(card,fText('販売ページのURL',it,'url',{type:'url',ph:'https://'}))},()=>({title:'',note:'',url:'',img:''}),'＋ 商品をふやす'));}},
  talk:{t:'セリフ',s:'立ち絵をタップした時のひとこと',i:'pill',r(b){
    b.append(el('h2',{},'立ち絵のセリフ'));b.append(el('p',{class:'note'},'立ち絵やミニキャラをタップするとランダムに出ます。1行=1セリフ。吹き出しで改行してよい場所に「/」を入れると、きれいに折り返します(例: 本日の処方、/始めますか?)。'));
    app(b,fArea('セリフ(1行=1つ)',C,'talk',v=>(v||[]).join('\n'),s=>s.split('\n').filter(x=>x.trim())));

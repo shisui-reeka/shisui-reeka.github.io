@@ -173,6 +173,10 @@ pre.tpl{white-space:pre-wrap;background:#fff;border:1px solid var(--line);paddin
 a.frame{cursor:pointer}
 #lb{position:fixed;inset:0;z-index:90;background:rgba(238,241,250,.97);display:none;flex-direction:column;align-items:center;justify-content:center;padding:16px;gap:10px}
 #lb.on{display:flex}
+/* 隠しページ中は、画面を引き下げた時の「ページ再読み込み」が起きないように */
+#lb{overscroll-behavior:none;touch-action:pan-y}
+#lbsec{overscroll-behavior:contain}
+html:has(#lb.on),html:has(#lb.on) body{overflow:hidden;overscroll-behavior:none}
 
 #lb .dkp{position:absolute;inset:0;pointer-events:none;z-index:4;background:radial-gradient(ellipse at 50% 50%,transparent 48%,rgba(255,99,189,.26) 100%);opacity:0;animation:thump 2.4s ease-in-out infinite}
 @keyframes thump{0%{opacity:0}12%{opacity:.5}24%{opacity:.12}34%{opacity:.35}55%,100%{opacity:0}}
@@ -801,14 +805,14 @@ table.cred td{padding-top:6px;padding-bottom:6px}
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="lbnav"><button class="lbn" id="lbp" aria-label="前へ">‹</button><div class="t" id="lbt"></div><button class="lbn" id="lbn" aria-label="次へ">›</button></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1793140977";
+window.BUILD="1793141301";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1793140977"></script>
-<script src="core.js?v=1793140977"></script>
-<script src="data.js?v=1793140977"></script>
+<script src="icons.js?v=1793141301"></script>
+<script src="core.js?v=1793141301"></script>
+<script src="data.js?v=1793141301"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;

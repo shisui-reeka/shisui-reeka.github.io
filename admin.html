@@ -109,13 +109,13 @@ textarea.one{min-height:0;resize:none;overflow:hidden;line-height:1.5;word-break
 <div class="savebar" id="savebar"><span id="savemsg">未保存の変更があります</span><button class="btn" id="save">保存して公開する</button></div>
 <div id="toast"></div>
 
-<script>window.ADMIN_V="1793121891";
+<script>window.ENC_BLOB="uG-L-3-iUUaZohwkiF-Oe81zNaNKVBlEv2Fl_HHvjJjr5NmmO66PkrbLccUqIQvP_SYMAn6b023n0-wi4jnNj65mXW7RSpWR-ZxOnX-vNaCbKl-Hy3Jf5CrPxLN8nKICr1duo9_oDhterC8iFL4Jd4Qat0_bD_lSYJipDeHxh0UC0oszmKrJS6Q";window.ADMIN_V="1793122023";
 /* 古い画面が残らないよう、最新かどうか確認して必要なら読み込み直す */
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){if(j&&j.v&&window.ADMIN_V!=='0'&&j.v!==window.ADMIN_V){location.replace(location.pathname+'?r='+j.v+location.hash)}}).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1793121891"></script>
-<script src="core.js?v=1793121891"></script>
-<script src="data.js?v=1793121891"></script>
+<script src="icons.js?v=1793122023"></script>
+<script src="core.js?v=1793122023"></script>
+<script src="data.js?v=1793122023"></script>
 <script>
 window.ICONS.drip='<path d="M7 4h10v7a5 5 0 0 1-10 0z"/><path d="M7 8h10"/><path d="M10 1h4"/><path d="M12 1v3"/><path d="M12 16v2"/><path d="M12 19.5c-1 1.2-1.6 2-1.6 2.6a1.6 1.6 0 0 0 3.2 0c0-.6-.6-1.4-1.6-2.6z"/>';
 (function(){
@@ -285,12 +285,12 @@ $('#tokGo').addEventListener('click',async()=>{const pw=$('#tok').value.trim();i
     await tryToken(t);store.set('rk_tok',t);store.set('rk_enc',encBlob);await start()}catch(e){toast(e.message||'失敗しました',true)}b.disabled=false;b.textContent='はじめる'});
 $('#logout').addEventListener('click',e=>{e.preventDefault();if(confirm('この端末のログインを解除します。よろしいですか?')){store.del('rk_tok');location.reload()}});
 (async()=>{const m=(location.hash||'').match(/[#&]e=([A-Za-z0-9_-]+)/);
-  if(m){encBlob=m[1]}else{encBlob=store.get('rk_enc')||''}
+  if(m){encBlob=m[1]}else{encBlob=window.ENC_BLOB||store.get('rk_enc')||''}
   if(m&&store.get('rk_enc')!==encBlob){store.del('rk_tok')}
   const t=store.get('rk_tok');
   if(t){try{await tryToken(t);await start();return}catch(e){toast('もう一度、合言葉を入れてください',true)}}
   if(!encBlob)$('#lnkBox').classList.remove('hide');
-  if(!encBlob)$('#loginNote').textContent='届いた「更新用リンク」を下の欄に貼ってから、合言葉を入れてください(この端末で1回だけ)。';
+  if(!encBlob)$('#loginNote').textContent='合言葉を入力してください。この端末では1回だけで、次からは入力しなくて大丈夫です。';
   $('#login').classList.remove('hide')})();
 })();
 </script>

@@ -68,10 +68,10 @@ textarea.one{min-height:0;resize:none;overflow:hidden;line-height:1.5;word-break
   <p class="lead" id="lead">ここから内容を更新できます</p>
 
   <div id="login" class="sheet hide">
-    <h2>はじめに(1回だけ)</h2>
-    <p class="note">届いた「更新用リンク」を、もう一度タップして開いてください。自動でログインされます。<br>※ リンクが無い場合は、下の欄に更新用のコードを貼ってください。</p>
-    <label>更新用のコード</label>
-    <input type="password" id="tok" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="github_pat_...">
+    <h2>合言葉を入れてください</h2>
+    <p class="note" id="loginNote">教えてもらった「合言葉」を入力してください。この端末では1回だけで、次からは入力しなくて大丈夫です。</p>
+    <label>合言葉</label>
+    <input type="password" id="tok" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="合言葉">
     <p style="margin-top:14px"><button class="btn" id="tokGo">はじめる</button></p>
   </div>
 
@@ -231,18 +231,33 @@ $('#save').addEventListener('click',async()=>{const b=$('#save');b.disabled=true
 window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue=''}});
 
 /* ---- boot ---- */
-function keepHash(){try{if(token)history.replaceState(null,'',location.pathname+location.search+'#t='+encodeURIComponent(token))}catch(e){}}
+function keepHash(){try{if(encBlob)history.replaceState(null,'',location.pathname+location.search+'#e='+encBlob)}catch(e){}}
 async function start(){keepHash();
   await window.loadContent();
   C={};window.EDITABLE.forEach(k=>C[k]=JSON.parse(JSON.stringify(S[k]===undefined?(k==='sub'?'':[]):S[k])));
   C.commission=C.commission||{};C.commission.prices=C.commission.prices||[];
   buildMenu();$('#login').classList.add('hide');$('#home').classList.remove('hide')}
 async function tryToken(t){token=t;const r=await fetch(API,{headers:{Authorization:'Bearer '+t,Accept:'application/vnd.github+json'}});
-  if(!r.ok)throw new Error('更新用のコードが正しくないようです ('+r.status+')');const j=await r.json();if(!(j.permissions&&j.permissions.push))throw new Error('このコードには、書きこみの権限がありません');return true}
-$('#tokGo').addEventListener('click',async()=>{const t=$('#tok').value.trim();if(!t)return;const b=$('#tokGo');b.disabled=true;
-  try{await tryToken(t);store.set('rk_tok',t);await start()}catch(e){toast(e.message||'失敗しました',true)}b.disabled=false});
+  if(!r.ok)throw new Error('ログインできませんでした ('+r.status+')。リンクが古い可能性があります');const j=await r.json();if(!(j.permissions&&j.permissions.push))throw new Error('書きこみの権限がありません');return true}
+/* ---- 合言葉(AES-GCM + PBKDF2) ---- */
+const b64u={enc:u=>btoa(String.fromCharCode(...u)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''),dec:t=>Uint8Array.from(atob(t.replace(/-/g,'+').replace(/_/g,'/')+'==='.slice((t.length+3)%4)),c=>c.charCodeAt(0))};
+async function decryptBlob(blob,pass){const raw=b64u.dec(blob);const salt=raw.slice(0,16),iv=raw.slice(16,28),ct=raw.slice(28);
+  const km=await crypto.subtle.importKey('raw',new TextEncoder().encode(pass),'PBKDF2',false,['deriveKey']);
+  const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:250000,hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['decrypt']);
+  const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv},key,ct);return new TextDecoder().decode(pt)}
+window.__decryptBlob=decryptBlob;
+let encBlob='';
+$('#tokGo').addEventListener('click',async()=>{const pw=$('#tok').value.trim();if(!pw)return;const b=$('#tokGo');b.disabled=true;b.textContent='確認中…';
+  try{if(!encBlob)throw new Error('届いたリンクから開き直してください');let t;try{t=await decryptBlob(encBlob,pw)}catch(e){throw new Error('合言葉がちがうようです')}
+    await tryToken(t);store.set('rk_tok',t);store.set('rk_enc',encBlob);await start()}catch(e){toast(e.message||'失敗しました',true)}b.disabled=false;b.textContent='はじめる'});
 $('#logout').addEventListener('click',e=>{e.preventDefault();if(confirm('この端末のログインを解除します。よろしいですか?')){store.del('rk_tok');location.reload()}});
-(async()=>{let h=(location.hash||'').match(/[#&]t=([^&]+)/);if(h){store.set('rk_tok',decodeURIComponent(h[1]));try{}catch(e){}}const t=store.get('rk_tok');if(t){try{await tryToken(t);await start();return}catch(e){toast('もう一度、リンクを開いてください',true)}}$('#login').classList.remove('hide')})();
+(async()=>{const m=(location.hash||'').match(/[#&]e=([A-Za-z0-9_-]+)/);
+  if(m){encBlob=m[1]}else{encBlob=store.get('rk_enc')||''}
+  if(m&&store.get('rk_enc')!==encBlob){store.del('rk_tok')}
+  const t=store.get('rk_tok');
+  if(t){try{await tryToken(t);await start();return}catch(e){toast('もう一度、合言葉を入れてください',true)}}
+  if(!encBlob)$('#loginNote').textContent='届いた「更新用リンク」から開いてください(リンクがないと入れません)。';
+  $('#login').classList.remove('hide')})();
 })();
 </script>
 </body>

@@ -345,6 +345,20 @@ html:has(#lb.on),html:has(#lb.on) body{overflow:hidden;overscroll-behavior:none}
 .dcard .slot.on svg{width:100%;height:auto;display:block}
 .dcard.full{border-color:var(--pink)}
 
+
+.wk{border:1.5px solid var(--blue);background:rgba(255,255,255,.7);border-radius:6px;padding:10px 12px 12px;margin:6px 0}
+.wk-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:8px;font-size:13px;color:var(--violet)}
+.wk-h b{font-weight:500;letter-spacing:.08em}.wk-u{font-size:10px;color:var(--sub)}
+.wk-l{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.wk-l li{display:grid;grid-template-columns:64px auto 1fr auto;align-items:baseline;gap:8px;padding:8px 10px;border:1px solid rgba(140,169,236,.6);border-radius:4px;background:#fff}
+.wk-d{font-size:15px;color:var(--ink)}.wk-d small{font-size:10px;margin-left:3px;color:var(--sub)}
+.wk-l li.sat .wk-d,.wk-l li.sat .wk-d small{color:var(--blue)}
+.wk-l li.sun .wk-d,.wk-l li.sun .wk-d small{color:var(--pink)}
+.wk-t{font-size:13px;color:var(--violet)}.wk-w{font-size:14px;grid-column:3}
+.wk-l li.td{border-color:var(--pink);background:rgba(255,99,189,.08)}
+.wk-n{font-size:9px;letter-spacing:.2em;color:var(--pink);border:1px solid var(--pink);padding:1px 5px;border-radius:2px;grid-column:4}
+.wk-l li.off{background:rgba(140,169,236,.12)}.wk-l li.off .wk-w{color:var(--sub);grid-column:2/-1}
+.wk-note{margin:10px 2px 0;font-size:13px;line-height:1.8;color:var(--violet)}
 .wpre{display:block;margin:12px 0}
 .wpm{position:fixed;inset:0;z-index:400;background:rgba(15,13,26,.82);display:flex;align-items:center;justify-content:center;padding:16px;overflow:auto;overscroll-behavior:contain}
 .wpm[hidden]{display:none}
@@ -838,14 +852,14 @@ table.cred td{padding-top:6px;padding-bottom:6px}
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="lbnav"><button class="lbn" id="lbp" aria-label="前へ">‹</button><div class="t" id="lbt"></div><button class="lbn" id="lbn" aria-label="次へ">›</button></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1793344097";
+window.BUILD="1793344187";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1793344097"></script>
-<script src="core.js?v=1793344097"></script>
-<script src="data.js?v=1793344097"></script>
+<script src="icons.js?v=1793344187"></script>
+<script src="core.js?v=1793344187"></script>
+<script src="data.js?v=1793344187"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -1052,9 +1066,11 @@ const schDays=()=>{
 };
 const schHtml=()=>{
   const {ds,note,today}=schDays(); if(!ds.length)return '';
-  const W=['日','月','火','水','木','金','土'];
-  return `<h2><span class="no mono">WEEK</span>外来予定</h2><table class="chart sch">${ds.map(x=>{const t=+x._d===+today,w=x._d.getDay();
-    return `<tr class="${t?'td ':''}${x.off?'off':''}"><th class="mono">${x._d.getMonth()+1}/${x._d.getDate()}(${W[w]})${t?' ・本日':''}</th><td>${x.off?'おやすみ':`${x.time?'<small class="t mono">'+esc(x.time)+'</small>':''}${esc(x.what||'配信')}`}</td></tr>`}).join('')}</table>${note?`<p class="muted" style="margin-top:8px">${esc(note)}</p>`:''}`;
+  const W=['日','月','火','水','木','金','土'],md=d=>(d.getMonth()+1)+'/'+d.getDate();
+  const u=S.schedule&&S.schedule.updated?new Date(S.schedule.updated):null;
+  const upd=u&&!isNaN(u)?`<span class="wk-u mono">${md(u)} ${u.getHours()}:${String(u.getMinutes()).padStart(2,'0')} 更新</span>`:'';
+  return `<h2><span class="no mono">WEEK</span>外来予定</h2><div class="wk"><div class="wk-h"><b>今後の予定 <span class="mono">${md(ds[0]._d)}${ds.length>1?'〜'+md(ds[ds.length-1]._d):''}</span></b>${upd}</div><ol class="wk-l">${ds.map(x=>{const t=+x._d===+today,w=x._d.getDay();
+    return `<li class="${w===6?'sat ':''}${w===0?'sun ':''}${t?'td ':''}${x.off?'off':''}"><span class="wk-d mono">${md(x._d)}<small>${W[w]}</small></span>${x.off?'<span class="wk-w">おやすみ</span>':`<span class="wk-t mono">${esc(x.time||'')}</span><span class="wk-w">${esc(x.what||'配信')}</span>`}${t?'<i class="wk-n mono">TODAY</i>':''}</li>`}).join('')}</ol>${note?`<p class="wk-note">✚ ${esc(note)}</p>`:''}</div>`;
 };
 P.chart = () => {
   let h = `<div class="hero"><div class="hint mono">▼ タップしてみて</div>${S.hero?`<div class="stage"><img class="stand" src="${esc(S.hero)}" alt="${esc(S.name)}"></div><div class="figcap"><span class="fcp"><b>FIG.00</b> ─ ${esc(S.name)} / 立ち絵</span><span class="fcm"><b>▼</b> 下のメニューから、好きな部屋へどうぞ</span></div>`:heroSvg}${(S.greeting&&S.greeting.length)?`<div class="greetcard"><div class="gh mono"><i>Rk</i><span>本日の処方 / TODAY'S ANNOUNCEMENT</span></div>${S.greeting.map((t,i)=>`<p class="gl">${String(t).split(/(?<=[、。])/).filter(Boolean).map(x=>`<span class="bk">${esc(x)}</span>`).join('')}</p>`).join('')}</div>`:''}<div class="row">${S.heroChibi?`<img src="${esc(S.heroChibi)}" alt="">`:''}<div><p>${esc(S.sub)}</p>${S.about.map(t=>`<p class="muted">${esc(t)}</p>`).join('')}</div></div></div>
@@ -1143,7 +1159,7 @@ P.shop = () => {
 P.fun = () => {
   const goal=S.stampGoal;
   return `<h2><span class="no mono">01</span>今日の処方箋(おみくじ)</h2><p class="muted">1日1回。まず問診票にこたえてください。</p><div class="prslot">処方箋発行口<i></i></div><div id="rx"></div><button class="btn" id="draw">問診票にこたえる</button><div id="rxhist"></div>
-  <h2><span class="no mono">02</span>通院カード(スタンプ)</h2><p class="muted">1日1回、押せます。${goal}個たまったら満たんです。</p><div id="card"></div><button class="btn line" id="stamp">今日のスタンプ</button> <span class="muted" id="stmsg"></span>`;
+  <h2><span class="no mono">02</span>通院カード(スタンプ)</h2><p class="muted">1日1回、押せます。その月に${goal}個たまると、今月だけの壁紙がもらえます。カードは毎月1日に新しくなります。</p><div id="card"></div><button class="btn line" id="stamp">今日のスタンプ</button> <span class="muted" id="stmsg"></span>`;
 };
 
 const wpList=()=>(S.wallpapers||[]).filter(x=>x&&x.img);
@@ -1236,23 +1252,24 @@ function bindFun(){
   histRender();
   const goal=S.stampGoal, card=$('#card'), st=$('#stamp'), msg=$('#stmsg');
   const BAND=(c)=>`<svg viewBox="0 0 60 60"><g transform="rotate(-38 30 30)"><rect x="4" y="19" width="52" height="22" rx="11" fill="${c}"/><rect x="20" y="19" width="20" height="22" fill="#fff" opacity=".78"/><g fill="#fff" opacity=".7"><circle cx="11" cy="27" r="1.3"/><circle cx="11" cy="33" r="1.3"/><circle cx="49" cy="27" r="1.3"/><circle cx="49" cy="33" r="1.3"/></g></g></svg>`;
+  const getS=()=>{let s=store.get('stampsM',null);const m=today().slice(0,7);if(!s||s.m!==m)s={m,d:[]};s.n=s.d.length;return s};
   const render=()=>{
-    const s=store.get('stamps',{n:0,d:''});
+    const s=getS();
     const no=String(7001+(s.n||0)*13).slice(-4);
-    card.innerHTML=`<div class="dcard${s.n>=goal?' full':''}"><div class="dh"><b>診察券</b><span>SHISUI CLINIC</span></div><div class="dn"><span>No. ${no}</span><span>${s.n}/${goal}</span></div><div class="slots" style="grid-template-columns:repeat(${goal>5?5:goal},1fr)">`+Array.from({length:goal},(_,i)=>`<div class="slot ${i<s.n?'on':''}${stampNew&&i===s.n-1?' stamped':''}">${i<s.n?BAND(['#ff63bd','#8ca9ec','#8f77c2'][i%3]):i+1}</div>`).join('')+`</div></div>`; stampNew=false;
-    if(s.d===today()){st.disabled=true;st.style.opacity=.5;msg.textContent='今日は押しました';}
-    if(s.n>=goal){msg.textContent='満たんです。おつかれさま。';store.set('wpOk',1)}
+    card.innerHTML=`<div class="dcard${s.n>=goal?' full':''}"><div class="dh"><b>診察券</b><span>SHISUI CLINIC</span></div><div class="dn"><span>No. ${no} ・ ${+s.m.slice(5)}月分</span><span>${s.n}/${goal}</span></div><div class="slots" style="grid-template-columns:repeat(${goal>5?5:goal},1fr)">`+Array.from({length:goal},(_,i)=>`<div class="slot ${i<s.n?'on':''}${stampNew&&i===s.n-1?' stamped':''}">${i<s.n?BAND(['#ff63bd','#8ca9ec','#8f77c2'][i%3]):i+1}</div>`).join('')+`</div></div>`; stampNew=false;
+    if(s.d.includes(today())){st.disabled=true;st.style.opacity=.5;msg.textContent='今日は押しました';}
+    if(s.n>=goal){msg.textContent='今月は満たんです。おつかれさま。';}
     let box=document.getElementById('wpbox'); if(box)box.remove();
-    if(wpList().length&&store.get('wpOk',0)){
-      box=document.createElement('button');box.id='wpbox';box.type='button';box.className='btn line wpre';box.textContent='🎁 満たんの壁紙を見る';
+    if(wpList().length&&s.n>=goal){
+      box=document.createElement('button');box.id='wpbox';box.type='button';box.className='btn line wpre';box.textContent='🎁 今月の壁紙をもう一度見る';
       box.addEventListener('click',openWp);card.after(box);
     }
   };
   st.addEventListener('click',()=>{
-    let s=store.get('stamps',{n:0,d:''}); if(s.d===today())return;
-    s.n = s.n>=goal?1:s.n+1; s.d=today(); store.set('stamps',s); stampNew=true; render();
-    if(s.n>=goal&&wpList().length)setTimeout(openWp,900);
-    { const sl=card.querySelectorAll('.slot')[s.n-1]; if(sl&&window.burst){const r=sl.getBoundingClientRect();window.burst(r.left+r.width/2,r.top+r.height/2,12)} }
+    const s=getS(); if(s.d.includes(today()))return;
+    s.d.push(today()); store.set('stampsM',{m:s.m,d:s.d}); stampNew=true; render();
+    if(s.d.length===goal&&wpList().length)setTimeout(openWp,900);
+    { const sl=card.querySelectorAll('.slot')[Math.min(s.d.length,goal)-1]; if(sl&&window.burst){const r=sl.getBoundingClientRect();window.burst(r.left+r.width/2,r.top+r.height/2,12)} }
   });
   render();
 }

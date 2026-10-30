@@ -109,13 +109,13 @@ textarea.one{min-height:0;resize:none;overflow:hidden;line-height:1.5;word-break
 <div class="savebar" id="savebar"><span id="savemsg">未保存の変更があります</span><button class="btn" id="save">保存して公開する</button></div>
 <div id="toast"></div>
 
-<script>window.ENC_BLOB="uG-L-3-iUUaZohwkiF-Oe81zNaNKVBlEv2Fl_HHvjJjr5NmmO66PkrbLccUqIQvP_SYMAn6b023n0-wi4jnNj65mXW7RSpWR-ZxOnX-vNaCbKl-Hy3Jf5CrPxLN8nKICr1duo9_oDhterC8iFL4Jd4Qat0_bD_lSYJipDeHxh0UC0oszmKrJS6Q";window.ADMIN_V="1793343163";
+<script>window.ENC_BLOB="uG-L-3-iUUaZohwkiF-Oe81zNaNKVBlEv2Fl_HHvjJjr5NmmO66PkrbLccUqIQvP_SYMAn6b023n0-wi4jnNj65mXW7RSpWR-ZxOnX-vNaCbKl-Hy3Jf5CrPxLN8nKICr1duo9_oDhterC8iFL4Jd4Qat0_bD_lSYJipDeHxh0UC0oszmKrJS6Q";window.ADMIN_V="1793343309";
 /* 古い画面が残らないよう、最新かどうか確認して必要なら読み込み直す */
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){if(j&&j.v&&window.ADMIN_V!=='0'&&j.v!==window.ADMIN_V){location.replace(location.pathname+'?r='+j.v+location.hash)}}).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1793343163"></script>
-<script src="core.js?v=1793343163"></script>
-<script src="data.js?v=1793343163"></script>
+<script src="icons.js?v=1793343309"></script>
+<script src="core.js?v=1793343309"></script>
+<script src="data.js?v=1793343309"></script>
 <script>
 window.ICONS.drip='<path d="M7 4h10v7a5 5 0 0 1-10 0z"/><path d="M7 8h10"/><path d="M10 1h4"/><path d="M12 1v3"/><path d="M12 16v2"/><path d="M12 19.5c-1 1.2-1.6 2-1.6 2.6a1.6 1.6 0 0 0 3.2 0c0-.6-.6-1.4-1.6-2.6z"/>';
 (function(){
@@ -239,7 +239,7 @@ const VIEWS={
    b.append(el('h2',{},'壁紙(スタンプ満たんの特典)'));
    b.append(el('p',{class:'note'},'スタンプがたまった人に、ここに入れた画像が出ます。スマホの壁紙サイズ(縦長)の絵をおすすめします。ふえるほど、たくさんの壁紙から選べます。'));
    C.wallpapers=C.wallpapers||[];
-   b.append(listEditor(C.wallpapers,(it,card)=>{card.append(fImage('壁紙の画像(きれいなまま保存されます)',it,'img',true));app(card,fText('名前(例: 病室の朝)',it,'title'));app(card,fSelect('カレンダーを重ねる(その月のカレンダーが入ります)',it,'cal',[['','重ねない'],['b','下のほうに重ねる'],['t','上のほうに重ねる']]))},()=>({title:'',img:'',cal:''}),'＋ 壁紙をふやす'));}},
+   b.append(listEditor(C.wallpapers,(it,card)=>{card.append(fImage('壁紙の画像(きれいなまま保存されます)',it,'img',true));app(card,fText('名前(例: 病室の朝)',it,'title'));app(card,fSelect('カレンダーを重ねる(その月のカレンダーが、絵のあいている所に自動で入ります)',it,'cal',[['','重ねない'],['a','重ねる']]))},()=>({title:'',img:'',cal:''}),'＋ 壁紙をふやす'));}},
  photo:{t:'写真',s:'トップの立ち絵・ミニキャラ',i:'photo',r(b){
    b.append(el('h2',{},'写真(立ち絵・ミニキャラ)'));
    b.append(el('p',{class:'note'},'「画像をえらぶ」を押すと、スマホの写真から選べます。選んだあと、下の「保存して公開する」を押すとサイトが変わります。'));

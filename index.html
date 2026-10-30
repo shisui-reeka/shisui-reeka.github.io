@@ -73,6 +73,11 @@ p{margin:0 0 10px}
 .hero p{margin:0}
 
 /* chart table */
+table.chart.sch th{width:34%;white-space:nowrap}
+table.chart.sch tr.td th,table.chart.sch tr.td td{background:rgba(255,99,189,.10);border-color:var(--pink)}
+table.chart.sch tr.td th{color:var(--pink)}
+table.chart.sch tr.off td{color:var(--sub)}
+table.chart.sch small.t{display:inline-block;margin-right:8px;color:var(--violet)}
 table.chart{width:100%;border-collapse:collapse;font-size:14px}
 table.chart th,table.chart td{border:1px solid var(--blue);padding:7px 10px;vertical-align:top;text-align:left}
 table.chart th{width:32%;background:rgba(140,169,236,.16);font-weight:500;color:var(--violet);font-size:12px}
@@ -822,14 +827,14 @@ table.cred td{padding-top:6px;padding-bottom:6px}
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="lbnav"><button class="lbn" id="lbp" aria-label="前へ">‹</button><div class="t" id="lbt"></div><button class="lbn" id="lbn" aria-label="次へ">›</button></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1793342378";
+window.BUILD="1793342997";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1793342378"></script>
-<script src="core.js?v=1793342378"></script>
-<script src="data.js?v=1793342378"></script>
+<script src="icons.js?v=1793342997"></script>
+<script src="core.js?v=1793342997"></script>
+<script src="data.js?v=1793342997"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -1029,8 +1034,20 @@ const MENU=[
 ];
 function menuHtml(){return '<div class="menu">'+MENU.map((m,i)=>`<button class="tile${i===MENU.length-1?' wide':''}" data-go="${m[0]}"><span class="tic">${ico(m[4],26)}</span><span class="n mono">No.${String(i+2).padStart(2,'0')}</span><b>${m[1]}</b><span class="e mono">${m[2]}</span><span class="d">${m[3]}</span></button>`).join('')+'</div>'}
 const credHtml=v=>String(v).split('/').map(x=>x.trim()).filter(Boolean).map(x=>{const m=x.match(/^(.*?)\s*[(（]\s*@([A-Za-z0-9_]+)\s*[)）]\s*$/);if(!m)return '<span class="cr"><span class="nm">'+esc(x)+'</span></span>';const nm=m[1].replace(/\s+(様|さん)$/,'$1').replace(/\s+/g,' ');return '<span class="cr"><span class="nm">'+esc(nm)+'</span> <a class="hd" href="https://x.com/'+esc(m[2])+'" target="_blank" rel="noopener">@'+esc(m[2])+'</a></span>'}).join('');
+const schDays=()=>{
+  const sc=S.schedule||{},d=new Date();d.setHours(0,0,0,0);
+  const ds=(Array.isArray(sc.days)?sc.days:[]).filter(x=>x&&/^\d{4}-\d{2}-\d{2}$/.test(x.date||'')).map(x=>{const p=x.date.split('-');return Object.assign({},x,{_d:new Date(+p[0],+p[1]-1,+p[2])})}).filter(x=>x._d>=d).sort((a,b)=>a._d-b._d).slice(0,14);
+  return {ds,note:sc.note||'',today:d};
+};
+const schHtml=()=>{
+  const {ds,note,today}=schDays(); if(!ds.length)return '';
+  const W=['日','月','火','水','木','金','土'];
+  return `<h2><span class="no mono">WEEK</span>外来予定</h2><table class="chart sch">${ds.map(x=>{const t=+x._d===+today,w=x._d.getDay();
+    return `<tr class="${t?'td ':''}${x.off?'off':''}"><th class="mono">${x._d.getMonth()+1}/${x._d.getDate()}(${W[w]})${t?' ・本日':''}</th><td>${x.off?'おやすみ':`${x.time?'<small class="t mono">'+esc(x.time)+'</small>':''}${esc(x.what||'配信')}`}</td></tr>`}).join('')}</table>${note?`<p class="muted" style="margin-top:8px">${esc(note)}</p>`:''}`;
+};
 P.chart = () => {
   let h = `<div class="hero"><div class="hint mono">▼ タップしてみて</div>${S.hero?`<div class="stage"><img class="stand" src="${esc(S.hero)}" alt="${esc(S.name)}"></div><div class="figcap"><span class="fcp"><b>FIG.00</b> ─ ${esc(S.name)} / 立ち絵</span><span class="fcm"><b>▼</b> 下のメニューから、好きな部屋へどうぞ</span></div>`:heroSvg}${(S.greeting&&S.greeting.length)?`<div class="greetcard"><div class="gh mono"><i>Rk</i><span>本日の処方 / TODAY'S ANNOUNCEMENT</span></div>${S.greeting.map((t,i)=>`<p class="gl">${String(t).split(/(?<=[、。])/).filter(Boolean).map(x=>`<span class="bk">${esc(x)}</span>`).join('')}</p>`).join('')}</div>`:''}<div class="row">${S.heroChibi?`<img src="${esc(S.heroChibi)}" alt="">`:''}<div><p>${esc(S.sub)}</p>${S.about.map(t=>`<p class="muted">${esc(t)}</p>`).join('')}</div></div></div>
+  ${schHtml()}
   <h2><span class="no mono">01</span>プロフィール</h2>
   <table class="chart">${S.chart.map(r=>`<tr><th class="mono">${esc(r[0])}</th><td>${emo(r[1])}</td></tr>`).join('')}</table>`;
   h += `<h2><span class="no mono">02</span>ご案内</h2>` + S.notes.map(n=>`<details><summary>${esc(n.title)}</summary><div class="in">${n.body.map(b=>`<p>${esc(b)}</p>`).join('')}</div></details>`).join('');
@@ -1328,7 +1345,7 @@ main.addEventListener('click',e=>{const pk=e.target.closest('.peek');if(!pk)retu
 (function(){const wk=document.querySelector('.walker');const fit=()=>{const d=wk.clientWidth+56;wk.style.setProperty('--wx',d+'px');wk.style.setProperty('--wd',(d*2/26).toFixed(1)+'s')};fit();let lw=innerWidth;addEventListener('resize',()=>{if(innerWidth!==lw){lw=innerWidth;fit()}})})();
 document.querySelector('.walker').addEventListener('click',e=>{const im=e.target.closest('img');if(!im)return;im.classList.remove('hop');void im.offsetWidth;im.classList.add('hop');const r=im.getBoundingClientRect();window.burst&&window.burst(r.left+r.width/2,r.top,8);setTimeout(()=>im.classList.remove('hop'),500)});
 (function(){const c=S.commission,lab={open:'受付中',closed:'停止中',ask:'要相談'}[c.status]||c.status;
-  const el=document.getElementById('wtx'); if(el){const msg='ただいまの依頼受付:'+lab+(c.note?' / '+String(c.note).replace(/\s+/g,' '):'')+'　　本日の処方箋は1日1回、通院カードのスタンプも1日1回です。お水を飲んで、ゆっくりお過ごしください。';
+  const el=document.getElementById('wtx'); if(el){const _s=schDays(),_t=_s.ds.find(x=>+x._d===+_s.today),msg=(_t?'本日の外来:'+(_t.off?'おやすみです':((_t.time?_t.time+' ':'')+(_t.what||'配信')))+'　　':'')+'ただいまの依頼受付:'+lab+(c.note?' / '+String(c.note).replace(/\s+/g,' '):'')+'　　本日の処方箋は1日1回、通院カードのスタンプも1日1回です。お水を飲んで、ゆっくりお過ごしください。';
     const build=()=>{const box=el.parentElement,W=box.clientWidth||360;el.innerHTML='<i>'+esc(msg)+'</i>';const w1=el.firstChild.getBoundingClientRect().width||200;el.style.setProperty('--W',W+'px');el.style.setProperty('--wd',Math.max(14,(W+w1)/38).toFixed(1)+'s')};
     build(); let lw=innerWidth,tm=null; addEventListener('resize',()=>{if(innerWidth===lw)return;lw=innerWidth;clearTimeout(tm);tm=setTimeout(build,250)}); }
   })();

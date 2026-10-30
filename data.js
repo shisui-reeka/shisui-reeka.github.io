@@ -308,5 +308,6 @@ window.SITE = {
   ],
   talkOver: "タップしすぎです。/過剰摂取…!",
   stampGoal: 10,
-  wallpapers: []
+  wallpapers: [],
+  schedule: {note:'',days:[]}
 };

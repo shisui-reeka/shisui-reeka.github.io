@@ -1,5 +1,5 @@
 /* content.json (管理画面で更新される内容) を data.js の上に重ねる */
-window.EDITABLE=['sub','about','chart','links','xposts','archive','gallery','commission','goods','hero','heroChibi','talk','talkOver','fortunes','credits','creditsNote','wallpapers'];
+window.EDITABLE=['sub','about','chart','links','xposts','archive','gallery','commission','goods','hero','heroChibi','talk','talkOver','fortunes','credits','creditsNote','wallpapers','schedule'];
 window.mergeContent=function(j){
   var S=window.SITE;
   Object.keys(j||{}).forEach(function(k){

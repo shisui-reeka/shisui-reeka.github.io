@@ -109,13 +109,13 @@ textarea.one{min-height:0;resize:none;overflow:hidden;line-height:1.5;word-break
 <div class="savebar" id="savebar"><span id="savemsg">未保存の変更があります</span><button class="btn" id="save">保存して公開する</button></div>
 <div id="toast"></div>
 
-<script>window.ENC_BLOB="uG-L-3-iUUaZohwkiF-Oe81zNaNKVBlEv2Fl_HHvjJjr5NmmO66PkrbLccUqIQvP_SYMAn6b023n0-wi4jnNj65mXW7RSpWR-ZxOnX-vNaCbKl-Hy3Jf5CrPxLN8nKICr1duo9_oDhterC8iFL4Jd4Qat0_bD_lSYJipDeHxh0UC0oszmKrJS6Q";window.ADMIN_V="1793342378";
+<script>window.ENC_BLOB="uG-L-3-iUUaZohwkiF-Oe81zNaNKVBlEv2Fl_HHvjJjr5NmmO66PkrbLccUqIQvP_SYMAn6b023n0-wi4jnNj65mXW7RSpWR-ZxOnX-vNaCbKl-Hy3Jf5CrPxLN8nKICr1duo9_oDhterC8iFL4Jd4Qat0_bD_lSYJipDeHxh0UC0oszmKrJS6Q";window.ADMIN_V="1793342997";
 /* 古い画面が残らないよう、最新かどうか確認して必要なら読み込み直す */
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){if(j&&j.v&&window.ADMIN_V!=='0'&&j.v!==window.ADMIN_V){location.replace(location.pathname+'?r='+j.v+location.hash)}}).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1793342378"></script>
-<script src="core.js?v=1793342378"></script>
-<script src="data.js?v=1793342378"></script>
+<script src="icons.js?v=1793342997"></script>
+<script src="core.js?v=1793342997"></script>
+<script src="data.js?v=1793342997"></script>
 <script>
 window.ICONS.drip='<path d="M7 4h10v7a5 5 0 0 1-10 0z"/><path d="M7 8h10"/><path d="M10 1h4"/><path d="M12 1v3"/><path d="M12 16v2"/><path d="M12 19.5c-1 1.2-1.6 2-1.6 2.6a1.6 1.6 0 0 0 3.2 0c0-.6-.6-1.4-1.6-2.6z"/>';
 (function(){
@@ -144,6 +144,7 @@ async function ghPut(path,b64,msg){let sha;try{const cur=await ghGet(path);sha=c
   const body={message:msg,content:b64,branch:BR};if(sha)body.sha=sha;
   const r=await fetch(API+'/contents/'+path,{method:'PUT',headers:{Authorization:'Bearer '+token,Accept:'application/vnd.github+json','Content-Type':'application/json'},body:JSON.stringify(body)});
   if(!r.ok){let m='';try{m=(await r.json()).message}catch(e){}throw new Error('保存に失敗しました ('+r.status+') '+m)}return r.json()}
+function fDate(label,obj,key){const i=el('input',{type:'date'});i.value=obj[key]||'';i.addEventListener('input',()=>{obj[key]=i.value;mark()});return [el('label',{},label),i]}
 function fImage(label,obj,key,big){
   const wrap=el('div');const th=el('img',{class:'thumb',alt:''});const setTh=()=>{th.style.display=obj[key]?'':'none';if(obj[key])th.src=obj[key]};setTh();
   const f=el('input',{type:'file',accept:'image/*',class:'hide'});
@@ -157,7 +158,7 @@ function fImage(label,obj,key,big){
 function sumOf(it){
   if(Array.isArray(it))return [it[0],it[1]].filter(Boolean).join(' / ');
   if(typeof it==='string')return it;
-  const ks=['title','label','rank','item','u','url','by','sub','msg','kind'];
+  const ks=['title','label','rank','item','u','url','by','sub','msg','kind','what','date'];
   const parts=[];for(const k of ks){if(it[k]&&typeof it[k]==='string'){parts.push(it[k]);break}}
   return parts.join(' / ')}
 function listEditor(arr,fields,make,addLabel,render){
@@ -227,6 +228,13 @@ const VIEWS={
    app(b,fText('料金表の説明文',c,'pricesNote'));
    b.append(el('label',{},'料金(ここに書くとサイトにも表の形で出ます)'));
    b.append(listEditor(c.prices,(it,card)=>{app(card,fText('内容(例: アイコン)',it,'item'));app(card,fText('金額(例: 3,000円〜)',it,'price'));app(card,fText('メモ',it,'note'))},()=>({item:'',price:'',note:''}),'＋ 料金をふやす'));}},
+ sched:{t:'予定',s:'配信・活動の予定カレンダー',i:'calendar',r(b){
+   b.append(el('h2',{},'配信・活動の予定'));
+   b.append(el('p',{class:'note'},'ここに入れた予定が、サイトのトップ(カルテ)に「外来予定」として出ます。日がすぎた予定は、自動でサイトから消えます。'));
+   C.schedule=C.schedule&&typeof C.schedule==='object'&&!Array.isArray(C.schedule)?C.schedule:{note:'',days:[]};C.schedule.days=C.schedule.days||[];
+   app(b,fText('ひとこと(例: 今週は夜おそめです)',C.schedule,'note'));
+   b.append(el('h2',{style:'margin-top:18px'},'予定の一覧'));
+   b.append(listEditor(C.schedule.days,(it,card)=>{app(card,fDate('日にち',it,'date'));app(card,fText('時間(例: 21:00〜)',it,'time'));app(card,fText('内容(例: 雑談配信)',it,'what'));app(card,fSelect('この日は',it,'off',[['','予定あり'],['1','おやすみ']]))},()=>({date:'',time:'',what:'',off:''}),'＋ 予定をふやす'));}},
  wp:{t:'壁紙',s:'スタンプ満たんのプレゼント',i:'photo',r(b){
    b.append(el('h2',{},'壁紙(スタンプ満たんの特典)'));
    b.append(el('p',{class:'note'},'スタンプがたまった人に、ここに入れた画像が出ます。スマホの壁紙サイズ(縦長)の絵をおすすめします。ふえるほど、たくさんの壁紙から選べます。'));

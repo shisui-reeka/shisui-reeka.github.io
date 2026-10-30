@@ -339,6 +339,13 @@ html:has(#lb.on),html:has(#lb.on) body{overflow:hidden;overscroll-behavior:none}
 .dcard .slot.on{border:none;background:transparent}
 .dcard .slot.on svg{width:100%;height:auto;display:block}
 .dcard.full{border-color:var(--pink)}
+.wpbox{margin:12px 0;padding:12px;border:1.5px solid var(--pink);border-radius:6px;background:rgba(255,255,255,.7)}
+.wpbox b{display:block;font-size:13px;letter-spacing:.12em;color:var(--pink)}
+.wpbox p{margin:6px 0 10px}
+.wpg{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px}
+.wpg a{display:block;text-decoration:none;color:inherit}
+.wpg img{width:100%;aspect-ratio:9/16;object-fit:cover;border:1px solid var(--blue);border-radius:4px;display:block;background:#eef1fa}
+.wpg span{display:block;font-size:11px;margin-top:4px;text-align:center}
 .prslot{display:flex;align-items:center;gap:8px;font:10px/1 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.2em;color:#fff;background:var(--violet);padding:6px 10px;border-radius:4px 4px 0 0;margin-top:10px}
 .prslot i{flex:1;height:5px;background:#2b2347;border-radius:3px;box-shadow:inset 0 1px 2px #000}
 #rx{margin-bottom:22px}
@@ -815,14 +822,14 @@ table.cred td{padding-top:6px;padding-bottom:6px}
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="lbnav"><button class="lbn" id="lbp" aria-label="前へ">‹</button><div class="t" id="lbt"></div><button class="lbn" id="lbn" aria-label="次へ">›</button></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1793287102";
+window.BUILD="1793342378";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1793287102"></script>
-<script src="core.js?v=1793287102"></script>
-<script src="data.js?v=1793287102"></script>
+<script src="icons.js?v=1793342378"></script>
+<script src="core.js?v=1793342378"></script>
+<script src="data.js?v=1793342378"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -1157,7 +1164,15 @@ function bindFun(){
     const no=String(7001+(s.n||0)*13).slice(-4);
     card.innerHTML=`<div class="dcard${s.n>=goal?' full':''}"><div class="dh"><b>診察券</b><span>SHISUI CLINIC</span></div><div class="dn"><span>No. ${no}</span><span>${s.n}/${goal}</span></div><div class="slots" style="grid-template-columns:repeat(${goal>5?5:goal},1fr)">`+Array.from({length:goal},(_,i)=>`<div class="slot ${i<s.n?'on':''}${stampNew&&i===s.n-1?' stamped':''}">${i<s.n?BAND(['#ff63bd','#8ca9ec','#8f77c2'][i%3]):i+1}</div>`).join('')+`</div></div>`; stampNew=false;
     if(s.d===today()){st.disabled=true;st.style.opacity=.5;msg.textContent='今日は押しました';}
-    if(s.n>=goal){msg.textContent='満たんです。おつかれさま。';}
+    if(s.n>=goal){msg.textContent='満たんです。おつかれさま。';store.set('wpOk',1)}
+    const w=(S.wallpapers||[]).filter(x=>x&&x.img);
+    let box=document.getElementById('wpbox');
+    if(box)box.remove();
+    if(w.length&&store.get('wpOk',0)){
+      box=document.createElement('div');box.id='wpbox';box.className='wpbox';
+      box.innerHTML=`<b>満たんのおくすり(壁紙)</b><p class="muted">画像をタップして開き、長押しで「写真に追加」してください。</p><div class="wpg">${w.map(x=>`<a href="${esc(x.img)}" target="_blank" rel="noopener"><img src="${esc(x.img)}" alt="" loading="lazy"><span>${esc(x.title||'')}</span></a>`).join('')}</div>`;
+      card.after(box);
+    }
   };
   st.addEventListener('click',()=>{
     let s=store.get('stamps',{n:0,d:''}); if(s.d===today())return;

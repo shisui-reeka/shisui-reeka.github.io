@@ -109,13 +109,13 @@ textarea.one{min-height:0;resize:none;overflow:hidden;line-height:1.5;word-break
 <div class="savebar" id="savebar"><span id="savemsg">未保存の変更があります</span><button class="btn" id="save">保存して公開する</button></div>
 <div id="toast"></div>
 
-<script>window.ENC_BLOB="uG-L-3-iUUaZohwkiF-Oe81zNaNKVBlEv2Fl_HHvjJjr5NmmO66PkrbLccUqIQvP_SYMAn6b023n0-wi4jnNj65mXW7RSpWR-ZxOnX-vNaCbKl-Hy3Jf5CrPxLN8nKICr1duo9_oDhterC8iFL4Jd4Qat0_bD_lSYJipDeHxh0UC0oszmKrJS6Q";window.ADMIN_V="1793287102";
+<script>window.ENC_BLOB="uG-L-3-iUUaZohwkiF-Oe81zNaNKVBlEv2Fl_HHvjJjr5NmmO66PkrbLccUqIQvP_SYMAn6b023n0-wi4jnNj65mXW7RSpWR-ZxOnX-vNaCbKl-Hy3Jf5CrPxLN8nKICr1duo9_oDhterC8iFL4Jd4Qat0_bD_lSYJipDeHxh0UC0oszmKrJS6Q";window.ADMIN_V="1793342378";
 /* 古い画面が残らないよう、最新かどうか確認して必要なら読み込み直す */
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){if(j&&j.v&&window.ADMIN_V!=='0'&&j.v!==window.ADMIN_V){location.replace(location.pathname+'?r='+j.v+location.hash)}}).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1793287102"></script>
-<script src="core.js?v=1793287102"></script>
-<script src="data.js?v=1793287102"></script>
+<script src="icons.js?v=1793342378"></script>
+<script src="core.js?v=1793342378"></script>
+<script src="data.js?v=1793342378"></script>
 <script>
 window.ICONS.drip='<path d="M7 4h10v7a5 5 0 0 1-10 0z"/><path d="M7 8h10"/><path d="M10 1h4"/><path d="M12 1v3"/><path d="M12 16v2"/><path d="M12 19.5c-1 1.2-1.6 2-1.6 2.6a1.6 1.6 0 0 0 3.2 0c0-.6-.6-1.4-1.6-2.6z"/>';
 (function(){
@@ -137,19 +137,19 @@ function fArea(label,obj,key,toStr,fromStr){const t=el('textarea');t.value=toStr
 function fSelect(label,obj,key,opts){const s=el('select');opts.forEach(o=>{const v=Array.isArray(o)?o[0]:o,l=Array.isArray(o)?o[1]:o;const op=el('option',{value:v},l);if(obj[key]===v)op.selected=true;s.append(op)});s.addEventListener('change',()=>{obj[key]=s.value;mark()});return [el('label',{},label),s]}
 
 /* ---- image upload ---- */
-function resizeToBlob(file,max){return new Promise((res,rej)=>{const url=URL.createObjectURL(file);const im=new Image();im.onload=()=>{const sc=Math.min(1,max/Math.max(im.width,im.height));const c=document.createElement('canvas');c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(url);c.toBlob(b=>{if(b&&b.type==='image/webp')res({blob:b,ext:'webp'});else c.toBlob(b2=>b2?res({blob:b2,ext:'png'}):rej(new Error('変換できませんでした')),'image/png')},'image/webp',.86)};im.onerror=()=>rej(new Error('画像を読み込めませんでした'));im.src=url})}
+function resizeToBlob(file,max,jpg){return new Promise((res,rej)=>{const url=URL.createObjectURL(file);const im=new Image();im.onload=()=>{const sc=Math.min(1,max/Math.max(im.width,im.height));const c=document.createElement('canvas');c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(url);if(jpg){c.toBlob(b=>b?res({blob:b,ext:'jpg'}):rej(new Error('変換できませんでした')),'image/jpeg',.92);return}c.toBlob(b=>{if(b&&b.type==='image/webp')res({blob:b,ext:'webp'});else c.toBlob(b2=>b2?res({blob:b2,ext:'png'}):rej(new Error('変換できませんでした')),'image/png')},'image/webp',.86)};im.onerror=()=>rej(new Error('画像を読み込めませんでした'));im.src=url})}
 function blobB64(b){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result).split(',')[1]);r.onerror=rej;r.readAsDataURL(b)})}
 async function ghGet(path){const r=await fetch(API+'/contents/'+path+'?ref='+BR+'&t='+Date.now(),{headers:{Authorization:'Bearer '+token,Accept:'application/vnd.github+json'},cache:'no-store'});if(r.status===404)return null;if(!r.ok)throw new Error('読み込みに失敗しました ('+r.status+')');return r.json()}
 async function ghPut(path,b64,msg){let sha;try{const cur=await ghGet(path);sha=cur&&cur.sha}catch(e){}
   const body={message:msg,content:b64,branch:BR};if(sha)body.sha=sha;
   const r=await fetch(API+'/contents/'+path,{method:'PUT',headers:{Authorization:'Bearer '+token,Accept:'application/vnd.github+json','Content-Type':'application/json'},body:JSON.stringify(body)});
   if(!r.ok){let m='';try{m=(await r.json()).message}catch(e){}throw new Error('保存に失敗しました ('+r.status+') '+m)}return r.json()}
-function fImage(label,obj,key){
+function fImage(label,obj,key,big){
   const wrap=el('div');const th=el('img',{class:'thumb',alt:''});const setTh=()=>{th.style.display=obj[key]?'':'none';if(obj[key])th.src=obj[key]};setTh();
   const f=el('input',{type:'file',accept:'image/*',class:'hide'});
   const b=el('button',{class:'mini',type:'button',onclick:()=>f.click()},obj[key]?'画像をえらびなおす':'画像をえらぶ');
   f.addEventListener('change',async()=>{const file=f.files&&f.files[0];if(!file)return;b.disabled=true;b.textContent='アップロード中…';
-    try{const {blob,ext}=await resizeToBlob(file,1400);const b64=await blobB64(blob);const path='img/u/'+Date.now()+'-'+Math.random().toString(36).slice(2,6)+'.'+ext;await ghPut(path,b64,'upload image');obj[key]=path;th.style.display='';th.src=URL.createObjectURL(blob);b.textContent='画像をえらびなおす';mark();toast('画像をアップロードしました')}
+    try{const {blob,ext}=await resizeToBlob(file,big?3000:1400,!!big);const b64=await blobB64(blob);const path='img/u/'+Date.now()+'-'+Math.random().toString(36).slice(2,6)+'.'+ext;await ghPut(path,b64,'upload image');obj[key]=path;th.style.display='';th.src=URL.createObjectURL(blob);b.textContent='画像をえらびなおす';mark();toast('画像をアップロードしました')}
     catch(e){toast(e.message||'失敗しました',true);b.textContent='画像をえらぶ'}b.disabled=false;f.value=''});
   wrap.append(el('label',{},label),th,b,f);return wrap}
 
@@ -227,6 +227,11 @@ const VIEWS={
    app(b,fText('料金表の説明文',c,'pricesNote'));
    b.append(el('label',{},'料金(ここに書くとサイトにも表の形で出ます)'));
    b.append(listEditor(c.prices,(it,card)=>{app(card,fText('内容(例: アイコン)',it,'item'));app(card,fText('金額(例: 3,000円〜)',it,'price'));app(card,fText('メモ',it,'note'))},()=>({item:'',price:'',note:''}),'＋ 料金をふやす'));}},
+ wp:{t:'壁紙',s:'スタンプ満たんのプレゼント',i:'photo',r(b){
+   b.append(el('h2',{},'壁紙(スタンプ満たんの特典)'));
+   b.append(el('p',{class:'note'},'スタンプがたまった人に、ここに入れた画像が出ます。スマホの壁紙サイズ(縦長)の絵をおすすめします。ふえるほど、たくさんの壁紙から選べます。'));
+   C.wallpapers=C.wallpapers||[];
+   b.append(listEditor(C.wallpapers,(it,card)=>{card.append(fImage('壁紙の画像(きれいなまま保存されます)',it,'img',true));app(card,fText('名前(例: 病室の朝)',it,'title'))},()=>({title:'',img:''}),'＋ 壁紙をふやす'));}},
  photo:{t:'写真',s:'トップの立ち絵・ミニキャラ',i:'photo',r(b){
    b.append(el('h2',{},'写真(立ち絵・ミニキャラ)'));
    b.append(el('p',{class:'note'},'「画像をえらぶ」を押すと、スマホの写真から選べます。選んだあと、下の「保存して公開する」を押すとサイトが変わります。'));

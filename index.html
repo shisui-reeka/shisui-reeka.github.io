@@ -344,6 +344,17 @@ html:has(#lb.on),html:has(#lb.on) body{overflow:hidden;overscroll-behavior:none}
 .dcard .slot.on{border:none;background:transparent}
 .dcard .slot.on svg{width:100%;height:auto;display:block}
 .dcard.full{border-color:var(--pink)}
+
+.wpre{display:block;margin:12px 0}
+.wpm{position:fixed;inset:0;z-index:400;background:rgba(15,13,26,.82);display:flex;align-items:center;justify-content:center;padding:16px;overflow:auto;overscroll-behavior:contain}
+.wpm[hidden]{display:none}
+.wpi{width:min(100%,420px);max-height:100%;overflow:auto;background:#fff;border:1.5px solid var(--pink);border-radius:8px;padding:16px;text-align:center}
+.wph{color:var(--pink);letter-spacing:.2em;font-size:12px}
+.wps{margin:8px 0 12px;line-height:1.8}
+.wpl{display:grid;gap:14px;margin-bottom:10px}
+.wpl figure{margin:0}
+.wpl img{width:min(100%,260px);aspect-ratio:9/19.5;object-fit:cover;border:1px solid var(--blue);border-radius:6px;background:#eef1fa;display:block;margin:0 auto}
+.wpl figcaption{font-size:12px;margin:4px 0}
 .wpbox{margin:12px 0;padding:12px;border:1.5px solid var(--pink);border-radius:6px;background:rgba(255,255,255,.7)}
 .wpbox b{display:block;font-size:13px;letter-spacing:.12em;color:var(--pink)}
 .wpbox p{margin:6px 0 10px}
@@ -827,14 +838,14 @@ table.cred td{padding-top:6px;padding-bottom:6px}
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="lbnav"><button class="lbn" id="lbp" aria-label="前へ">‹</button><div class="t" id="lbt"></div><button class="lbn" id="lbn" aria-label="次へ">›</button></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1793342997";
+window.BUILD="1793343163";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1793342997"></script>
-<script src="core.js?v=1793342997"></script>
-<script src="data.js?v=1793342997"></script>
+<script src="icons.js?v=1793343163"></script>
+<script src="core.js?v=1793343163"></script>
+<script src="data.js?v=1793343163"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -1134,6 +1145,42 @@ P.fun = () => {
   return `<h2><span class="no mono">01</span>今日の処方箋(おみくじ)</h2><p class="muted">1日1回。まず問診票にこたえてください。</p><div class="prslot">処方箋発行口<i></i></div><div id="rx"></div><button class="btn" id="draw">問診票にこたえる</button><div id="rxhist"></div>
   <h2><span class="no mono">02</span>通院カード(スタンプ)</h2><p class="muted">1日1回、押せます。${goal}個たまったら満たんです。</p><div id="card"></div><button class="btn line" id="stamp">今日のスタンプ</button> <span class="muted" id="stmsg"></span>`;
 };
+
+const wpList=()=>(S.wallpapers||[]).filter(x=>x&&x.img);
+const wpCache={};
+function wpMake(x){
+  const key=x.img+'|'+(x.cal||'')+'|'+new Date().getMonth();
+  if(wpCache[key])return wpCache[key];
+  return wpCache[key]=new Promise(res=>{
+    if(!x.cal)return fetch(x.img).then(r=>r.blob()).then(b=>res({url:URL.createObjectURL(b),blob:b})).catch(()=>res({url:x.img,blob:null}));
+    const im=new Image();im.onload=()=>{
+      const W=1170,H=2532,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');
+      g.fillStyle='#14111f';g.fillRect(0,0,W,H);
+      const sc=Math.max(W/im.width,H/im.height),dw=im.width*sc,dh=im.height*sc;g.drawImage(im,(W-dw)/2,(H-dh)/2,dw,dh);
+      const d=new Date(),y=d.getFullYear(),m=d.getMonth(),first=new Date(y,m,1).getDay(),days=new Date(y,m+1,0).getDate(),rows=Math.ceil((first+days)/7);
+      const pw=W*.84,ph=150+rows*98+30,px=(W-pw)/2,py=x.cal==='t'?H*.40:H*.60;
+      g.fillStyle='rgba(20,17,31,.62)';g.strokeStyle='rgba(140,169,236,.8)';g.lineWidth=3;g.beginPath();g.roundRect?g.roundRect(px,py,pw,ph,22):g.rect(px,py,pw,ph);g.fill();g.stroke();
+      g.textAlign='center';g.fillStyle='#fff';g.font='600 46px ui-monospace,Menlo,monospace';
+      g.fillText(['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'][m]+' '+y,W/2,py+70);
+      const cw=pw/7;['日','月','火','水','木','金','土'].forEach((t,i)=>{g.font='500 30px sans-serif';g.fillStyle=i===0?'#ff63bd':i===6?'#8ca9ec':'#c9c3e6';g.fillText(t,px+cw*(i+.5),py+122)});
+      for(let k=1;k<=days;k++){const idx=first+k-1,col=idx%7,row=Math.floor(idx/7);g.font='500 40px ui-monospace,Menlo,monospace';g.fillStyle=col===0?'#ff63bd':col===6?'#8ca9ec':'#fff';g.fillText(String(k),px+cw*(col+.5),py+185+row*98)}
+      c.toBlob(b=>res({url:URL.createObjectURL(b),blob:b}),'image/png');
+    };im.onerror=()=>res({url:x.img,blob:null});im.src=x.img;
+  });
+}
+function openWp(){
+  let m=document.getElementById('wpm');
+  if(!m){m=document.createElement('div');m.id='wpm';m.className='wpm';document.body.appendChild(m);m.addEventListener('click',e=>{if(e.target===m||e.target.closest('.wpx'))m.hidden=true})}
+  const L=wpList();
+  m.innerHTML=`<div class="wpi"><p class="mono wph">PRESCRIPTION COMPLETE</p><p class="wps">スタンプがたまりました。<br>おくすり(壁紙)をどうぞ。</p><div class="wpl">${L.map((x,i)=>`<figure><img data-save alt="${esc(x.title||'')}"><figcaption>${esc(x.title||'')}</figcaption><button type="button" class="btn line wpsv" data-i="${i}">壁紙を保存する</button></figure>`).join('')}</div><p class="muted">画像を長押ししても保存できます</p><button type="button" class="btn wpx">とじる</button></div>`;
+  m.hidden=false;
+  m.querySelectorAll('img').forEach((im,i)=>wpMake(L[i]).then(r=>{im.src=r.url}));
+  m.querySelectorAll('.wpsv').forEach(b=>b.addEventListener('click',()=>{const i=+b.dataset.i;wpMake(L[i]).then(r=>{
+    const ext=r.blob&&r.blob.type==='image/png'?'png':(r.blob&&r.blob.type==='image/webp'?'webp':'jpg');
+    const f=r.blob&&new File([r.blob],'reeka-wallpaper.'+ext,{type:r.blob.type});
+    if(f&&navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f]}).catch(()=>{});return}
+    const a=document.createElement('a');a.href=r.url;a.download='reeka-wallpaper.'+ext;document.body.appendChild(a);a.click();a.remove()})}));
+}
 let stampNew=false;
 function bindFun(){
   const rx=$('#rx'), draw=$('#draw');
@@ -1182,18 +1229,16 @@ function bindFun(){
     card.innerHTML=`<div class="dcard${s.n>=goal?' full':''}"><div class="dh"><b>診察券</b><span>SHISUI CLINIC</span></div><div class="dn"><span>No. ${no}</span><span>${s.n}/${goal}</span></div><div class="slots" style="grid-template-columns:repeat(${goal>5?5:goal},1fr)">`+Array.from({length:goal},(_,i)=>`<div class="slot ${i<s.n?'on':''}${stampNew&&i===s.n-1?' stamped':''}">${i<s.n?BAND(['#ff63bd','#8ca9ec','#8f77c2'][i%3]):i+1}</div>`).join('')+`</div></div>`; stampNew=false;
     if(s.d===today()){st.disabled=true;st.style.opacity=.5;msg.textContent='今日は押しました';}
     if(s.n>=goal){msg.textContent='満たんです。おつかれさま。';store.set('wpOk',1)}
-    const w=(S.wallpapers||[]).filter(x=>x&&x.img);
-    let box=document.getElementById('wpbox');
-    if(box)box.remove();
-    if(w.length&&store.get('wpOk',0)){
-      box=document.createElement('div');box.id='wpbox';box.className='wpbox';
-      box.innerHTML=`<b>満たんのおくすり(壁紙)</b><p class="muted">画像をタップして開き、長押しで「写真に追加」してください。</p><div class="wpg">${w.map(x=>`<a href="${esc(x.img)}" target="_blank" rel="noopener"><img src="${esc(x.img)}" alt="" loading="lazy"><span>${esc(x.title||'')}</span></a>`).join('')}</div>`;
-      card.after(box);
+    let box=document.getElementById('wpbox'); if(box)box.remove();
+    if(wpList().length&&store.get('wpOk',0)){
+      box=document.createElement('button');box.id='wpbox';box.type='button';box.className='btn line wpre';box.textContent='🎁 満たんの壁紙を見る';
+      box.addEventListener('click',openWp);card.after(box);
     }
   };
   st.addEventListener('click',()=>{
     let s=store.get('stamps',{n:0,d:''}); if(s.d===today())return;
     s.n = s.n>=goal?1:s.n+1; s.d=today(); store.set('stamps',s); stampNew=true; render();
+    if(s.n>=goal&&wpList().length)setTimeout(openWp,900);
     { const sl=card.querySelectorAll('.slot')[s.n-1]; if(sl&&window.burst){const r=sl.getBoundingClientRect();window.burst(r.left+r.width/2,r.top+r.height/2,12)} }
   });
   render();

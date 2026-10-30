@@ -838,14 +838,14 @@ table.cred td{padding-top:6px;padding-bottom:6px}
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="lbnav"><button class="lbn" id="lbp" aria-label="前へ">‹</button><div class="t" id="lbt"></div><button class="lbn" id="lbn" aria-label="次へ">›</button></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1793343337";
+window.BUILD="1793343350";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1793343337"></script>
-<script src="core.js?v=1793343337"></script>
-<script src="data.js?v=1793343337"></script>
+<script src="icons.js?v=1793343350"></script>
+<script src="core.js?v=1793343350"></script>
+<script src="data.js?v=1793343350"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -1165,7 +1165,12 @@ function wpMake(x){
       const E=new Float32Array(sw*sh);for(let yy=1;yy<sh;yy++)for(let xx=1;xx<sw;xx++){const i=yy*sw+xx;E[i]=Math.abs(L[i]-L[i-1])+Math.abs(L[i]-L[i-sw])}
       const rx0=Math.floor(px*sk),rx1=Math.floor((px+pw)*sk),rh=Math.ceil(ph*sk);let best=1e18,py=H*.60;
       for(let ty=Math.floor(sh*.30);ty<=Math.floor(sh*.78)-rh;ty+=2){let t=0;for(let yy=ty;yy<ty+rh;yy++)for(let xx=rx0;xx<rx1;xx++)t+=E[yy*sw+xx];t+=Math.abs(ty-sh*.62)*60;if(t<best){best=t;py=ty/sk}}
-      window.__wpScore=best/((rx1-rx0)*rh);
+      if(best/((rx1-rx0)*rh)>5){
+        /* 空きがない絵:絵を少し小さくして、下にカレンダーの場所をつくる */
+        const bg=g.createLinearGradient(0,0,0,H);bg.addColorStop(0,'#1b1730');bg.addColorStop(1,'#0f0d1a');g.fillStyle=bg;g.fillRect(0,0,W,H);
+        const bw=W*.92,bh=H*.58,k=Math.min(bw/im.width,bh/im.height),w2=im.width*k,h2=im.height*k;g.drawImage(im,(W-w2)/2,H*.04+(bh-h2)/2,w2,h2);
+        py=H*.66;
+      }
       g.fillStyle='rgba(20,17,31,.62)';g.strokeStyle='rgba(140,169,236,.8)';g.lineWidth=3;g.beginPath();g.roundRect?g.roundRect(px,py,pw,ph,22):g.rect(px,py,pw,ph);g.fill();g.stroke();
       g.textAlign='center';g.fillStyle='#fff';g.font='600 46px ui-monospace,Menlo,monospace';
       g.fillText(['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'][m]+' '+y,W/2,py+70);

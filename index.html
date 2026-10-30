@@ -852,14 +852,14 @@ table.cred td{padding-top:6px;padding-bottom:6px}
 <div id="lb" role="dialog" aria-label="拡大表示"><div class="lbl">VIEW BOX · 読影中</div><button class="btn line x" id="lbx">閉じる</button><img id="lbi" alt=""><div class="lbnav"><button class="lbn" id="lbp" aria-label="前へ">‹</button><div class="t" id="lbt"></div><button class="lbn" id="lbn" aria-label="次へ">›</button></div><div id="lbsec" style="display:none;width:100%;max-width:720px;overflow:auto;max-height:80vh"></div></div>
 <script>
 /* 自動更新: 公開済みの版と違えば、キャッシュを避けて読み直す */
-window.BUILD="1793346294";
+window.BUILD="1793346361";
 (function(){try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
  if(j&&j.v&&j.v!==window.BUILD){var k='rk_rl_'+j.v;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+j.v+location.hash)}
 }).catch(function(){})}catch(e){}})();
 </script>
-<script src="icons.js?v=1793346294"></script>
-<script src="core.js?v=1793346294"></script>
-<script src="data.js?v=1793346294"></script>
+<script src="icons.js?v=1793346361"></script>
+<script src="core.js?v=1793346361"></script>
+<script src="data.js?v=1793346361"></script>
 <script>
 loadContent().then(function(){
 const S = window.SITE;
@@ -1253,12 +1253,13 @@ function bindFun(){
   const goal=S.stampGoal, card=$('#card'), st=$('#stamp'), msg=$('#stmsg');
   const BAND=(c)=>`<svg viewBox="0 0 60 60"><g transform="rotate(-38 30 30)"><rect x="4" y="19" width="52" height="22" rx="11" fill="${c}"/><rect x="20" y="19" width="20" height="22" fill="#fff" opacity=".78"/><g fill="#fff" opacity=".7"><circle cx="11" cy="27" r="1.3"/><circle cx="11" cy="33" r="1.3"/><circle cx="49" cy="27" r="1.3"/><circle cx="49" cy="33" r="1.3"/></g></g></svg>`;
   const getS=()=>{let s=store.get('stampsM',null);const m=today().slice(0,7);
-    if(!s){ /* 月替わり前のスタンプを、今月分として引き継ぐ */
-      const o=store.get('stamps',null);s={m,d:[]};
-      if(o&&o.n>0&&typeof o.d==='string'&&o.d.slice(0,7)===m){const last=+o.d.slice(8);for(let i=0;i<o.n&&last-i>=1;i++)s.d.unshift(m+'-'+String(last-i).padStart(2,'0'));}
-      store.set('stampsM',{m,d:s.d});
+    if(!s||s.m!==m)s={m,d:[]};
+    if(!s.mig){ /* 月替わり前のスタンプを、今月分として1回だけ引き継ぐ(すでに押した分とは合算) */
+      const o=store.get('stamps',null);
+      if(o&&o.n>0&&typeof o.d==='string'&&o.d.slice(0,7)===m){const last=+o.d.slice(8);for(let i=0;i<o.n&&last-i>=1;i++){const k=m+'-'+String(last-i).padStart(2,'0');if(!s.d.includes(k))s.d.push(k)}s.d.sort()}
+      s.mig=1;store.set('stampsM',{m:s.m,d:s.d,mig:1});
     }
-    if(s.m!==m)s={m,d:[]};s.n=s.d.length;return s};
+    s.n=s.d.length;return s};
   const render=()=>{
     const s=getS();
     const no=String(7001+(s.n||0)*13).slice(-4);
@@ -1273,7 +1274,7 @@ function bindFun(){
   };
   st.addEventListener('click',()=>{
     const s=getS(); if(s.d.includes(today()))return;
-    s.d.push(today()); store.set('stampsM',{m:s.m,d:s.d}); stampNew=true; render();
+    s.d.push(today()); store.set('stampsM',{m:s.m,d:s.d,mig:1}); stampNew=true; render();
     if(s.d.length===goal&&wpList().length)setTimeout(openWp,900);
     { const sl=card.querySelectorAll('.slot')[Math.min(s.d.length,goal)-1]; if(sl&&window.burst){const r=sl.getBoundingClientRect();window.burst(r.left+r.width/2,r.top+r.height/2,12)} }
   });
